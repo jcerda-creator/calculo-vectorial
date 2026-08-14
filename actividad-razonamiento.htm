@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Actividad: Razonamiento lógico-matemático</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;max-width:900px;margin:2rem auto;padding:1rem}
+    h1,h2{color:#1f2937}
+    .card{border:1px solid #e5e7eb;padding:1rem;border-radius:8px;margin-bottom:1rem;background:#fff}
+    .question{margin:0.5rem 0}
+    .btn{display:inline-block;padding:0.5rem 0.75rem;background:#2563eb;color:#fff;border-radius:6px;text-decoration:none;border:none;cursor:pointer}
+    .result{margin-top:0.75rem;font-weight:600}
+    footer{font-size:0.9rem;color:#6b7280;margin-top:2rem}
+    ul{margin-left:1.25rem}
+    code{background:#f3f4f6;padding:0.1rem 0.3rem;border-radius:4px}
+  </style>
+</head>
+<body>
+  <h1>Actividad: Razonamiento lógico-matemático</h1>
+  <p>Esta actividad cubre conceptos básicos de lógica: premisas, argumentos, conclusiones, falacias y criterios de validez. Lee las definiciones, revisa los ejemplos y responde el cuestionario interactivo al final.</p>
+
+  <div class="card">
+    <h2>Definiciones rápidas</h2>
+    <ul>
+      <li><strong>Premisa</strong>: Afirmación o proposición que se toma como punto de partida en un argumento.</li>
+      <li><strong>Conclusión</strong>: Afirmación que se deriva de las premisas mediante un proceso inferencial.</li>
+      <li><strong>Argumento</strong>: Conjunto de premisas destinadas a apoyar una conclusión.</li>
+      <li><strong>Argumento válido</strong>: Un argumento es válido si, en caso de que las premisas sean verdaderas, la conclusión necesariamente debe ser verdadera. Validez no implica verdad de las premisas.</li>
+      <li><strong>Falacia</strong>: Razonamiento que parece válido o persuasivo pero que tiene un defecto lógico. Las falacias pueden ser formales (error en la forma) o informales (error en el contenido).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Ejemplos</h2>
+    <p><strong>Ejemplo de argumento válido:</strong></p>
+    <p>Premisa 1: Todos los mamíferos son vertebrados.<br>
+    Premisa 2: Un perro es un mamífero.<br>
+    Conclusión: Por tanto, un perro es un vertebrado.</p>
+
+    <p><strong>Ejemplo no válido (falacia):</strong></p>
+    <p>Premisa 1: María estudia matemáticas.<br>
+    Conclusión: Por tanto, María es inteligente.</p>
+    <p>Este argumento falla porque la conclusión no se deriva necesariamente de la premisa: estudiar matemáticas no garantiza inteligencia (falacia de <em>afirmación apresurada</em> o <em>generalización indebida</em>).</p>
+  </div>
+
+  <div class="card">
+    <h2>Cómo evaluar un argumento</h2>
+    <ol>
+      <li>Identifica las premisas y la conclusión.</li>
+      <li>Determina si las premisas son verdaderas o plausibles (evaluación de verdad).</li>
+      <li>Comprueba la relación lógica entre premisas y conclusión: ¿si las premisas fueran verdaderas, la conclusión sería necesariamente verdadera? (validez)</li>
+      <li>Si es válido y las premisas son verdaderas, el argumento es <em>sound</em> (sólido/sonoro).</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>Cuestionario interactivo</h2>
+    <form id="quiz">
+      <div class="question">
+        <label>1) ¿Qué es una premisa?</label><br>
+        <input type="radio" name="q1" value="a"> a) Una conclusión ya demostrada<br>
+        <input type="radio" name="q1" value="b"> b) Una afirmación que se toma como punto de partida<br>
+        <input type="radio" name="q1" value="c"> c) Una falacia lógica<br>
+      </div>
+
+      <div class="question">
+        <label>2) ¿Cuál de los siguientes argumentos es válido?</label><br>
+        <input type="radio" name="q2" value="a"> a) Si hoy llueve, la calle está mojada. Hoy la calle está mojada. Por tanto, hoy llovió.<br>
+        <input type="radio" name="q2" value="b"> b) Todos los peces son animales. Un tiburón es un pez. Por tanto, un tiburón es un animal.<br>
+        <input type="radio" name="q2" value="c"> c) Si estudio, aprobaré. No aprobé. Por tanto, no estudié.<br>
+      </div>
+
+      <div class="question">
+        <label>3) ¿Qué es una falacia formal?</label><br>
+        <input type="radio" name="q3" value="a"> a) Un razonamiento con error en la forma lógica<br>
+        <input type="radio" name="q3" value="b"> b) Un argumento con premisas falsas<br>
+        <input type="radio" name="q3" value="c"> c) Una conclusión verdadera
+      </div>
+
+      <div class="question">
+        <label>4) Un argumento es sólido (sound) cuando:</label><br>
+        <input type="radio" name="q4" value="a"> a) Es válido y sus premisas son verdaderas<br>
+        <input type="radio" name="q4" value="b"> b) Tiene una conclusión verdadera
+        <br>
+        <input type="radio" name="q4" value="c"> c) No contiene falacias retóricas
+      </div>
+
+      <div class="question">
+        <label>5) Identifica la falacia en: "Si A entonces B. B, luego A."</label><br>
+        <input type="radio" name="q5" value="a"> a) Negación del antecedente<br>
+        <input type="radio" name="q5" value="b"> b) Afirmación del consecuente<br>
+        <input type="radio" name="q5" value="c"> c) Falsa causa
+      </div>
+
+      <div class="question">
+        <label>6) Si las premisas son falsas, ¿puede un argumento ser válido?</label><br>
+        <input type="radio" name="q6" value="a"> a) No, la validez requiere premisas verdaderas<br>
+        <input type="radio" name="q6" value="b"> b) Sí, la validez es sobre la forma, no sobre la verdad de las premisas<br>
+        <input type="radio" name="q6" value="c"> c) Solo si la conclusión es verdadera
+      </div>
+
+      <button type="button" class="btn" onclick="checkAnswers()">Enviar respuestas</button>
+      <div id="output" class="result" aria-live="polite"></div>
+    </form>
+
+    <script>
+      const answers = {q1:'b', q2:'b', q3:'a', q4:'a', q5:'b', q6:'b'};
+      const explanations = {
+        q1:'Una premisa es una afirmación que se toma como punto de partida para un argumento.',
+        q2:'El ejemplo (b) es un silogismo categórico válido: todos los peces son animales; tiburón es pez; por tanto es animal.',
+        q3:'Falacia formal implica error en la forma del argumento (por ejemplo, modus ponens mal aplicado).',
+        q4:'Sólido = válido + premisas verdaderas.',
+        q5:'Este es el clásico error: afirmar el consecuente (si A entonces B; B; por tanto A).',
+        q6:'Sí: la validez es una propiedad formal; premisas falsas no impiden validez.'
+      };
+
+      function checkAnswers(){
+        const form = document.getElementById('quiz');
+        let score = 0; let total = Object.keys(answers).length; let details = '';
+        for(const q in answers){
+          const node = form.querySelector('input[name="'+q+'"]:checked');
+          const user = node ? node.value : null;
+          if(user === answers[q]){ score++; details += `<p>${q.toUpperCase()}: Correcto. ${explanations[q]}</p>`; }
+          else { details += `<p>${q.toUpperCase()}: Incorrecto. ${explanations[q]}</p>`; }
+        }
+        document.getElementById('output').innerHTML = `Puntuación: ${score} / ${total}` + details;
+      }
+    </script>
+  </div>
+
+  <footer>
+    Consejos: Para practicar más, toma argumentos de la vida cotidiana y pregúntate si las conclusiones siguen necesariamente de las premisas; identifica posibles falacias.
+  </footer>
+</body>
+</html>
