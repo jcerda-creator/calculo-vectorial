@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regla de la Cadena · Cálculo Vectorial · UP</title>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    /* ===== PALETA INSTITUCIONAL + VERDE METRÓPOLIS ===== */
+    :root {
+      --up-blue: #0A1C3A;       /* azul marino */
+      --up-gold: #C9A84C;       /* dorado */
+      --up-gold-light: #E8D5A3;
+      --up-green: #007B5D;      /* verde Metrópolis */
+      --up-green-light: #D4EDDA;
+      --up-white: #FFFFFF;
+      --up-gray: #F5F5F5;
+      --up-gray-dark: #D0D0D0;
+      --up-text: #1E2A44;
+      --up-shadow: rgba(10, 28, 58, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: var(--up-gray);
+      color: var(--up-text);
+      line-height: 1.65;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, var(--up-blue) 0%, #143466 100%);
+      color: var(--up-white);
+      padding: 2rem 1.5rem;
+      box-shadow: 0 6px 20px var(--up-shadow);
+      border-bottom: 4px solid var(--up-gold);
+    }
+    header h1 {
+      margin: 0 0 0.3rem;
+      font-size: 2.2rem;
+      letter-spacing: -0.5px;
+    }
+    header h1 span {
+      color: var(--up-gold);
+    }
+    header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 1.05rem;
+    }
+
+    /* ===== TABS ===== */
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      background: var(--up-blue);
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    nav.tabs button {
+      background: transparent;
+      color: #cbd5e1;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    nav.tabs button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    nav.tabs button.active {
+      background: var(--up-gold);
+      color: var(--up-blue);
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: none;
+      animation: fade 0.4s ease;
+    }
+    section.active {
+      display: block;
+    }
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--up-white);
+      border-radius: 12px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 16px var(--up-shadow);
+      border-left: 6px solid var(--up-gold);
+      transition: box-shadow 0.2s;
+    }
+    .card.accent {
+      border-left-color: var(--up-blue);
+    }
+    .card.warn {
+      border-left-color: #b8860b;
+    }
+    .card.success {
+      border-left-color: var(--up-green);
+    }
+    .card.green {
+      border-left-color: var(--up-green);
+      background: #f8fdfb;
+    }
+
+    h2 {
+      color: var(--up-blue);
+      margin-top: 0;
+      font-size: 1.6rem;
+    }
+    h3 {
+      color: var(--up-blue);
+      margin-top: 1.2rem;
+    }
+    .formula {
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      text-align: center;
+      border: 1px dashed var(--up-gold);
+      font-size: 1.1rem;
+      overflow-x: auto;
+    }
+    .keyword {
+      background: linear-gradient(transparent 60%, var(--up-gold-light) 60%);
+      font-weight: 700;
+      cursor: help;
+      border-bottom: 2px dotted var(--up-gold);
+    }
+
+    .glossary-term {
+      color: var(--up-blue);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 1px dashed var(--up-gold);
+    }
+    .glossary-term:hover {
+      background: var(--up-gold-light);
+    }
+
+    /* ===== ACORDEÓN ===== */
+    .accordion-toggle {
+      background: var(--up-blue);
+      color: var(--up-white);
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.5rem 0;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      text-align: left;
+    }
+    .accordion-toggle:hover {
+      background: #143466;
+    }
+    .accordion-toggle .arrow {
+      transition: transform 0.3s;
+      margin-left: auto;
+    }
+    .accordion-toggle.open .arrow {
+      transform: rotate(180deg);
+    }
+    .accordion-content {
+      display: none;
+      padding-top: 0.8rem;
+      animation: fade 0.3s ease;
+    }
+    .accordion-content.open {
+      display: block;
+    }
+
+    /* ===== INPUTS ===== */
+    input.fill {
+      border: none;
+      border-bottom: 2px solid var(--up-blue);
+      background: transparent;
+      font-family: monospace;
+      font-size: 1rem;
+      padding: 2px 6px;
+      width: 130px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input.fill:focus {
+      border-color: var(--up-gold);
+      background: #fff;
+    }
+    input.fill.correct {
+      background: var(--up-green-light);
+      border-color: var(--up-green);
+      color: #0b4a2a;
+    }
+    input.fill.wrong {
+      background: #f8d7da;
+      border-color: #b02a37;
+      color: #7a1a1a;
+    }
+
+    .btn {
+      background: var(--up-blue);
+      color: var(--up-white);
+      border: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.3rem 0.2rem;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 3px 8px rgba(10, 28, 58, 0.3);
+    }
+    .btn:hover {
+      background: #143466;
+      transform: translateY(-2px);
+    }
+    .btn.secondary {
+      background: var(--up-gray-dark);
+      color: var(--up-text);
+      box-shadow: none;
+    }
+    .btn.success {
+      background: var(--up-green);
+    }
+    .btn.success:hover {
+      background: #005f47;
+    }
+    .btn.gold {
+      background: var(--up-gold);
+      color: var(--up-blue);
+    }
+    .btn.gold:hover {
+      background: #b8983f;
+    }
+
+    .feedback {
+      margin-top: 0.8rem;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+    .feedback.ok {
+      background: var(--up-green-light);
+      color: #0b4a2a;
+      display: block;
+    }
+    .feedback.err {
+      background: #f8d7da;
+      color: #7a1a1a;
+      display: block;
+    }
+
+    /* ===== OPCIONES ===== */
+    .options label {
+      display: block;
+      padding: 0.6rem 1rem;
+      margin: 0.3rem 0;
+      background: #f8fafc;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .options label:hover {
+      background: #ecf3fa;
+      border-color: var(--up-gold-light);
+    }
+    .options input {
+      margin-right: 0.6rem;
+    }
+    .options label.selected {
+      background: var(--up-gold-light);
+      border-color: var(--up-gold);
+    }
+    .options label.correct {
+      background: var(--up-green-light);
+      border-color: var(--up-green);
+    }
+    .options label.wrong {
+      background: #f8d7da;
+      border-color: #b02a37;
+    }
+
+    /* ===== TEXTAREA ===== */
+    textarea.essay {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.8rem;
+      border: 2px solid var(--up-gray-dark);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    textarea.essay:focus {
+      border-color: var(--up-gold);
+      outline: none;
+    }
+
+    /* ===== TOOLTIP ===== */
+    .tooltip {
+      position: fixed;
+      background: var(--up-blue);
+      color: #fff;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      max-width: 320px;
+      font-size: 0.9rem;
+      z-index: 100;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .tooltip.show {
+      opacity: 1;
+    }
+
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 28, 58, 0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal.show {
+      display: flex;
+    }
+    .modal-content {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.8rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      border-top: 6px solid var(--up-gold);
+    }
+    .modal-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--up-blue);
+    }
+
+    /* ===== TABLAS ===== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+    }
+    th, td {
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--up-gray-dark);
+      text-align: left;
+    }
+    th {
+      background: var(--up-blue);
+      color: var(--up-white);
+    }
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    .progress {
+      height: 8px;
+      background: var(--up-gray-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--up-green), var(--up-gold));
+      width: 0;
+      transition: width 0.4s;
+    }
+
+    .case-box {
+      background: #fef9e7;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid var(--up-gold);
+    }
+    .case-box h4 {
+      margin-top: 0;
+      color: var(--up-blue);
+    }
+    .example-box {
+      background: #eaf2fa;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid var(--up-blue);
+    }
+    .example-box h4 {
+      margin-top: 0;
+      color: var(--up-blue);
+    }
+
+    footer {
+      background: var(--up-blue);
+      color: var(--up-gold-light);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-top: 4px solid var(--up-gold);
+    }
+
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 1.6rem;
+      }
+      .card {
+        padding: 1.2rem;
+      }
+      nav.tabs button {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.7rem;
+      }
+    }
+
+    /* ===== BOTÓN DE DIÁLOGO ADICIONAL ===== */
+    .dialog-btn {
+      background: none;
+      border: none;
+      color: var(--up-green);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline dotted;
+      padding: 0 0.2rem;
+      font-size: 0.95rem;
+    }
+    .dialog-btn:hover {
+      color: var(--up-blue);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>∇ Regla de la <span>Cadena</span> · Cálculo Vectorial</h1>
+    <p>Universidad Panamericana · Clase interactiva · 4 de septiembre de 2026</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="intro">🎯 Introducción</button>
+    <button data-tab="teo">📐 Teorema</button>
+    <button data-tab="casos">🧩 Casos</button>
+    <button data-tab="ejemplos">💡 Ejemplos</button>
+    <button data-tab="aplic">⚙️ Aplicaciones</button>
+    <button data-tab="polar">🌀 Polares</button>
+    <button data-tab="demo">🔬 Demostración</button>
+    <button data-tab="fill">✏️ Completa</button>
+    <button data-tab="mc">✔️ Opción múltiple</button>
+    <button data-tab="essay">📝 Ensayo</button>
+    <button data-tab="glossary">📖 Glosario</button>
+  </nav>
+
+  <main>
+
+    <!-- ============ INTRO ============ -->
+    <section id="intro" class="active">
+      <div class="card">
+        <h2>1. Motivación</h2>
+        <p>En cálculo de una variable, la <span class="glossary-term" data-term="regla-cadena-1v">regla de la cadena</span> nos dice cómo derivar una composición $h(x)=g(f(x))$: $h'(x)=g'(f(x))\cdot f'(x)$. En <b>cálculo vectorial</b>, queremos hacer lo mismo cuando las funciones van entre $\mathbb{R}^n$, $\mathbb{R}^m$ y $\mathbb{R}^p$.</p>
+        <p>La clave está en reemplazar las derivadas ordinarias por las <span class="glossary-term" data-term="matriz-jacobiana">matrices jacobianas</span> (derivadas totales) $Df$ y $Dg$, y el producto ordinario por <b>producto de matrices</b>.</p>
+        <button class="dialog-btn" data-dialog="intro-detail">↪ Ver más sobre la motivación</button>
+        <div id="intro-detail" style="display:none; margin-top:0.8rem; padding:0.8rem; background:#f0f2f5; border-radius:6px;">
+          <p>La regla de la cadena es fundamental porque permite descomponer derivadas de funciones compuestas, facilitando el cálculo en sistemas dinámicos, optimización y física. En varias variables, la matriz jacobiana captura todas las derivadas parciales, y el producto matricial encadena las aproximaciones lineales.</p>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <h2>2. Notación y configuración</h2>
+        <p>Sean $U\subset\mathbb{R}^n$ y $V\subset\mathbb{R}^m$ abiertos, y dos funciones:</p>
+        <div class="formula">$$f: U \longrightarrow V, \qquad g: V \longrightarrow \mathbb{R}^p$$</div>
+        <p>La composición $g\circ f: U \longrightarrow \mathbb{R}^p$ está dada por $(g\circ f)(P)=g(f(P))$. Queremos calcular su <span class="glossary-term" data-term="derivada-total">derivada total</span> en $P\in U$.</p>
+        <p>La derivada total de $f$ en $P$ es la matriz $Df(P)$ de tamaño $m\times n$, y la de $g$ en $Q=f(P)$ es $Dg(Q)$ de tamaño $p\times m$.</p>
+      </div>
+
+      <div class="card success">
+        <h3>💡 Idea central</h3>
+        <p>La regla de la cadena en varias variables es una <b>generalización matricial</b> de la regla de una variable: las derivadas se convierten en matrices jacobianas y la multiplicación escalar se reemplaza por multiplicación de matrices.</p>
+      </div>
+    </section>
+
+    <!-- ============ TEOREMA ============ -->
+    <section id="teo">
+      <div class="card">
+        <h2>3. Teorema 12.1 — Forma matricial</h2>
+        <p><b>Enunciado.</b> Sean $U\subset\mathbb{R}^n$ y $V\subset\mathbb{R}^m$ abiertos, $f:U\to V$ y $g:V\to\mathbb{R}^p$. Si $f$ es <span class="glossary-term" data-term="diferenciable">diferenciable</span> en $P$ y $g$ en $Q=f(P)$, entonces $g\circ f$ es diferenciable en $P$, con derivada:</p>
+        <div class="formula">$$\boxed{D(g\circ f)(P) \;=\; Dg(Q)\;\cdot\; Df(P)}$$</div>
+        <p>El tamaño de $D(g\circ f)(P)$ es $p\times n$.</p>
+        <button class="dialog-btn" data-dialog="teo-detail">↪ Explicación de la fórmula</button>
+        <div id="teo-detail" style="display:none; margin-top:0.8rem; padding:0.8rem; background:#f0f2f5; border-radius:6px;">
+          <p>La fórmula matricial es análoga a la de una variable: la derivada de la composición es el producto de las derivadas, evaluadas en los puntos correspondientes. El orden $Dg(Q)\cdot Df(P)$ es crucial porque las dimensiones deben encajar: $(p\times m)\cdot(m\times n) = (p\times n)$.</p>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <h3>🔍 Fórmula por entradas</h3>
+        <p>La entrada $(i,k)$ de $D(g\circ f)(P)$, es decir $\dfrac{\partial (g\circ f)_i}{\partial x_k}$, se obtiene como el <span class="glossary-term" data-term="producto-punto">producto punto</span> de la fila $i$-ésima de $Dg(Q)$ y la columna $k$-ésima de $Df(P)$:</p>
+        <div class="formula">$$\frac{\partial (g\circ f)_i}{\partial x_k}(P) \;=\; \sum_{j=1}^{m} \frac{\partial g_i}{\partial y_j}(Q)\;\cdot\;\frac{\partial f_j}{\partial x_k}(P)$$</div>
+        <p>Si $z=(g\circ f)(P)$, para cada componente $z_i$:</p>
+        <div class="formula">$$\frac{\partial z_i}{\partial x_k} \;=\; \sum_{j=1}^{m} \frac{\partial z_i}{\partial y_j}\;\cdot\;\frac{\partial y_j}{\partial x_k}$$</div>
+      </div>
+
+      <div class="card warn">
+        <h3>⚠️ Orden de los factores</h3>
+        <p>El orden importa: primero $Dg(Q)$ y luego $Df(P)$. Invertir el orden generalmente no tiene sentido dimensional.</p>
+      </div>
+    </section>
+
+    <!-- ============ CASOS ============ -->
+    <section id="casos">
+      <div class="card">
+        <h2>4. Casos particulares importantes</h2>
+        <p>Desenredemos el teorema en situaciones concretas que aparecen con frecuencia. Haz clic en cada caso para expandirlo.</p>
+      </div>
+
+      <!-- Caso A -->
+      <div class="case-box">
+        <button class="accordion-toggle open" data-target="casoA">▸ Caso A — $f:\mathbb{R}\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$ <span class="arrow">▼</span></button>
+        <div class="accordion-content open" id="casoA">
+          <p>Tenemos $f(x)=(f_1(x),f_2(x))$ y $w=g(y,z)$. Entonces:</p>
+          <div class="formula">$$Df(P) = \begin{pmatrix} \dfrac{df_1}{dx}(P) \\[6pt] \dfrac{df_2}{dx}(P) \end{pmatrix}, \qquad Dg(Q) = \begin{pmatrix} \dfrac{\partial g}{\partial y}(Q) & \dfrac{\partial g}{\partial z}(Q) \end{pmatrix}$$</div>
+          <p>Por la regla de la cadena:</p>
+          <div class="formula">$$\frac{d(g\circ f)}{dx}(P) = \frac{\partial g}{\partial y}(Q)\,\frac{df_1}{dx}(P) \;+\; \frac{\partial g}{\partial z}(Q)\,\frac{df_2}{dx}(P)$$</div>
+        </div>
+      </div>
+
+      <!-- Caso B -->
+      <div class="case-box">
+        <button class="accordion-toggle" data-target="casoB">▸ Caso B — $f:\mathbb{R}^2\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$ <span class="arrow">▼</span></button>
+        <div class="accordion-content" id="casoB">
+          <p>Ahora $f(x,y)=(f_1(x,y),f_2(x,y))$ y $w=g(u,v)$. Las jacobianas son:</p>
+          <div class="formula">$$Df(P) = \begin{pmatrix} \dfrac{\partial f_1}{\partial x} & \dfrac{\partial f_1}{\partial y} \\[6pt] \dfrac{\partial f_2}{\partial x} & \dfrac{\partial f_2}{\partial y} \end{pmatrix}, \qquad Dg(Q) = \begin{pmatrix} \dfrac{\partial g}{\partial u} & \dfrac{\partial g}{\partial v} \end{pmatrix}$$</div>
+          <p>El producto da un vector fila de $1\times 2$:</p>
+          <div class="formula">$$\frac{\partial (g\circ f)}{\partial x} = \frac{\partial g}{\partial u}\,\frac{\partial f_1}{\partial x} + \frac{\partial g}{\partial v}\,\frac{\partial f_2}{\partial x}$$</div>
+          <div class="formula">$$\frac{\partial (g\circ f)}{\partial y} = \frac{\partial g}{\partial u}\,\frac{\partial f_1}{\partial y} + \frac{\partial g}{\partial v}\,\frac{\partial f_2}{\partial y}$$</div>
+          <p>Sustituyendo $u=f_1(x,y)$ y $v=f_2(x,y)$:</p>
+          <div class="formula">$$\frac{\partial w}{\partial x} = \frac{\partial w}{\partial u}\frac{\partial u}{\partial x} + \frac{\partial w}{\partial v}\frac{\partial v}{\partial x}, \qquad \frac{\partial w}{\partial y} = \frac{\partial w}{\partial u}\frac{\partial u}{\partial y} + \frac{\partial w}{\partial v}\frac{\partial v}{\partial y}$$</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📋 Tabla resumen de dimensiones</h3>
+        <table>
+          <tr><th>Situación</th><th>$Df$</th><th>$Dg$</th><th>$D(g\circ f)$</th></tr>
+          <tr><td>$f:\mathbb{R}^n\to\mathbb{R}^m$, $g:\mathbb{R}^m\to\mathbb{R}^p$</td><td>$m\times n$</td><td>$p\times m$</td><td>$p\times n$</td></tr>
+          <tr><td>$f:\mathbb{R}\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$</td><td>$2\times 1$</td><td>$1\times 2$</td><td>$1\times 1$ (escalar)</td></tr>
+          <tr><td>$f:\mathbb{R}^2\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$</td><td>$2\times 2$</td><td>$1\times 2$</td><td>$1\times 2$ (gradiente)</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============ EJEMPLOS ============ -->
+    <section id="ejemplos">
+      <div class="card">
+        <h2>5. Ejemplos resueltos</h2>
+        <p>Haz clic en cada ejemplo para ver su desarrollo completo.</p>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle open" data-target="ejemplo1">▸ Ejemplo 12.2 — $f:\mathbb{R}\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$ <span class="arrow">▼</span></button>
+        <div class="accordion-content open" id="ejemplo1">
+          <p>Sean $f(x)=(x^2,x^3)$ y $g(y,z)=yz$. Aplicamos la regla de la cadena:</p>
+          <div class="formula">$$Df(x) = \begin{pmatrix} 2x \\ 3x^2 \end{pmatrix}, \qquad Dg(y,z) = \begin{pmatrix} z & y \end{pmatrix}$$</div>
+          <p>Entonces:</p>
+          <div class="formula">$$\frac{d(g\circ f)}{dx} = Dg\cdot Df = z\cdot(2x) + y\cdot(3x^2) = 5x^4$$</div>
+          <p><b>Verificación directa:</b> $(g\circ f)(x) = x^2\cdot x^3 = x^5$, y $\dfrac{d}{dx}x^5 = 5x^4$. ✓</p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ejemplo2">▸ Ejemplo 12.3 — $f:\mathbb{R}^2\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}$ <span class="arrow">▼</span></button>
+        <div class="accordion-content" id="ejemplo2">
+          <p>Sean $f(x,y)=(\cos(xy),\,e^{x-y})$ y $g(u,v)=u^2\sin v$. Calculemos $D(g\circ f)$.</p>
+          <p>Identificamos $u=\cos(xy)$ y $v=e^{x-y}$. Las parciales de $g$:</p>
+          <div class="formula">$$\frac{\partial g}{\partial u} = 2u\sin v, \qquad \frac{\partial g}{\partial v} = u^2\cos v$$</div>
+          <p>Parciales de $f_1$ y $f_2$:</p>
+          <div class="formula">$$\frac{\partial f_1}{\partial x}=-y\sin(xy),\quad \frac{\partial f_1}{\partial y}=-x\sin(xy)$$</div>
+          <div class="formula">$$\frac{\partial f_2}{\partial x}=e^{x-y},\quad \frac{\partial f_2}{\partial y}=-e^{x-y}$$</div>
+          <p>Aplicando la regla:</p>
+          <div class="formula">$$\frac{\partial (g\circ f)}{\partial x} = 2u\sin v\cdot(-y\sin xy) + u^2\cos v\cdot e^{x-y}$$</div>
+          <p>Sustituyendo $u=\cos(xy)$ y $v=e^{x-y}$:</p>
+          <div class="formula">$$= -2\cos(xy)\sin(e^{x-y})\,y\sin(xy) + \cos^2(xy)\cos(e^{x-y})\,e^{x-y}$$</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ APLICACIONES ============ -->
+    <section id="aplic">
+      <div class="card">
+        <h2>6. Aplicaciones: demostrar reglas de derivación</h2>
+        <p>La regla de la cadena permite <b>deducir</b> reglas elementales como la derivada de la suma y del producto.</p>
+        <button class="dialog-btn" data-dialog="aplic-detail">↪ Ver demostración detallada</button>
+        <div id="aplic-detail" style="display:none; margin-top:0.8rem; padding:0.8rem; background:#f0f2f5; border-radius:6px;">
+          <p><b>Regla de la suma:</b> Sean $f,g:\mathbb{R}^n\to\mathbb{R}^m$ diferenciables en $P$. Definimos $\sigma:\mathbb{R}^{2m}\to\mathbb{R}^m$ por $\sigma(\vec{u},\vec{v})=\vec{u}+\vec{v}$ y $h(Q)=(f(Q),g(Q))$. Entonces $f+g = \sigma\circ h$. Como $\sigma$ es lineal, $D\sigma=(I_m\;|\;I_m)$, y por la regla de la cadena $D(f+g)(P)=Df(P)+Dg(P)$.</p>
+          <p><b>Regla del producto (escalar):</b> Si $f,g:\mathbb{R}^n\to\mathbb{R}$, definimos $\mu(x,y)=xy$. Entonces $fg = \mu\circ(f,g)$. $D\mu(x,y)=(y,\;x)$, por lo que $D(fg)(P)=g(P)Df(P)+f(P)Dg(P)$.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ POLARES ============ -->
+    <section id="polar">
+      <div class="card">
+        <h2>7. Cambio a coordenadas polares</h2>
+        <p>Un caso muy importante es el cambio de variables $(x,y)\leftrightarrow (r,\theta)$ dado por:</p>
+        <div class="formula">$$x = r\cos\theta, \qquad y = r\sin\theta$$</div>
+        <p>Si $f=f(x,y)$, queremos expresar $\dfrac{\partial f}{\partial r}$ y $\dfrac{\partial f}{\partial \theta}$ en términos de $\dfrac{\partial f}{\partial x}$ y $\dfrac{\partial f}{\partial y}$.</p>
+        <button class="accordion-toggle open" data-target="polar-deriv">▸ Derivadas parciales en polares <span class="arrow">▼</span></button>
+        <div class="accordion-content open" id="polar-deriv">
+          <div class="formula">$$\frac{\partial f}{\partial r} = \frac{\partial f}{\partial x}\cos\theta + \frac{\partial f}{\partial y}\sin\theta$$</div>
+          <div class="formula">$$\frac{\partial f}{\partial \theta} = \frac{\partial f}{\partial x}(-r\sin\theta) + \frac{\partial f}{\partial y}(r\cos\theta)$$</div>
+        </div>
+
+        <div class="card green" style="margin-top:1rem;">
+          <h3>🔄 Forma matricial del cambio</h3>
+          <div class="formula">$$\begin{pmatrix} \dfrac{\partial}{\partial r} \\[8pt] \dfrac{\partial}{\partial \theta} \end{pmatrix} = \begin{pmatrix} \cos\theta & \sin\theta \\ -r\sin\theta & r\cos\theta \end{pmatrix} \begin{pmatrix} \dfrac{\partial}{\partial x} \\[8pt] \dfrac{\partial}{\partial y} \end{pmatrix}$$</div>
+          <p>El <span class="glossary-term" data-term="jacobiano">jacobiano</span> de esta transformación es:</p>
+          <div class="formula">$$\det = r(\cos^2\theta+\sin^2\theta) = r$$</div>
+          <p>Cuando $r\neq 0$, la matriz es invertible. Invirtiendo:</p>
+          <div class="formula">$$\begin{pmatrix} \dfrac{\partial}{\partial x} \\[8pt] \dfrac{\partial}{\partial y} \end{pmatrix} = \frac{1}{r}\begin{pmatrix} r\cos\theta & -\sin\theta \\ r\sin\theta & \cos\theta \end{pmatrix} \begin{pmatrix} \dfrac{\partial}{\partial r} \\[8pt] \dfrac{\partial}{\partial \theta} \end{pmatrix}$$</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ DEMOSTRACIÓN ============ -->
+    <section id="demo">
+      <div class="card">
+        <h2>8. Demostración del Teorema 12.1</h2>
+        <p>Presentamos la demostración clásica basada en un lema auxiliar.</p>
+        <button class="accordion-toggle open" data-target="demo-lema">▸ Lema 12.4 (cota de Lipschitz local) <span class="arrow">▼</span></button>
+        <div class="accordion-content open" id="demo-lema">
+          <p><b>Enunciado.</b> Sea $A\subset\mathbb{R}^n$ abierto y $f:A\to\mathbb{R}^m$ diferenciable en $P$. Entonces existen $M\geq 0$ y $\delta>0$ tales que si $\|\overrightarrow{PQ}\|<\delta$, se cumple:</p>
+          <div class="formula">$$\|f(Q)-f(P)\| \;\leq\; M\,\|\overrightarrow{PQ}\|$$</div>
+          <p><b>Idea de la prueba.</b> Como $f$ es diferenciable en $P$, para $\|\overrightarrow{PQ}\|$ suficientemente pequeño:</p>
+          <div class="formula">$$\frac{\|f(Q)-f(P)-Df(P)\overrightarrow{PQ}\|}{\|\overrightarrow{PQ}\|} < 1$$</div>
+          <p>Aplicando la desigualdad triangular, $\|f(Q)-f(P)\| \leq (1+K)\|\overrightarrow{PQ}\|$ con $K=\|Df(P)\|$. Tomamos $M=1+K$.</p>
+        </div>
+
+        <div class="card warn" style="margin-top:1rem;">
+          <button class="accordion-toggle" data-target="demo-prueba">▸ Prueba de la regla de la cadena <span class="arrow">▼</span></button>
+          <div class="accordion-content" id="demo-prueba">
+            <p><b>Notación.</b> Sea $Q=f(P)$, $P'$ cercano a $P$, $Q'=f(P')$.</p>
+            <p>Definimos $G:V\to\mathbb{R}^p$:</p>
+            <div class="formula">$$G(Q') = \begin{cases} \dfrac{g(Q')-g(Q)-Dg(Q)(\overrightarrow{QQ'})}{\|Q'-Q\|} & \text{si } Q'\neq Q \\ 0 & \text{si } Q'=Q \end{cases}$$</div>
+            <p>Como $g$ es diferenciable en $Q$, $G$ es <b>continua</b> en $Q$ y $G(Q)=0$.</p>
+            <p>Reescribimos el cociente diferencial de $g\circ f$:</p>
+            <div class="formula">$$\frac{(g\circ f)(P')-(g\circ f)(P)-Dg(Q)Df(P)(\overrightarrow{PP'})}{\|P'-P\|}$$</div>
+            <p>Se descompone en:</p>
+            <div class="formula">$$= \;Dg(Q)\cdot\frac{f(P')-f(P)-Df(P)(\overrightarrow{PP'})}{\|P'-P\|} \;+\; G(f(P'))\cdot\frac{\|f(P')-f(P)\|}{\|P'-P\|}$$</div>
+            <p>Cuando $P'\to P$:</p>
+            <ul>
+              <li>El primer término tiende a $0$ por diferenciabilidad de $f$.</li>
+              <li>$G(f(P'))\to G(Q)=0$ por continuidad de $G$ y de $f$.</li>
+              <li>El cociente $\|f(P')-f(P)\|/\|P'-P\|$ está acotado por el Lema.</li>
+            </ul>
+            <p>Por lo tanto, el cociente total tiende a $0$, lo que prueba que $g\circ f$ es diferenciable en $P$ con derivada $Dg(Q)\cdot Df(P)$. $\blacksquare$</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPLETAR ============ -->
+    <section id="fill">
+      <div class="card">
+        <h2>✏️ Ejercicios de completar palabras clave</h2>
+        <p>Rellena cada espacio con el término correcto y pulsa <b>Verificar</b>.</p>
+
+        <div id="fill-container">
+          <div class="fill-item" data-answer="matriz jacobiana">
+            <p>1. La derivada total de una función $f:\mathbb{R}^n\to\mathbb{R}^m$ se representa mediante una <input class="fill" type="text" placeholder="..." style="width:180px">.</p>
+          </div>
+          <div class="fill-item" data-answer="producto de matrices">
+            <p>2. En la regla de la cadena multivariable, la derivada de la composición se obtiene mediante el <input class="fill" type="text" placeholder="..." style="width:220px"> de $Dg(Q)$ y $Df(P)$.</p>
+          </div>
+          <div class="fill-item" data-answer="d(g∘f)(p)=dg(q)·df(p)">
+            <p>3. La fórmula matricial de la regla de la cadena es: <input class="fill" type="text" placeholder="..." style="width:320px">.</p>
+          </div>
+          <div class="fill-item" data-answer="p×n">
+            <p>4. Si $Df$ es $m\times n$ y $Dg$ es $p\times m$, entonces $D(g\circ f)$ tiene tamaño <input class="fill" type="text" placeholder="..." style="width:80px">.</p>
+          </div>
+          <div class="fill-item" data-answer="producto punto">
+            <p>5. La entrada $(i,k)$ de $D(g\circ f)$ es el <input class="fill" type="text" placeholder="..." style="width:180px"> entre la fila $i$ de $Dg$ y la columna $k$ de $Df$.</p>
+          </div>
+          <div class="fill-item" data-answer="r">
+            <p>6. El jacobiano del cambio a coordenadas polares es igual a <input class="fill" type="text" placeholder="..." style="width:60px">.</p>
+          </div>
+          <div class="fill-item" data-answer="diferenciable">
+            <p>7. La hipótesis del teorema exige que $f$ sea <input class="fill" type="text" placeholder="..."> en $P$ y $g$ en $Q=f(P)$.</p>
+          </div>
+          <div class="fill-item" data-answer="continua">
+            <p>8. La función auxiliar $G$ construida en la demostración es <input class="fill" type="text" placeholder="..."> en $Q$.</p>
+          </div>
+          <div class="fill-item" data-answer="lineal">
+            <p>9. La función suma $\sigma(\vec{u},\vec{v})=\vec{u}+\vec{v}$ es <input class="fill" type="text" placeholder="..." style="width:120px">, lo que facilita su derivación.</p>
+          </div>
+          <div class="fill-item" data-answer="lipschitz">
+            <p>10. El Lema 12.4 establece una cota de tipo <input class="fill" type="text" placeholder="..." style="width:140px"> local para funciones diferenciables.</p>
+          </div>
+        </div>
+
+        <button class="btn" onclick="checkFill()">Verificar respuestas</button>
+        <button class="btn secondary" onclick="resetFill()">Reiniciar</button>
+        <div id="fill-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ OPCIÓN MÚLTIPLE ============ -->
+    <section id="mc">
+      <div class="card">
+        <h2>✔️ Ejercicios de opción múltiple</h2>
+        <div class="progress"><div class="progress-bar" id="mc-progress"></div></div>
+        <div id="mc-container"></div>
+        <button class="btn" onclick="checkMC()">Calificar</button>
+        <button class="btn secondary" onclick="renderMC()">Reiniciar</button>
+        <div id="mc-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ ENSAYO ============ -->
+    <section id="essay">
+      <div class="card">
+        <h2>📝 Ejercicios tipo ensayo</h2>
+        <p>Responde con tus propias palabras. Puedes usar notación matemática. Al finalizar puedes guardar tus respuestas.</p>
+
+        <h3>Pregunta 1</h3>
+        <p>Explica con tus palabras por qué la regla de la cadena en cálculo vectorial se considera una generalización de la regla de la cadena de una variable. ¿Qué objetos matemáticos reemplazan a las derivadas ordinarias?</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 2</h3>
+        <p>Sean $f:\mathbb{R}^2\to\mathbb{R}^3$ y $g:\mathbb{R}^3\to\mathbb{R}^2$. ¿Cuáles son las dimensiones de $Df$, $Dg$ y $D(g\circ f)$? ¿Es posible calcular $D(f\circ g)$? Justifica tu respuesta.</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 3</h3>
+        <p>Reproduce paso a paso el Ejemplo 12.2 del material: $f(x)=(x^2,x^3)$ y $g(y,z)=yz$. Calcula $D(g\circ f)(x)$ usando la regla de la cadena y verifica el resultado componiendo directamente.</p>
+        <textarea class="essay" placeholder="Desarrolla el ejemplo..."></textarea>
+
+        <h3>Pregunta 4</h3>
+        <p>Explica el papel de la función auxiliar $G$ en la demostración del Teorema 12.1. ¿Por qué se define por casos? ¿Qué propiedad de $G$ es crucial para concluir la prueba?</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 5 (problema)</h3>
+        <p>Sea $w=g(u,v)$ con $u=x^2-y$ y $v=xy$. Supón que en el punto $(u,v)=(1,2)$ se tiene $\dfrac{\partial g}{\partial u}=3$ y $\dfrac{\partial g}{\partial v}=-1$. Calcula $\dfrac{\partial w}{\partial x}$ y $\dfrac{\partial w}{\partial y}$ en el punto $(x,y)=(1,1)$.</p>
+        <textarea class="essay" placeholder="Desarrolla el problema..."></textarea>
+
+        <h3>Pregunta 6</h3>
+        <p>A partir de la regla de la cadena, deduce la fórmula para expresar $\dfrac{\partial f}{\partial x}$ y $\dfrac{\partial f}{\partial y}$ en coordenadas polares. ¿En qué punto la transformación deja de ser invertible? ¿Qué significado geométrico tiene esto?</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <button class="btn success" onclick="saveEssay()">💾 Guardar mis respuestas</button>
+        <div id="essay-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ GLOSARIO ============ -->
+    <section id="glossary">
+      <div class="card">
+        <h2>📖 Glosario de términos</h2>
+        <p>Haz clic en cualquier término para ver su definición ampliada.</p>
+        <div id="glossary-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="tooltip" id="tooltip"></div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Universidad Panamericana · Regla de la Cadena · Cálculo Vectorial · 2026</p>
+  </footer>
+
+  <script>
+    /* ===== NAVEGACIÓN ===== */
+    document.querySelectorAll('nav.tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+      });
+    });
+
+    /* ===== ACORDEÓN ===== */
+    document.querySelectorAll('.accordion-toggle').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        if (content) {
+          content.classList.toggle('open');
+          this.classList.toggle('open');
+        }
+      });
+    });
+
+    /* ===== DIÁLOGOS (botones "Ver más") ===== */
+    document.querySelectorAll('.dialog-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.dataset.dialog;
+        const detail = document.getElementById(targetId);
+        if (detail) {
+          if (detail.style.display === 'none' || detail.style.display === '') {
+            detail.style.display = 'block';
+            this.textContent = '↪ Ocultar detalle';
+          } else {
+            detail.style.display = 'none';
+            this.textContent = '↪ Ver más sobre la motivación';
+          }
+        }
+      });
+    });
+
+    /* ===== TOOLTIPS ===== */
+    const tip = document.getElementById('tooltip');
+    document.querySelectorAll('.keyword').forEach(el => {
+      el.addEventListener('mouseenter', e => {
+        tip.textContent = el.dataset.tip || 'Concepto clave';
+        tip.classList.add('show');
+        const r = el.getBoundingClientRect();
+        tip.style.left = Math.min(r.left, window.innerWidth - 340) + 'px';
+        tip.style.top = (r.bottom + 8) + 'px';
+      });
+      el.addEventListener('mouseleave', () => tip.classList.remove('show'));
+    });
+
+    /* ===== GLOSARIO ===== */
+    const glossary = {
+      'regla-cadena-1v': { t: 'Regla de la cadena (una variable)', d: 'Si $h(x)=g(f(x))$, entonces $h\'(x)=g\'(f(x))\\cdot f\'(x)$. Es el caso más elemental, donde las derivadas son números reales y la composición se traduce en producto.' },
+      'matriz-jacobiana': { t: 'Matriz jacobiana', d: 'Dada $f:\mathbb{R}^n\\to\\mathbb{R}^m$, la matriz jacobiana $Df$ es la matriz $m\\times n$ cuyas entradas son $\\dfrac{\\partial f_i}{\\partial x_j}$. Representa la mejor aproximación lineal de $f$ cerca de un punto.' },
+      'derivada-total': { t: 'Derivada total', d: 'Generalización del concepto de derivada a funciones entre espacios $\\mathbb{R}^n\\to\\mathbb{R}^m$. Se representa por la matriz jacobiana y codifica todas las derivadas direccionales.' },
+      'diferenciable': { t: 'Función diferenciable', d: 'Una función $f$ es diferenciable en $P$ si existe una transformación lineal $Df(P)$ tal que $f(P+\\vec{h})=f(P)+Df(P)\\vec{h}+o(\\|\\vec{h}\\|)$. Es la versión multivariable de "tener derivada".' },
+      'producto-punto': { t: 'Producto punto', d: 'Operación entre dos vectores de igual dimensión: $\\vec{a}\\cdot\\vec{b}=\\sum a_i b_i$. Aparece al calcular entradas específicas del producto de matrices jacobianas.' },
+      'jacobiano': { t: 'Jacobiano (determinante)', d: 'Determinante de la matriz jacobiana de una transformación $\\mathbb{R}^n\\to\\mathbb{R}^n$. Mide el factor local de dilatación de volúmenes. En polares, $\\det J = r$.' }
+    };
+
+    document.querySelectorAll('.glossary-term').forEach(el => {
+      el.addEventListener('click', () => {
+        const g = glossary[el.dataset.term];
+        if (!g) return;
+        document.getElementById('modal-body').innerHTML = `<h2>${g.t}</h2><p>${g.d}</p>`;
+        document.getElementById('modal').classList.add('show');
+        if (window.MathJax) MathJax.typesetPromise();
+      });
+    });
+
+    function closeModal() { document.getElementById('modal').classList.remove('show'); }
+    document.getElementById('modal').addEventListener('click', e => {
+      if (e.target.id === 'modal') closeModal();
+    });
+
+    const gl = document.getElementById('glossary-list');
+    Object.entries(glossary).forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'card accent';
+      d.style.cursor = 'pointer';
+      d.innerHTML = `<h3>${v.t}</h3><p>${v.d}</p>`;
+      d.addEventListener('click', () => {
+        document.getElementById('modal-body').innerHTML = `<h2>${v.t}</h2><p>${v.d}</p>`;
+        document.getElementById('modal').classList.add('show');
+        if (window.MathJax) MathJax.typesetPromise();
+      });
+      gl.appendChild(d);
+    });
+
+    /* ===== COMPLETAR ===== */
+    function normalize(s) {
+      return s.toLowerCase().trim()
+        .replace(/[áéíóú]/g, m => ({ á: 'a', é: 'e', í: 'i', ó: 'o', ú: 'u' }[m]))
+        .replace(/\s+/g, ' ');
+    }
+
+    function checkFill() {
+      let ok = 0,
+        total = 0;
+      document.querySelectorAll('.fill-item').forEach(item => {
+        total++;
+        const input = item.querySelector('input');
+        const ans = normalize(item.dataset.answer);
+        const usr = normalize(input.value);
+        input.classList.remove('correct', 'wrong');
+        let match = false;
+        if (item.dataset.answer === 'd(g∘f)(p)=dg(q)·df(p)') {
+          const cleaned = usr.replace(/[^a-z0-9=]/g, '');
+          if (cleaned.includes('dgofp') && cleaned.includes('dgq') && cleaned.includes('dfp')) match = true;
+          if (usr.includes('d(g') && usr.includes('df(p)')) match = true;
+        } else {
+          match = (usr === ans);
+        }
+        if (match) { input.classList.add('correct');
+          ok++; } else { input.classList.add('wrong'); }
+      });
+      const fb = document.getElementById('fill-feedback');
+      fb.className = 'feedback ' + (ok === total ? 'ok' : 'err');
+      fb.textContent = `Obtuviste ${ok} de ${total} correctas.` + (ok === total ? ' ¡Excelente! 🎉' : ' Revisa las marcadas en rojo.');
+    }
+
+    function resetFill() {
+      document.querySelectorAll('#fill-container input').forEach(i => { i.value = '';
+        i.classList.remove('correct', 'wrong'); });
+      document.getElementById('fill-feedback').className = 'feedback';
+    }
+
+    /* ===== OPCIÓN MÚLTIPLE ===== */
+    const mcQuestions = [
+      { q: 'Si $f:\\mathbb{R}^n\\to\\mathbb{R}^m$ y $g:\\mathbb{R}^m\\to\\mathbb{R}^p$, ¿cuál es el tamaño de $D(g\\circ f)$?',
+        o: ['$m\\times n$', '$p\\times m$', '$p\\times n$', '$n\\times p$'], c: 2 },
+      { q: 'La fórmula matricial de la regla de la cadena es:',
+        o: ['$D(g\\circ f)=Df\\cdot Dg$', '$D(g\\circ f)=Dg\\cdot Df$', '$D(g\\circ f)=Df+Dg$', '$D(g\\circ f)=Dg/Df$'],
+        c: 1 },
+      { q: 'En el Ejemplo 12.2, con $f(x)=(x^2,x^3)$ y $g(y,z)=yz$, se obtiene $\\frac{d(g\\circ f)}{dx}=$',
+        o: ['$3x^4$', '$5x^4$', '$2x^3$', '$x^5$'], c: 1,
+        note: '$z\\cdot 2x + y\\cdot 3x^2 = x^3\\cdot 2x + x^2\\cdot 3x^2 = 5x^4$.' },
+      { q: 'El jacobiano del cambio a coordenadas polares es:',
+        o: ['$1$', '$r$', '$r^2$', '$\\cos\\theta$'], c: 1 },
+      { q: '¿Cuál es la hipótesis necesaria sobre $f$ y $g$ en el Teorema 12.1?',
+        o: ['Continuas en todo $\\mathbb{R}^n$', 'Diferenciables en $P$ y $Q=f(P)$ respectivamente', 'Polinómicas',
+          'Invertibles'
+        ], c: 1 },
+      { q: 'La entrada $(i,k)$ de $D(g\\circ f)$ se obtiene como:',
+        o: ['La suma de la fila $i$ de $Dg$ y la columna $k$ de $Df$',
+          'El producto punto de la fila $i$ de $Dg$ y la columna $k$ de $Df$', 'El producto de los determinantes',
+          'La traza del producto'
+        ], c: 1 },
+      { q: '¿Por qué la función $\\sigma(\\vec{u},\\vec{v})=\\vec{u}+\\vec{v}$ es fácil de derivar?',
+        o: ['Porque es periódica', 'Porque es lineal', 'Porque es continua', 'Porque es acotada'], c: 1,
+        note: 'Toda función lineal $L$ cumple $DL=L$ en todos los puntos.' },
+      { q: 'En coordenadas polares, $\\dfrac{\\partial f}{\\partial r}$ es igual a:',
+        o: ['$\\dfrac{\\partial f}{\\partial x}\\cos\\theta + \\dfrac{\\partial f}{\\partial y}\\sin\\theta$',
+          '$\\dfrac{\\partial f}{\\partial x} - \\dfrac{\\partial f}{\\partial y}$',
+          '$r\\dfrac{\\partial f}{\\partial x}\\cos\\theta$',
+          '$\\dfrac{\\partial f}{\\partial x}\\sin\\theta + \\dfrac{\\partial f}{\\partial y}\\cos\\theta$'
+        ], c: 0 },
+      { q: '¿Qué papel juega el Lema 12.4 en la demostración?',
+        o: ['Demuestra que $g\\circ f$ es continua', 'Proporciona una cota $\\|f(Q)-f(P)\\|\\leq M\\|Q-P\\|$',
+          'Calcula el jacobiano', 'Define la función $G$'
+        ], c: 1 },
+      { q: '¿Cuál de las siguientes afirmaciones es FALSA?',
+        o: ['$D(g\\circ f)(P)=Dg(Q)\\cdot Df(P)$', 'El orden de los factores en el producto jacobiano importa',
+          'La regla de la cadena solo vale para funciones escalares', 'Si $r=0$ la transformación polar no es invertible'
+        ], c: 2 }
+    ];
+
+    function renderMC() {
+      const c = document.getElementById('mc-container');
+      c.innerHTML = '';
+      mcQuestions.forEach((q, i) => {
+        const d = document.createElement('div');
+        d.style.marginBottom = '1.2rem';
+        d.innerHTML = `<p><b>${i + 1}.</b> ${q.q}</p><div class="options" data-correct="${q.c}">` +
+          q.o.map((op, j) => `<label><input type="radio" name="q${i}" value="${j}"> ${op}</label>`).join('') +
+          `</div><div class="fb-${i}"></div>`;
+        c.appendChild(d);
+      });
+      c.querySelectorAll('input[type=radio]').forEach(r => {
+        r.addEventListener('change', e => {
+          const opts = e.target.closest('.options');
+          opts.querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+          e.target.closest('label').classList.add('selected');
+        });
+      });
+      document.getElementById('mc-feedback').className = 'feedback';
+      document.getElementById('mc-progress').style.width = '0%';
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function checkMC() {
+      let ok = 0;
+      document.querySelectorAll('#mc-container .options').forEach((opts, i) => {
+        const correct = parseInt(opts.dataset.correct);
+        const sel = opts.querySelector('input:checked');
+        opts.querySelectorAll('label').forEach(l => l.classList.remove('correct', 'wrong'));
+        const fb = document.querySelector('.fb-' + i);
+        fb.innerHTML = '';
+        if (!sel) { fb.innerHTML = '<i style="color:#64748b">Sin responder</i>'; return; }
+        const v = parseInt(sel.value);
+        if (v === correct) {
+          sel.closest('label').classList.add('correct');
+          ok++;
+          if (mcQuestions[i].note) fb.innerHTML = `<div class="feedback ok">✅ Correcto. ${mcQuestions[i].note}</div>`;
+          else fb.innerHTML = `<div class="feedback ok">✅ Correcto.</div>`;
+        } else {
+          sel.closest('label').classList.add('wrong');
+          opts.children[correct].classList.add('correct');
+          fb.innerHTML = `<div class="feedback err">❌ Incorrecto. La respuesta correcta está marcada en verde.</div>`;
+        }
+      });
+      const total = mcQuestions.length;
+      const pct = Math.round(ok / total * 100);
+      document.getElementById('mc-progress').style.width = pct + '%';
+      const f = document.getElementById('mc-feedback');
+      f.className = 'feedback ' + (pct >= 70 ? 'ok' : 'err');
+      f.textContent = `Resultado: ${ok}/${total} (${pct}%). ` + (pct === 100 ? '¡Perfecto! 🏆' : pct >= 70 ? '¡Buen trabajo!' :
+        'Repasa los conceptos.');
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    /* ===== ENSAYO ===== */
+    function saveEssay() {
+      const areas = document.querySelectorAll('#essay textarea');
+      let txt = '=== Respuestas tipo ensayo — Regla de la Cadena ===\n\n';
+      areas.forEach((a, i) => { txt += `Pregunta ${i + 1}:\n${a.value}\n\n`; });
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'respuestas_regla_cadena.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+      const f = document.getElementById('essay-feedback');
+      f.className = 'feedback ok';
+      f.textContent = '✅ Respuestas guardadas como archivo de texto.';
+    }
+
+    /* Inicializar */
+    renderMC();
+  </script>
+</body>
+</html>
