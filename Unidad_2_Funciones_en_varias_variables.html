@@ -576,13 +576,13 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
   </div>
 </section>
 
-<!-- ==================== SIMULADOR 3D ==================== -->
+<!-- ==================== SIMULADOR 3D MEJORADO ==================== -->
 <section class="view" id="v-simulador" hidden>
   <div class="wrap">
     <div class="view-head">
       <p class="overline">Laboratorio de simulación · Actividad práctica</p>
       <h2>Curvas de nivel, superficies y curvas en el espacio</h2>
-      <p class="sub">Explora visualizaciones 3D interactivas: gira, acerca y observa cómo las funciones se comportan en el espacio.</p>
+      <p class="sub">Visualización 3D interactiva con ejes etiquetados, ecuaciones mostradas y trazas de superficies.</p>
     </div>
 
     <div class="lab-grid">
@@ -605,11 +605,13 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
                 <option value="sin(x)*cos(y)">\(\sin(x)\cos(y)\)</option>
                 <option value="x2-y2">\(x^2 - y^2\) (silla)</option>
                 <option value="exp(-x2-y2)">\(e^{-(x^2+y^2)}\) (campana)</option>
+                <option value="x*y">\(xy\) (silla hiperbólica)</option>
+                <option value="x3-y3">\(x^3 - y^3\)</option>
               </select>
             </div>
             <div class="sim-presets">
               <button class="btn sm ghost" data-contorno="5">5 curvas</button>
-              <button class="btn sm ghost" data-contorno="10">10 curvas</button>
+              <button class="btn sm ghost active" data-contorno="10">10 curvas</button>
               <button class="btn sm ghost" data-contorno="20">20 curvas</button>
               <button class="btn sm ghost" data-contorno="30">30 curvas</button>
             </div>
@@ -620,7 +622,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
             </div>
           </div>
 
-          <!-- Pestaña: Superficies de nivel -->
+          <!-- Pestaña: Superficies de nivel MEJORADA -->
           <div class="sim-panel" id="st-superficie">
             <div class="field" style="margin-bottom:12px">
               <label for="funcSuperficie">Función \(f(x,y,z)\)</label>
@@ -629,20 +631,27 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
                 <option value="x2+y2-z2" selected>\(x^2+y^2-z^2\) (hiperboloide)</option>
                 <option value="x2-y2+z2">\(x^2-y^2+z^2\)</option>
                 <option value="x2+y2+z">\(x^2+y^2+z\) (paraboloides)</option>
+                <option value="x2-y2">\(x^2-y^2\) (cilindro parabólico)</option>
+                <option value="x2+y2">\(x^2+y^2\) (cilindro circular)</option>
               </select>
             </div>
             <div class="field" style="margin-bottom:12px">
               <label for="nivelValor">Valor de nivel \(k\)</label>
               <input id="nivelValor" type="number" value="1" step="0.5">
             </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              <button class="btn sm ghost" id="btnMostrarTraza">Mostrar traza con \(z=0\)</button>
+              <button class="btn sm ghost" id="btnMostrarTrazaXY">Traza con \(z=k\)</button>
+            </div>
             <button class="btn" id="btnSuperficie"><i data-lucide="box"></i>Mostrar superficie de nivel</button>
             <div class="legend-3d">
               <span><span class="dot" style="background:#1e4636;"></span>Superficie de nivel</span>
               <span><span class="dot" style="background:transparent;border:2px solid #c2542f;"></span>Malla</span>
+              <span><span class="dot" style="background:#8a6d10;"></span>Traza</span>
             </div>
           </div>
 
-          <!-- Pestaña: Curvas en el espacio -->
+          <!-- Pestaña: Curvas en el espacio MEJORADA -->
           <div class="sim-panel" id="st-curva">
             <div class="field" style="margin-bottom:12px">
               <label for="funcCurva">Curva paramétrica \(\mathbf{r}(t)\)</label>
@@ -652,27 +661,36 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
                 <option value="lissajous">Lissajous 3D: \((\sin 2t, \cos 3t, \sin t)\)</option>
                 <option value="viviani">Viviani: \((\cos^2 t, \sin t\cos t, \sin t)\)</option>
                 <option value="tornillo">Tornillo: \((t\cos t, t\sin t, t)\)</option>
+                <option value="curvaC">Curva C: \((\cos t, \sin t, \cos 2t)\)</option>
               </select>
             </div>
             <div class="sim-controls-3d">
               <div class="field"><label>\(t_{\min}\)</label><input id="tmin" type="number" value="0" step="0.1"></div>
               <div class="field"><label>\(t_{\max}\)</label><input id="tmax" type="number" value="6.28" step="0.1"></div>
             </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+              <button class="btn sm ghost" id="btnMostrarPuntos">Mostrar puntos de muestreo</button>
+              <button class="btn sm ghost" id="btnMostrarTangente">Mostrar tangente (t=1)</button>
+            </div>
             <button class="btn" id="btnCurva"><i data-lucide="activity"></i>Dibujar curva</button>
             <div class="legend-3d">
               <span><span class="dot" style="background:#1e4636;"></span>Curva \(\mathbf{r}(t)\)</span>
-              <span><span class="dot" style="background:transparent;border:2px solid #c2542f;"></span>Puntos de muestreo</span>
+              <span><span class="dot" style="background:#c2542f;"></span>Puntos de muestreo</span>
+              <span><span class="dot" style="background:#8a6d10;"></span>Vector tangente</span>
             </div>
           </div>
 
-          <p class="note">Arrastra con el mouse para rotar la vista. Usa la rueda para acercar/alejar. El simulador usa Three.js para renderizado 3D.</p>
+          <p class="note">Arrastra con el mouse para rotar. Usa la rueda para acercar/alejar. Los ejes X(rojo), Y(verde), Z(azul) están etiquetados.</p>
         </div>
       </div>
 
       <div class="panel">
         <div class="panel-head"><i data-lucide="box"></i>Visualización 3D</div>
         <div class="sim-3d-container" id="threeContainer"></div>
-        <div class="graph-cap" id="graphCap3D">Selecciona una visualización y presiona el botón correspondiente.</div>
+        <div class="graph-cap" id="graphCap3D">Selecciona una visualización. La ecuación se muestra arriba.</div>
+        <div id="equationDisplay" style="padding:10px 16px;background:#ecf1ea;border-top:1px solid var(--line);font-family:'Fraunces',serif;font-size:1.1rem;text-align:center;color:var(--pine);min-height:40px;">
+          <span id="eqText">\(f(x,y)=\cos(x^2+y^2)\)</span>
+        </div>
       </div>
     </div>
   </div>
