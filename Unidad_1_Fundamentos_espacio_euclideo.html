@@ -607,13 +607,13 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
   </div>
 </section>
 
-<!-- ==================== SIMULADOR ==================== -->
+<!-- ==================== SIMULADOR MEJORADO ==================== -->
 <section class="view" id="v-simulador" hidden>
   <div class="wrap">
     <div class="view-head">
       <p class="overline">Laboratorio de simulación · Actividad práctica</p>
       <h2>Operaciones vectoriales y visualización de regiones</h2>
-      <p class="sub">Explora vectores en \(\mathbb{R}^2\), realiza operaciones, y visualiza conjuntos abiertos, cerrados y dominios de funciones.</p>
+      <p class="sub">Ejes de -15 a 15. Explora vectores en \(\mathbb{R}^2\), realiza operaciones, y visualiza conjuntos abiertos, cerrados y dominios de funciones.</p>
     </div>
 
     <div class="lab-grid">
@@ -628,13 +628,13 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
           <!-- Pestaña: Vectores -->
           <div class="sim-panel active" id="st-vec">
             <div class="vec-input">
-              <div class="field"><label>Vector \(\mathbf{u}\)</label><input id="vx1" type="number" value="2" step="0.5"></div>
-              <div class="field"><label>\(u_y\)</label><input id="vy1" type="number" value="1" step="0.5"></div>
+              <div class="field"><label>Vector \(\mathbf{u}\)</label><input id="vx1" type="number" value="5" step="0.5"></div>
+              <div class="field"><label>\(u_y\)</label><input id="vy1" type="number" value="3" step="0.5"></div>
               <div class="field"><label>\(\alpha\) (escalar)</label><input id="vscalar" type="number" value="2" step="0.5"></div>
             </div>
             <div class="vec-input">
-              <div class="field"><label>Vector \(\mathbf{v}\)</label><input id="vx2" type="number" value="-1" step="0.5"></div>
-              <div class="field"><label>\(v_y\)</label><input id="vy2" type="number" value="3" step="0.5"></div>
+              <div class="field"><label>Vector \(\mathbf{v}\)</label><input id="vx2" type="number" value="-4" step="0.5"></div>
+              <div class="field"><label>\(v_y\)</label><input id="vy2" type="number" value="5" step="0.5"></div>
               <div class="field"><label style="visibility:hidden">.</label><button class="btn" id="btnVecUpdate"><i data-lucide="refresh-cw"></i>Actualizar</button></div>
             </div>
             <div class="vec-actions">
@@ -645,23 +645,32 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
               <button class="btn sm" data-vecop="norma"><i data-lucide="ruler"></i>Norma y distancia</button>
             </div>
             <div class="vec-result" id="vecResult"></div>
+            <p class="note"><strong>Consejo:</strong> Los ejes van de -15 a 15. Usa vectores en ese rango para visualizar la <strong>ley del paralelogramo</strong>.</p>
           </div>
 
-          <!-- Pestaña: Regiones -->
+          <!-- Pestaña: Regiones MEJORADA -->
           <div class="sim-panel" id="st-region">
             <div class="region-presets">
               <button class="btn sm ghost" data-region="disco">Disco abierto</button>
               <button class="btn sm ghost" data-region="disco-cerrado">Disco cerrado</button>
+              <button class="btn sm ghost" data-region="semiespacio">\(y > x+1\)</button>
+              <button class="btn sm ghost" data-region="banda">\(1 < x^2+y^2 < 4\)</button>
               <button class="btn sm ghost" data-region="dominio1">\(\sqrt{x+y}\)</button>
               <button class="btn sm ghost" data-region="dominio2">\(\ln(x^2-1)\)</button>
               <button class="btn sm ghost" data-region="interseccion">Intersección</button>
+              <button class="btn sm ghost" data-region="triangulo">Triángulo: \(x>0,y>0,x+y<1\)</button>
             </div>
             <div class="region-inputs">
-              <div class="field"><label>\(x\) centro / expresión</label><input id="regExpr" type="text" value="x^2+y^2 < 4" placeholder="Ej: x^2+y^2 < 4"></div>
-              <div class="field"><label>\(y\) (opcional)</label><input id="regExpr2" type="text" value="" placeholder="Segunda condición"></div>
+              <div class="field"><label>Expresión (usar x, y)</label>
+                <input id="regExpr" type="text" value="x^2+y^2 < 4" placeholder="Ej: x^2+y^2 < 4">
+              </div>
+              <div class="field"><label>Segunda condición (opcional)</label>
+                <input id="regExpr2" type="text" value="" placeholder="Ej: x > 0">
+              </div>
             </div>
             <button class="btn" id="btnRegionPlot"><i data-lucide="paintbrush-2"></i>Graficar región</button>
             <div class="region-result" id="regionResult"></div>
+            <p class="note"><strong>Ejemplos válidos:</strong> <code>x^2+y^2 < 4</code>, <code>x^2+y^2 >= 1</code>, <code>y > x+1</code>, <code>x > 0</code>, <code>y < 0</code>. Usa <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>.</p>
           </div>
 
           <p class="note">Las operaciones se visualizan en el gráfico de la derecha. Para regiones, la frontera se muestra con línea punteada (abierta) o continua (cerrada), y el interior se ilumina.</p>
@@ -671,7 +680,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
       <div class="panel graph-frame">
         <div class="panel-head"><i data-lucide="chart-line"></i>Visualización</div>
         <canvas id="simCanvas"></canvas>
-        <div class="graph-cap" id="graphCap">Arrastra para ver las operaciones vectoriales y las regiones.</div>
+        <div class="graph-cap" id="graphCap">Ejes de -15 a 15. Arrastra para ver las operaciones vectoriales y las regiones.</div>
       </div>
     </div>
   </div>
