@@ -493,7 +493,7 @@
 
   <header>
     <h1> Regla de la <span>Cadena</span> · Cálculo Vectorial</h1>
-    <p>Universidad Panamericana · Clase interactiva · 4 de septiembre de 2026</p>
+    <p>Universidad Panamericana · Clase interactiva · 7 de septiembre de 2026 · Prof. Adrián Cerda </p>
   </header>
 
   <nav class="tabs">
@@ -641,6 +641,57 @@
           <div class="formula">$$= -2\cos(xy)\sin(e^{x-y})\,y\sin(xy) + \cos^2(xy)\cos(e^{x-y})\,e^{x-y}$$</div>
         </div>
       </div>
+
+      <!-- NUEVO EJEMPLO 3: Evaluación numérica explícita -->
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ejemplo3">▸ Ejemplo 12.4 — Evaluación numérica explícita en un punto $P$ <span class="arrow">▼</span></button>
+        <div class="accordion-content" id="ejemplo3">
+          <p>Sean $f(r,s) = (r+s,\; r-s)$ y $g(u,v) = \left(uv,\; \dfrac{u}{v}\right)$. Queremos calcular $D(g\circ f)$ en el punto $P=(2,1)$.</p>
+          <p><b>Paso 1:</b> Encontrar el punto intermedio $Q = f(P)$.</p>
+          <div class="formula">$$Q = f(2,1) = (2+1,\; 2-1) = (3,1)$$</div>
+          <p><b>Paso 2:</b> Calcular las matrices jacobianas generales y evaluarlas en $P$ y $Q$.</p>
+          <div class="formula">$$Df(r,s) = \begin{pmatrix} \dfrac{\partial u}{\partial r} & \dfrac{\partial u}{\partial s} \\[6pt] \dfrac{\partial v}{\partial r} & \dfrac{\partial v}{\partial s} \end{pmatrix} = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} \implies Df(2,1) = \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix}$$</div>
+          <div class="formula">$$Dg(u,v) = \begin{pmatrix} \dfrac{\partial g_1}{\partial u} & \dfrac{\partial g_1}{\partial v} \\[6pt] \dfrac{\partial g_2}{\partial u} & \dfrac{\partial g_2}{\partial v} \end{pmatrix} = \begin{pmatrix} v & u \\ \dfrac{1}{v} & -\dfrac{u}{v^2} \end{pmatrix} \implies Dg(3,1) = \begin{pmatrix} 1 & 3 \\ 1 & -3 \end{pmatrix}$$</div>
+          <p><b>Paso 3:</b> Realizar el producto matricial $Dg(Q) \cdot Df(P)$.</p>
+          <div class="formula">$$D(g\circ f)(2,1) = \begin{pmatrix} 1 & 3 \\ 1 & -3 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 1 & -1 \end{pmatrix} = \begin{pmatrix} (1)(1)+(3)(1) & (1)(1)+(3)(-1) \\ (1)(1)+(-3)(1) & (1)(1)+(-3)(-1) \end{pmatrix} = \begin{pmatrix} 4 & -2 \\ -2 & 4 \end{pmatrix}$$</div>
+          <p><b>Verificación directa:</b> $(g\circ f)(r,s) = \left((r+s)(r-s),\; \dfrac{r+s}{r-s}\right) = \left(r^2-s^2,\; \dfrac{r+s}{r-s}\right)$. Derivando y evaluando en $(2,1)$ se obtiene exactamente la misma matriz.</p>
+        </div>
+      </div>
+
+      <!-- NUEVO EJEMPLO 4: Curva en R3 y campo escalar -->
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ejemplo4">▸ Ejemplo 12.5 — Curva en $\mathbb{R}^3$ y campo escalar (Aplicación física) <span class="arrow">▼</span></button>
+        <div class="accordion-content" id="ejemplo4">
+          <p>Sea una partícula que se mueve en la hélice $f(t) = (\cos t,\; \sin t,\; t)$, y un campo de temperatura $g(x,y,z) = x^2 + y^2 + z^2$. Calculemos la tasa de cambio de la temperatura respecto al tiempo en $t = \pi/2$.</p>
+          <p><b>Paso 1:</b> Identificar dimensiones. $f:\mathbb{R}\to\mathbb{R}^3$ (matriz $3\times 1$) y $g:\mathbb{R}^3\to\mathbb{R}$ (matriz $1\times 3$). El resultado será $1\times 1$ (un escalar).</p>
+          <p><b>Paso 2:</b> Evaluar el punto intermedio $Q = f(\pi/2)$.</p>
+          <div class="formula">$$Q = \left(\cos\frac{\pi}{2},\; \sin\frac{\pi}{2},\; \frac{\pi}{2}\right) = \left(0,\; 1,\; \frac{\pi}{2}\right)$$</div>
+          <p><b>Paso 3:</b> Calcular las jacobianas.</p>
+          <div class="formula">$$Df(t) = \begin{pmatrix} -\sin t \\ \cos t \\ 1 \end{pmatrix} \implies Df(\pi/2) = \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix}$$</div>
+          <div class="formula">$$Dg(x,y,z) = \begin{pmatrix} 2x & 2y & 2z \end{pmatrix} \implies Dg\left(0, 1, \frac{\pi}{2}\right) = \begin{pmatrix} 0 & 2 & \pi \end{pmatrix}$$</div>
+          <p><b>Paso 4:</b> Producto matricial (producto punto de fila por columna).</p>
+          <div class="formula">$$\frac{d(g\circ f)}{dt}\left(\frac{\pi}{2}\right) = \begin{pmatrix} 0 & 2 & \pi \end{pmatrix} \begin{pmatrix} -1 \\ 0 \\ 1 \end{pmatrix} = (0)(-1) + (2)(0) + (\pi)(1) = \pi$$</div>
+          <p><b>Verificación directa:</b> $(g\circ f)(t) = \cos^2 t + \sin^2 t + t^2 = 1 + t^2$. Su derivada es $2t$. Evaluando en $t=\pi/2$, obtenemos $2(\pi/2) = \pi$. ✓</p>
+        </div>
+      </div>
+
+      <!-- NUEVO EJEMPLO 5: Composición vectorial completa R2 -> R2 -> R2 -->
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ejemplo5">▸ Ejemplo 12.6 — Composición vectorial completa $f:\mathbb{R}^2\to\mathbb{R}^2$, $g:\mathbb{R}^2\to\mathbb{R}^2$ <span class="arrow">▼</span></button>
+        <div class="accordion-content" id="ejemplo5">
+          <p>Sean $f(x,y) = (x^2y,\; x+y)$ y $g(u,v) = (u^2,\; v^3)$. Calculemos la matriz jacobiana de la composición de forma simbólica.</p>
+          <p><b>Paso 1:</b> Jacobiana de la función interna $f$.</p>
+          <div class="formula">$$Df(x,y) = \begin{pmatrix} \dfrac{\partial f_1}{\partial x} & \dfrac{\partial f_1}{\partial y} \\[6pt] \dfrac{\partial f_2}{\partial x} & \dfrac{\partial f_2}{\partial y} \end{pmatrix} = \begin{pmatrix} 2xy & x^2 \\ 1 & 1 \end{pmatrix}$$</div>
+          <p><b>Paso 2:</b> Jacobiana de la función externa $g$, evaluada en $Q = f(x,y) = (x^2y, x+y)$.</p>
+          <div class="formula">$$Dg(u,v) = \begin{pmatrix} 2u & 0 \\ 0 & 3v^2 \end{pmatrix} \implies Dg(f(x,y)) = \begin{pmatrix} 2x^2y & 0 \\ 0 & 3(x+y)^2 \end{pmatrix}$$</div>
+          <p><b>Paso 3:</b> Producto matricial $Dg(f(x,y)) \cdot Df(x,y)$.</p>
+          <div class="formula">$$D(g\circ f)(x,y) = \begin{pmatrix} 2x^2y & 0 \\ 0 & 3(x+y)^2 \end{pmatrix} \begin{pmatrix} 2xy & x^2 \\ 1 & 1 \end{pmatrix}$$</div>
+          <p>Desarrollando el producto fila por columna:</p>
+          <div class="formula">$$= \begin{pmatrix} (2x^2y)(2xy) + (0)(1) & (2x^2y)(x^2) + (0)(1) \\ (0)(2xy) + 3(x+y)^2(1) & (0)(x^2) + 3(x+y)^2(1) \end{pmatrix} = \begin{pmatrix} 4x^3y^2 & 2x^4y \\ 3(x+y)^2 & 3(x+y)^2 \end{pmatrix}$$</div>
+          <p><b>Verificación directa:</b> $(g\circ f)(x,y) = g(x^2y, x+y) = ((x^2y)^2,\; (x+y)^3) = (x^4y^2,\; (x+y)^3)$. Derivando esta composición directamente respecto a $x$ y $y$ se obtiene exactamente la misma matriz jacobiana. ✓</p>
+        </div>
+      </div>
+
     </section>
 
     <!-- ============ APLICACIONES ============ -->
