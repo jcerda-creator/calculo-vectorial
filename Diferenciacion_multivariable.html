@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derivadas direccionales, gradiente y comportamiento local — Cálculo Vectorial</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+<style>
+/* ============================================================
+   VARIABLES Y BASE — paleta institucional UP + verde Metrópolis
+============================================================ */
+:root{
+  --paper:#f5f5f5;
+  --card:#ffffff;
+  --ink:#0A1C3A;          /* azul marino */
+  --blue-light:#143466;
+  --pine:#007B5D;         /* verde Metrópolis */
+  --pine-soft:#005F47;
+  --pine-light:#D4EDDA;
+  --terra:#9a7d2e;        /* dorado oscuro (texto) */
+  --terra-soft:#E8D5A3;   /* dorado claro */
+  --gold:#C9A84C;         /* dorado pleno */
+  --err:#b02a37;
+  --err-bg:#f8d7da;
+  --line:rgba(10,28,58,.16);
+  --line-strong:rgba(10,28,58,.4);
+  --muted:rgba(30,42,68,.62);
+  --ok-bg:#D4EDDA;
+  --shadow:rgba(10,28,58,.15);
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:170px}
+[hidden]{display:none!important}
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--paper);
+  color:#1E2A44;
+  line-height:1.6;
+  background-image:radial-gradient(rgba(10,28,58,.07) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.wrap{max-width:1150px;margin:0 auto;padding:0 24px}
+h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--ink)}
+.overline{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.mono{font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--pine)}
+svg.lucide{width:16px;height:16px;stroke-width:2}
+
+/* ============================================================
+   HEADER / NAV
+============================================================ */
+header.topbar{
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(135deg,rgba(10,28,58,.97) 0%,rgba(20,52,102,.97) 100%);
+  backdrop-filter:blur(10px);
+  border-bottom:4px solid var(--gold);
+  box-shadow:0 6px 20px var(--shadow);
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;color:#fff}
+.brand .brand-ico{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:9px;display:grid;place-items:center;background:var(--gold);color:var(--ink)}
+.brand .brand-ico svg{width:17px;height:17px}
+.brand small{display:block;font-family:'Instrument Sans';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.topbar-side{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-soft);text-align:right}
+nav.tabs{display:flex;gap:6px;border-top:1px solid rgba(255,255,255,.18);padding:10px 0;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  border:1px solid transparent;background:transparent;color:#cbd5e1;
+  font-weight:600;font-size:13.5px;padding:8px 14px;border-radius:999px;
+  transition:all .18s ease;
+}
+.nav-btn svg{width:15px;height:15px}
+.nav-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.active{background:var(--gold);color:var(--ink)}
+
+/* ============================================================
+   VISTAS
+============================================================ */
+.view{padding:0 0 80px}
+.view-head{border-bottom:2px solid var(--ink);padding:52px 0 26px;margin-bottom:36px}
+.view-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin:8px 0 10px}
+.view-head p.sub{max-width:680px;color:var(--muted)}
+
+/* ============================================================
+   BOTONES / FORMULARIOS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:#fff;
+  border:1px solid var(--ink);border-radius:10px;
+  padding:11px 18px;font-weight:600;font-size:14px;
+  transition:all .18s ease;box-shadow:0 3px 8px var(--shadow);
+}
+.btn:hover{background:var(--blue-light);border-color:var(--blue-light);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.ghost:hover{background:rgba(10,28,58,.06);transform:translateY(-1px)}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{
+  font:inherit;font-size:14px;color:#1E2A44;
+  background:var(--card);border:1px solid var(--line-strong);
+  border-radius:8px;padding:10px 12px;width:100%;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.field input[type=range]{border:none;background:transparent;padding:0;box-shadow:none;height:28px;accent-color:var(--pine);cursor:pointer}
+.hint{font-size:12px;color:var(--muted)}
+
+/* ============================================================
+   INICIO / HERO
+============================================================ */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:64px 0 56px}
+.hero h1{font-size:clamp(2.3rem,4.6vw,3.7rem);margin:14px 0 18px}
+.hero h1 em{font-style:italic;color:var(--terra)}
+.hero .lead{font-size:1.05rem;color:var(--muted);max-width:520px}
+.hero-actions{display:flex;gap:12px;margin:26px 0 30px;flex-wrap:wrap}
+.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line-strong);max-width:520px}
+.meta-grid>div{padding:12px 14px 12px 0;border-bottom:1px solid var(--line)}
+.meta-grid dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.meta-grid dd{font-weight:600;font-size:14.5px}
+.hero-fig{border:1.5px solid var(--ink);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:6px 6px 0 var(--shadow)}
+.hero-fig canvas{display:block;width:100%;height:320px}
+.hero-fig figcaption{padding:12px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.home-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:44px;border-top:1.5px solid var(--ink);padding-top:38px}
+.route-item{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-top:1px solid var(--line);padding:22px 4px;cursor:pointer;transition:background .15s}
+.route-item:first-child{border-top:none}
+.route-item:hover{background:rgba(10,28,58,.045)}
+.route-no{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:400;color:rgba(0,123,93,.28)}
+.route-item h3{font-size:1.2rem;margin-bottom:4px}
+.route-item p{font-size:13.5px;color:var(--muted)}
+.route-go{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--ink);transition:all .18s}
+.route-item:hover .route-go{background:var(--ink);color:#fff}
+.side-stats{display:flex;flex-direction:column;gap:12px}
+.stat{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);padding:14px 18px;box-shadow:0 2px 8px var(--shadow)}
+.stat .num{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:600;line-height:1;color:var(--ink)}
+.stat .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ============================================================
+   TEORÍA
+============================================================ */
+.theory{display:grid;grid-template-columns:250px 1fr;gap:52px;align-items:start}
+.toc{position:sticky;top:170px;border-left:1.5px solid var(--ink);display:flex;flex-direction:column}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 0 10px 16px}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);padding:9px 16px;font-size:13.5px;font-weight:500;border-left:3px solid transparent;margin-left:-1.5px;transition:all .15s}
+.toc a span{font-family:'Fraunces',serif;color:var(--terra);font-weight:600;min-width:30px}
+.toc a:hover{border-left-color:var(--pine);background:rgba(0,123,93,.06)}
+.sec{border-top:1px solid var(--line);padding:44px 0}
+.sec:first-child{border-top:none;padding-top:0}
+.sec-no{font-family:'Fraunces',serif;font-size:3rem;font-weight:400;color:rgba(0,123,93,.22);line-height:1}
+.sec h3{font-size:1.55rem;margin:6px 0 16px}
+.prose p{margin:0 0 14px;max-width:70ch}
+.prose ul,.prose ol{margin:0 0 14px 22px;max-width:70ch}
+.prose li{margin-bottom:6px}
+.def{background:rgba(0,123,93,.07);border:1px solid rgba(0,123,93,.28);border-radius:0 10px 10px 0;border-left:4px solid var(--pine);padding:18px 22px;margin:20px 0}
+.def .def-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--pine)}
+.def p{margin:6px 0 0}
+.ex{background:#fef9e7;border:1px solid rgba(201,168,76,.45);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:18px 22px;margin:20px 0}
+.ex .ex-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9a7d2e}
+.ex p{margin:6px 0 0}
+.formula-hero{display:flex;justify-content:center;padding:16px 0;font-size:1.15rem}
+.tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+.tbl th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line)}
+.tbl tbody tr:hover{background:rgba(10,28,58,.04)}
+.tbl td.center,.tbl th.center{text-align:center}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid}
+.tag.d{color:var(--pine);border-color:rgba(0,123,93,.45);background:var(--pine-light)}
+.tag.c{color:var(--terra);border-color:rgba(154,125,46,.45);background:var(--terra-soft)}
+
+/* ============================================================
+   APLICACIONES
+============================================================ */
+.app-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.app-card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:12px;box-shadow:0 4px 16px var(--shadow);padding:24px 26px}
+.app-card.green{border-left-color:var(--pine)}
+.app-card.blue{border-left-color:var(--ink)}
+.app-card h3{font-size:1.25rem;margin:12px 0 10px}
+.app-card p{font-size:14.5px;color:rgba(30,42,68,.85);margin-bottom:10px}
+.app-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pine);background:rgba(0,123,93,.1);padding:4px 10px;border-radius:999px}
+.app-card.blue .app-badge{color:var(--blue-light);background:#eaf2fa}
+.app-card.gold .app-badge{color:var(--terra);background:var(--terra-soft)}
+.formula-mini{background:#f0f2f5;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:12px 0;text-align:center;font-size:1.02rem;overflow-x:auto}
+.app-link{font-size:12px;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:10px;margin-top:8px}
+.app-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);padding:20px 24px;margin-top:22px;box-shadow:0 4px 16px var(--shadow)}
+.app-cta p{margin:0;color:var(--muted);max-width:64ch}
+
+/* ============================================================
+   SIMULADOR 3D
+============================================================ */
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.panel-body{padding:20px 18px}
+.lab-grid{display:grid;grid-template-columns:430px 1fr;gap:24px;align-items:start}
+.sim-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap}
+.sim-tab{background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13px;color:var(--muted);transition:all .15s}
+.sim-tab:hover{border-color:var(--line-strong)}
+.sim-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-panel{display:none}
+.sim-panel.active{display:block}
+.sim-3d-container{width:100%;height:420px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);background:#f6f7f9;position:relative}
+.sim-3d-container canvas{display:block;width:100%!important;height:100%!important}
+.graph-cap{font-size:12.5px;color:var(--muted);padding:10px 16px 0}
+.sim-controls-3d{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.sim-controls-3d .field{margin-bottom:0}
+.sim-presets{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.sim-presets button{font-size:11px;padding:6px 12px}
+.legend-3d{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.legend-3d .dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.note{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line-strong);margin-top:18px;padding-top:12px}
+.info-box{background:#eaf2fa;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:14px;border-left:4px solid var(--ink)}
+.info-box .valor{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--pine);font-weight:600}
+.info-box .label{font-weight:600;color:var(--muted)}
+#equationDisplay{padding:10px 16px;background:#eaf2fa;border-top:1px solid var(--line);font-family:'Fraunces',serif;font-size:1.1rem;text-align:center;color:var(--ink);min-height:40px}
+
+/* ============================================================
+   ACTIVIDADES
+============================================================ */
+.act-block{margin-bottom:52px}
+.act-block>h3{font-size:1.45rem;margin:8px 0 6px}
+.act-block>.act-desc{color:var(--muted);max-width:70ch;margin-bottom:20px}
+.rub-row{display:grid;grid-template-columns:280px 1fr 60px;gap:16px;align-items:center;border-top:1px solid var(--line);padding:14px 4px}
+.rub-row:last-child{border-bottom:1px solid var(--line)}
+.rub-row .rub-name{font-weight:600;font-size:14.5px}
+.rub-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+.rub-bar>div{height:100%;background:var(--pine)}
+.rub-pct{text-align:right;font-family:'Fraunces',serif;font-weight:600}
+details.sol{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px var(--shadow)}
+details.sol summary{list-style:none;display:flex;align-items:flex-start;gap:12px;padding:16px 18px;cursor:pointer;font-weight:600;transition:background .15s}
+details.sol summary::-webkit-details-marker{display:none}
+details.sol summary:hover{background:rgba(10,28,58,.04)}
+.sol-marker{flex:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;transition:transform .2s;margin-top:1px}
+details[open].sol .sol-marker{transform:rotate(45deg);background:var(--ink);color:#fff}
+.sol-body{border-top:1px dashed var(--line-strong);padding:16px 20px;font-size:14.5px}
+.sol-body p{margin-bottom:10px;max-width:75ch}
+.prob-tag{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:4px}
+.chk{display:flex;align-items:center;gap:11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--card);padding:10px 14px;margin-bottom:9px;cursor:pointer;transition:all .15s;font-size:14.5px}
+.chk:hover{border-color:var(--pine)}
+.chk input{width:16px;height:16px;accent-color:var(--pine)}
+.chk.done{background:var(--ok-bg);border-color:var(--pine)}
+
+/* ============================================================
+   EDITOR DE REDACCIÓN
+============================================================ */
+.ed-box{border:1.5px solid var(--ink);border-radius:10px;margin-top:18px;overflow:hidden;background:var(--card)}
+.ed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);background:#eaf2fa;flex-wrap:wrap}
+.ed-title{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--pine)}
+.ed-title svg{width:13px;height:13px}
+.ed-status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+.ed-status .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ed-status.saved{color:var(--pine);font-weight:600}
+.ed-status.saved .dot{background:#2f855a}
+.ed-grid{display:grid;grid-template-columns:1fr 330px}
+.ed-main{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ed-ta{width:100%;min-height:200px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.6;padding:12px 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:#1E2A44}
+.ed-ta:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.ed-preview-wrap{border:1px dashed var(--line-strong);border-radius:8px;overflow:hidden;background:var(--paper)}
+.ed-preview-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 12px;background:rgba(10,28,58,.04);border-bottom:1px dashed var(--line)}
+.ed-preview{padding:12px 14px;font-size:14.5px;min-height:56px;overflow-x:auto;white-space:pre-wrap}
+.ed-preview .katex-display{margin:6px 0}
+.ed-ph{color:var(--muted);font-size:13px}
+.ed-manual{border-left:1px solid var(--line);padding:12px 14px;background:rgba(10,28,58,.03);max-height:460px;overflow:auto}
+.ed-note{font-size:12px;color:var(--muted);margin-bottom:10px}
+.ed-note code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px}
+.ed-cmd-title{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);margin:12px 0 4px}
+.cmd-row{display:grid;grid-template-columns:minmax(0,1fr) auto 26px;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.cmd-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#1E2A44;overflow-x:auto;white-space:nowrap;display:block}
+.cmd-help{display:block;font-size:10.5px;color:var(--muted);font-family:'Instrument Sans'}
+.cmd-view{font-size:13px;text-align:right;max-width:130px;overflow-x:auto;padding:2px 0}
+.cmd-add{width:26px;height:26px;border:1px solid var(--line-strong);border-radius:6px;background:var(--card);display:grid;place-items:center;font-weight:700;color:var(--pine);transition:all .15s;font-size:14px;flex:none}
+.cmd-add:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+.ed-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-top:1px dashed var(--line-strong);flex-wrap:wrap}
+.ed-count{font-size:12px;color:var(--muted)}
+details.mini-check{border:1px dashed var(--line-strong);border-radius:8px;background:var(--terra-soft);margin-top:14px}
+details.mini-check summary{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;list-style:none}
+details.mini-check summary::-webkit-details-marker{display:none}
+details.mini-check summary:hover{color:var(--terra)}
+details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-top:8px;font-size:13.5px}
+
+/* ============================================================
+   QUIZ
+============================================================ */
+.quiz-q{border-top:1px solid var(--line);padding:24px 4px}
+.quiz-q header{display:flex;gap:14px;margin-bottom:14px}
+.qnum{flex:none;font-family:'Fraunces',serif;font-weight:700;color:var(--terra);border:1.5px solid var(--terra);border-radius:8px;padding:2px 9px;height:fit-content}
+.quiz-q .q-text{font-weight:600;font-size:15.5px;padding-top:4px}
+.opts{display:grid;gap:9px;margin-left:56px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line-strong);border-radius:10px;padding:11px 14px;cursor:pointer;background:var(--card);transition:all .15s;font-size:14.5px}
+.opt:hover{border-color:var(--pine)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt-key{flex:none;width:26px;height:26px;border:1.5px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;transition:all .15s}
+.opt.is-correct{border-color:var(--pine);background:var(--ok-bg)}
+.opt.is-correct .opt-key{background:var(--pine);border-color:var(--pine);color:#fff}
+.opt.is-wrong{border-color:var(--err);background:var(--err-bg)}
+.opt.is-wrong .opt-key{background:var(--err);border-color:var(--err);color:#fff}
+.opt.locked{cursor:default}
+.explain{margin:12px 0 0 56px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:8px 14px;background:var(--card)}
+.quiz-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;border-top:1.5px solid var(--ink);padding-top:20px}
+.quiz-result{font-size:15px}
+.quiz-result strong{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--pine);margin-right:8px}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;color:#fff}
+.del-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;transition:all .15s}
+.del-btn:hover{border-color:var(--err);color:var(--err)}
+.del-btn.confirm{background:var(--err);border-color:var(--err);color:#fff}
+.boleta-card{position:relative;max-width:700px;background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 var(--shadow);overflow:hidden}
+.b-head{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1.5px solid var(--ink)}
+.b-head .avatar{width:52px;height:52px;font-size:17px;border:1.5px solid var(--ink)}
+.b-head>div{flex:1;min-width:0}
+.b-title{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--terra);margin-bottom:3px}
+.b-name{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;line-height:1.15;color:var(--ink)}
+.b-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.b-seal{flex:none;width:82px;height:82px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--terra);transform:rotate(-8deg);opacity:.9;line-height:1.25}
+.b-seal span{font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.b-seal strong{font-family:'Fraunces',serif;font-size:1.25rem}
+.b-body{padding:8px 24px 18px}
+.b-row{display:grid;grid-template-columns:1fr 150px 92px;gap:14px;align-items:center;border-top:1px solid var(--line);padding:13px 0}
+.b-row:first-child{border-top:none}
+.b-rubname{font-weight:600;font-size:14.5px}
+.b-rubdet{font-size:12px;color:var(--muted);margin-top:1px}
+.b-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper)}
+.b-bar>div{height:100%;background:var(--pine);transition:width .4s ease}
+.b-pts{text-align:right;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem}
+.b-pts small{font-weight:400;color:var(--muted);font-size:.75em}
+.b-total{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:2px solid var(--ink);background:#eaf2fa;padding:16px 24px}
+.b-total-lbl{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink)}
+.b-total-det{font-size:11.5px;color:var(--muted);margin-top:2px}
+.b-score{display:flex;align-items:baseline;gap:6px}
+.b-score .big{font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--pine);line-height:1}
+.b-score .den{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--muted)}
+.b-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line-strong);padding:11px 24px;font-size:11.5px;color:var(--muted)}
+.boleta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;max-width:700px}
+
+/* ============================================================
+   TOASTS / FOOTER
+============================================================ */
+#toasts{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(10,28,58,.3);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
+.toast svg{flex:none;width:17px;height:17px}
+.toast.ok svg{color:#8fd0a5}
+.toast.err svg{color:#f0a284}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
+footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38px;margin-top:20px}
+.foot-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.72)}
+.foot-row strong{color:#fff}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .home-grid{grid-template-columns:1fr}
+  .theory{grid-template-columns:1fr}
+  .toc{position:static;flex-direction:row;overflow-x:auto;border-left:none;border-bottom:1.5px solid var(--ink);gap:2px}
+  .toc-title{display:none}
+  .toc a{white-space:nowrap;border-left:none;border-bottom:3px solid transparent}
+  .toc a:hover{border-bottom-color:var(--pine)}
+  .lab-grid,.task-panel,.app-grid{grid-template-columns:1fr}
+  .ed-grid{grid-template-columns:1fr}
+  .ed-manual{border-left:none;border-top:1px solid var(--line);max-height:none}
+  .sim-controls-3d{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .b-row{grid-template-columns:1fr 86px}
+  .b-bar{display:none}
+  .b-seal{display:none}
+  .b-total{flex-direction:column;align-items:flex-start;gap:6px}
+  .opts,.explain{margin-left:0}
+}
+</style>
+</head>
+<body>
+<!-- ==================== HEADER ==================== -->
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div class="brand">
+      <span class="brand-ico"><i data-lucide="sigma"></i></span>
+      <span>Cálculo Vectorial <small>Aula interactiva — Dr. Adrián Cerda</small></span>
+    </div>
+    <div class="topbar-side">9 sep 2026</div>
+  </div>
+  <div class="wrap">
+    <nav class="tabs" id="mainNav">
+      <button class="nav-btn active" data-view="inicio"><i data-lucide="home"></i>Inicio</button>
+      <button class="nav-btn" data-view="teoria"><i data-lucide="book-open"></i>Teoría</button>
+      <button class="nav-btn" data-view="simulador"><i data-lucide="layout-dashboard"></i>Simulador 3D</button>
+      <button class="nav-btn" data-view="aplicaciones"><i data-lucide="rocket"></i>Aplicaciones</button>
+      <button class="nav-btn" data-view="actividades"><i data-lucide="clipboard-list"></i>Actividades</button>
+      <button class="nav-btn" data-view="boleta"><i data-lucide="badge-check"></i>Mi boleta</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ==================== INICIO ==================== -->
+<section class="view" id="v-inicio">
+  <div class="wrap hero">
+    <div>
+      <p class="overline">Cálculo Vectorial · Universidad Panamericana</p>
+      <h1>Derivadas direccionales, gradiente y comportamiento <em>local</em></h1>
+      <p class="lead">Explora derivadas direccionales y el gradiente, clasifica máximos, mínimos y puntos silla con la Hessiana, y optimiza con restricciones mediante multiplicadores de Lagrange.</p>
+      <div class="hero-actions">
+        <button class="btn" data-view="teoria"><i data-lucide="book-open"></i>Entrar a la teoría</button>
+        <button class="btn ghost" data-view="simulador"><i data-lucide="layout-dashboard"></i>Explorar en 3D</button>
+      </div>
+      <dl class="meta-grid">
+        <div><dt>Unidad</dt><dd>IV — Derivadas y comportamiento local</dd></div>
+        <div><dt>Sesiones</dt><dd>2 de 2 horas cada una</dd></div>
+        <div><dt>Evaluación</dt><dd>Quiz + tareas + laboratorio</dd></div>
+        <div><dt>Texto</dt><dd>Marsden &amp; Tromba — Cap. 4</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-fig">
+      <canvas id="heroCanvas"></canvas>
+      <figcaption><strong>Puntos críticos.</strong> Máximo (dorado), mínimo (verde) y punto silla en tres superficies.</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap home-grid">
+    <div>
+      <p class="overline" style="margin-bottom:14px">Ruta de la unidad</p>
+      <div class="route-item" data-view="teoria">
+        <span class="route-no">01</span>
+        <div><h3>Desarrollo de la teoría</h3><p>Derivadas parciales, direccionales y gradiente, Hessiana, extremos y multiplicadores de Lagrange.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="simulador">
+        <span class="route-no">02</span>
+        <div><h3>Laboratorio 3D</h3><p>Visualiza extremos, optimización con restricciones, y derivadas direccionales con el gradiente en 3D.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="aplicaciones">
+        <span class="route-no">03</span>
+        <div><h3>Aplicaciones</h3><p>El gradiente en topografía, inteligencia artificial, física, economía y visión por computadora.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="actividades">
+        <span class="route-no">04</span>
+        <div><h3>Evaluación y tareas</h3><p>Ejercicios guiados, redacción en LaTeX, quiz y problemas del Marsden-Tromba.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="boleta">
+        <span class="route-no">05</span>
+        <div><h3>Mi boleta</h3><p>Regístrate y sigue tu avance: tu progreso y calificación final.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+    </div>
+    <aside>
+      <p class="overline" style="margin-bottom:14px">En un vistazo</p>
+      <div class="side-stats">
+        <div class="stat"><div class="num" id="statNota">—</div><div class="lbl">Tu nota (sobre 10)</div></div>
+        <div class="stat"><div class="num">5</div><div class="lbl">Secciones teóricas</div></div>
+        <div class="stat"><div class="num">6</div><div class="lbl">Preguntas del quiz</div></div>
+        <div class="stat"><div class="num">14</div><div class="lbl">Ejercicios y problemas</div></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ==================== TEORÍA ==================== -->
+<section class="view" id="v-teoria" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Desarrollo de la teoría</p>
+      <h2>Derivadas parciales, direccionales, extremos y optimización con restricciones</h2>
+      <p class="sub">Síntesis del Capítulo 4 de Marsden &amp; Tromba, <em>Cálculo Vectorial</em>.</p>
+    </div>
+
+    <div class="theory">
+      <aside class="toc">
+        <p class="toc-title">Contenido</p>
+        <a href="#t41"><span>4.1</span>Derivadas parciales y totales</a>
+        <a href="#t42"><span>4.2</span>Derivadas direccionales y gradiente</a>
+        <a href="#t43"><span>4.3</span>Derivadas de orden superior</a>
+        <a href="#t44"><span>4.4</span>Extremos relativos y Hessiana</a>
+        <a href="#t45"><span>4.5</span>Multiplicadores de Lagrange</a>
+      </aside>
+
+      <div class="prose">
+
+        <!-- 4.1 -->
+        <article class="sec" id="t41">
+          <div class="sec-no">4.1</div>
+          <h3>Derivadas parciales y totales</h3>
+          <div class="def">
+            <span class="def-tag">Definición</span>
+            <p>La <strong>derivada parcial</strong> de \(f\) con respecto a \(x\) en \((a,b)\) es:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \frac{\partial f}{\partial x}(a,b) = \lim_{h\to0} \frac{f(a+h,b)-f(a,b)}{h} \)</p>
+            <p>Análogamente para \(y\): \( \displaystyle \frac{\partial f}{\partial y}(a,b) = \lim_{h\to0} \frac{f(a,b+h)-f(a,b)}{h} \).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Para \(f(x,y)=x^2+3xy+y^3\):</p>
+            <p>\(\frac{\partial f}{\partial x}=2x+3y,\quad \frac{\partial f}{\partial y}=3x+3y^2\)</p>
+            <p>En \((1,2)\): \(\frac{\partial f}{\partial x}=8,\quad \frac{\partial f}{\partial y}=15\)</p>
+          </div>
+        </article>
+
+        <!-- 4.2 NUEVA SECCIÓN -->
+        <article class="sec" id="t42">
+          <div class="sec-no">4.2</div>
+          <h3>Derivadas direccionales y gradiente</h3>
+          <p>Las derivadas parciales miden el cambio de \(f\) solo en las direcciones de los ejes. La <strong>derivada direccional</strong> generaliza esta idea a <em>cualquier</em> dirección del plano.</p>
+          <div class="def">
+            <span class="def-tag">Definición · Derivada direccional</span>
+            <p>Sea \(\vec u=(u_1,u_2)\) un vector <strong>unitario</strong> (\(\|\vec u\|=1\)). La derivada de \(f\) en la dirección de \(\vec u\), en el punto \((a,b)\), es:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle D_{\vec u}f(a,b)=\lim_{h\to0}\frac{f(a+h\,u_1,\;b+h\,u_2)-f(a,b)}{h} \)</p>
+            <p>Si \(\vec u=(1,0)\) recuperamos \(f_x\); si \(\vec u=(0,1)\), recuperamos \(f_y\). Si \(\vec u\) no es unitario, se normaliza: \(\vec u/\|\vec u\|\).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Definición · Gradiente</span>
+            <p>El <strong>gradiente</strong> de \(f\) es el vector de sus derivadas parciales:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \nabla f(x,y)=\left(\frac{\partial f}{\partial x},\;\frac{\partial f}{\partial y}\right) \)</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Teorema · Fórmula fundamental</span>
+            <p>Si \(f\) es diferenciable en \((a,b)\) y \(\vec u=(u_1,u_2)\) es unitario:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle D_{\vec u}f(a,b)=\nabla f(a,b)\cdot\vec u=f_x(a,b)\,u_1+f_y(a,b)\,u_2 \)</p>
+            <p>En función del ángulo \(\varphi\) entre \(\vec u\) y \(\nabla f\): \(D_{\vec u}f=\|\nabla f\|\cos\varphi\).</p>
+          </div>
+          <p><strong>Propiedades del gradiente.</strong> En cada punto donde \(\nabla f\neq(0,0)\):</p>
+          <ul>
+            <li>\(D_{\vec u}f\) es <strong>máxima</strong> cuando \(\vec u\) apunta en la dirección de \(\nabla f\), y vale \(\|\nabla f\|\) (dirección de <em>máximo crecimiento</em>).</li>
+            <li>\(D_{\vec u}f\) es <strong>mínima</strong> cuando \(\vec u=-\nabla f/\|\nabla f\|\), y vale \(-\|\nabla f\|\) (máximo decrecimiento).</li>
+            <li>\(D_{\vec u}f=0\) cuando \(\vec u\perp\nabla f\): a lo largo de las <strong>curvas de nivel</strong> la función no cambia.</li>
+            <li>Por lo anterior, \(\nabla f\) es <strong>perpendicular a las curvas de nivel</strong> de \(f\).</li>
+          </ul>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Sea \(f(x,y)=x^2+xy\). Entonces \(\nabla f=(2x+y,\;x)\).</p>
+            <p>En \(P=(1,2)\): \(\nabla f(P)=(4,1)\) y \(\|\nabla f\|=\sqrt{17}\approx4.12\).</p>
+            <p>Con \(\vec u=(3/5,\,4/5)\): \(D_{\vec u}f(P)=4\cdot\frac35+1\cdot\frac45=\frac{16}{5}=3.2\).</p>
+            <p>Dirección de máximo crecimiento: \(\frac{1}{\sqrt{17}}(4,1)\), con tasa \(\sqrt{17}\). Dirección perpendicular \(\frac{1}{\sqrt{17}}(-1,4)\): ahí \(D_{\vec u}f=0\) (se avanza sobre la línea de nivel).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Interpretación geométrica</span>
+            <p>\(D_{\vec u}f(a,b)\) es la <strong>pendiente del corte</strong> de la superficie \(z=f(x,y)\) con el plano vertical que contiene a \((a,b)\) y a la dirección \(\vec u\): exactamente lo que dibuja el simulador en la pestaña «Direccionales y gradiente».</p>
+          </div>
+          <p>Esta maquinaria conecta todo el resto de la unidad: el <em>descenso del gradiente</em> (sección de Aplicaciones) camina siempre en la dirección \(-\nabla f\), y en el método de Lagrange (§4.5) la derivada direccional a lo largo de la restricción debe anularse en el extremo, lo que obliga a \(\nabla f\parallel\nabla g\).</p>
+        </article>
+
+        <!-- 4.3 -->
+        <article class="sec" id="t43">
+          <div class="sec-no">4.3</div>
+          <h3>Derivadas de orden superior</h3>
+          <div class="def">
+            <span class="def-tag">Definición</span>
+            <p>Las derivadas parciales de segundo orden son:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle f_{xx} = \frac{\partial^2 f}{\partial x^2},\quad f_{yy} = \frac{\partial^2 f}{\partial y^2},\quad f_{xy} = \frac{\partial^2 f}{\partial x\partial y},\quad f_{yx} = \frac{\partial^2 f}{\partial y\partial x} \)</p>
+          </div>
+          <p>Por el <strong>Teorema de Clairaut</strong>, si las derivadas mixtas son continuas, entonces \(f_{xy}=f_{yx}\).</p>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Para \(f(x,y)=x^2y^3\):</p>
+            <p>\(f_{xx}=2y^3,\quad f_{yy}=6x^2y,\quad f_{xy}=6xy^2,\quad f_{yx}=6xy^2\)</p>
+            <p>Efectivamente, \(f_{xy}=f_{yx}\).</p>
+          </div>
+        </article>
+
+        <!-- 4.4 -->
+        <article class="sec" id="t44">
+          <div class="sec-no">4.4</div>
+          <h3>Extremos relativos y Hessiana</h3>
+          <div class="def">
+            <span class="def-tag">Definición</span>
+            <p>Un punto \((a,b)\) es <strong>punto crítico</strong> si \(\nabla f(a,b) = (0,0)\).</p>
+            <p>La <strong>matriz Hessiana</strong> es:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( H = \begin{pmatrix} f_{xx} & f_{xy} \\ f_{yx} & f_{yy} \end{pmatrix} \)</p>
+          </div>
+          <p><strong>Criterio de la Hessiana</strong> (para puntos críticos):</p>
+          <ul>
+            <li>Si \(\det(H) > 0\) y \(f_{xx} > 0\): <strong>mínimo local</strong>.</li>
+            <li>Si \(\det(H) > 0\) y \(f_{xx} < 0\): <strong>máximo local</strong>.</li>
+            <li>Si \(\det(H) < 0\): <strong>punto silla</strong>.</li>
+            <li>Si \(\det(H) = 0\): el criterio no decide.</li>
+          </ul>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Para \(f(x,y)=x^2-y^2\) en \((0,0)\):</p>
+            <p>\(f_{xx}=2,\; f_{yy}=-2,\; f_{xy}=0\)</p>
+            <p>\(\det(H)=2(-2)-0=-4<0\) ⇒ <strong>punto silla</strong>.</p>
+          </div>
+        </article>
+
+        <!-- 4.5 -->
+        <article class="sec" id="t45">
+          <div class="sec-no">4.5</div>
+          <h3>Multiplicadores de Lagrange</h3>
+          <div class="def">
+            <span class="def-tag">Teorema</span>
+            <p>Para optimizar \(f(x,y)\) sujeta a la restricción \(g(x,y)=0\), los extremos ocurren en puntos donde:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \nabla f(x,y) = \lambda \nabla g(x,y) \)</p>
+            <p>para algún \(\lambda \in \mathbb{R}\) (multiplicador de Lagrange).</p>
+          </div>
+          <p>Esto significa que los gradientes son <strong>paralelos</strong> en el punto extremo. En términos de la sección 4.2: en el óptimo, la derivada direccional de \(f\) en toda dirección tangente a la curva \(g=0\) es cero, así que \(\nabla f\) solo tiene componente normal, igual que \(\nabla g\).</p>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Maximizar \(f(x,y)=xy\) sujeta a \(x^2+y^2=1\).</p>
+            <p>\(\nabla f=(y,x),\; \nabla g=(2x,2y)\)</p>
+            <p>\(y=2\lambda x,\; x=2\lambda y,\; x^2+y^2=1\)</p>
+            <p>Resolviendo: \(x=y=\pm\frac{1}{\sqrt{2}}\) o \(x=-y=\pm\frac{1}{\sqrt{2}}\).</p>
+            <p>Máximos en \((\frac{1}{\sqrt{2}},\frac{1}{\sqrt{2}})\) y \((-\frac{1}{\sqrt{2}},-\frac{1}{\sqrt{2}})\) con valor \(1/2\).</p>
+          </div>
+          <div class="info-box" style="margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <span>¿Para qué sirve todo esto fuera del aula? Visita la sección de aplicaciones.</span>
+            <button class="btn sm" data-view="aplicaciones"><i data-lucide="rocket"></i>Ver aplicaciones</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== APLICACIONES ==================== -->
+<section class="view" id="v-aplicaciones" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Sección de aplicaciones</p>
+      <h2>El gradiente y las derivadas direccionales en el mundo real</h2>
+      <p class="sub">De la topografía al aprendizaje de máquinas: las mismas fórmulas de la sección 4.2 impulsan tecnologías cotidianas.</p>
+    </div>
+
+    <div class="app-grid">
+      <article class="app-card green">
+        <span class="app-badge">Topografía · Ingeniería civil</span>
+        <h3>Pendiente máxima y drenaje</h3>
+        <p>Si \(h(x,y)\) modela la elevación de un terreno, \(\nabla h\) apunta hacia donde la ladera sube más rápido y \(\|\nabla h\|\) es la pendiente máxima. El agua escurre en la dirección \(-\nabla h\), y las curvas de nivel son las isolíneas de un mapa topográfico.</p>
+        <div class="formula-mini">\( h(x,y)=100-x^2-2y^2 \;\Rightarrow\; \nabla h(1,1)=(-2,\,-4) \)</div>
+        <p>En \((1,1)\): pendiente máxima \(\|\nabla h\|=\sqrt{20}\approx4.47\) m por unidad de distancia; el agua fluye en la dirección \((2,4)/\sqrt{20}\), es decir, hacia la cima del terreno invertido.</p>
+        <p class="app-link">Conexión: teoría §4.2 · simulador «Direccionales y gradiente».</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Inteligencia artificial · Optimización</span>
+        <h3>Descenso del gradiente</h3>
+        <p>Entrenar una red neuronal es <em>minimizar</em> una función de pérdida \(f\). El algoritmo más usado camina siempre contra el gradiente, exactamente en la dirección de máximo decrecimiento (§4.2):</p>
+        <div class="formula-mini">\( \vec x_{k+1}=\vec x_k-\alpha\,\nabla f(\vec x_k) \)</div>
+        <p>Aquí \(\alpha\) es la <strong>tasa de aprendizaje</strong>. El algoritmo se detiene cuando \(\nabla f\approx(0,0)\): un punto crítico que la Hessiana (§4.4) ayuda a clasificar.</p>
+        <table class="tbl">
+          <thead><tr><th>Paso</th><th class="center">\((x_k,y_k)\)</th><th class="center">\(f\)</th></tr></thead>
+          <tbody>
+            <tr><td class="center">0</td><td class="center mono">\((2,\,2)\)</td><td class="center mono">20.00</td></tr>
+            <tr><td class="center">1</td><td class="center mono">\((1.6,\,0.4)\)</td><td class="center mono">3.20</td></tr>
+            <tr><td class="center">2</td><td class="center mono">\((1.28,\,0.08)\)</td><td class="center mono">1.66</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:13px;color:var(--muted)">Iteraciones para \(f(x,y)=x^2+4y^2\) con \(\alpha=0.1\), inicio \((2,2)\).</p>
+        <p class="app-link">Conexión: teoría §4.2 y §4.4.</p>
+      </article>
+
+      <article class="app-card gold">
+        <span class="app-badge">Física · Transferencia</span>
+        <h3>Flujo de calor, difusión y campos</h3>
+        <p>La naturaleza fluye <em>contra</em> el gradiente. La ley de Fourier dice que el calor se mueve de lo caliente a lo frío: \(\vec q=-k\nabla T\). La ley de Fick (difusión de sustancias) y el campo electrostático \(\vec E=-\nabla V\) tienen la misma estructura.</p>
+        <div class="formula-mini">\( T(x,y)=x^2+2y^2 \;\Rightarrow\; \nabla T(1,1)=(2,\,4),\quad \vec q\parallel-(2,4) \)</div>
+        <p>En \((1,1)\) el calor fluye en la dirección \(-(2,4)/\sqrt{20}\): hacia el origen, donde la temperatura es mínima. La tasa de enfriamiento por unidad de distancia es \(k\|\nabla T\|=2\sqrt5\,k\).</p>
+        <p class="app-link">Conexión: teoría §4.2 (dirección de máximo decrecimiento).</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Economía · Lagrange</span>
+        <h3>Utilidad máxima con presupuesto</h3>
+        <p>Un consumidor maximiza su utilidad \(U(x,y)\) sujeto al presupuesto \(p_xx+p_yy=m\). El consumidor óptimo satisface \(\nabla U=\lambda\nabla g\), y \(\lambda\) mide la <strong>utilidad marginal del dinero</strong>: cuánta utilidad extra da un peso adicional.</p>
+        <div class="formula-mini">\( \max\; xy \quad \text{s.a.}\quad 2x+3y=12 \)</div>
+        <p>\((y,x)=\lambda(2,3)\Rightarrow y=2\lambda,\; x=3\lambda\). Sustituyendo: \(6\lambda+6\lambda=12\Rightarrow\lambda=1\), luego \(x=3,\;y=2\) con \(U=6\). Cada peso extra de presupuesto aumentaría la utilidad en \(\approx1\).</p>
+        <p class="app-link">Conexión: teoría §4.5 · simulador «Multiplicadores de Lagrange».</p>
+      </article>
+
+      <article class="app-card green">
+        <span class="app-badge">Visión por computadora</span>
+        <h3>Detección de bordes en imágenes</h3>
+        <p>Una imagen en escala de grises es un campo \(I(x,y)\). Un <strong>borde</strong> es un cambio brusco de brillo, es decir, un lugar donde \(\|\nabla I\|\) es grande. Los filtros de Sobel aproximan \(I_x\) e \(I_y\) con pequeñas matrices, y la orientación del borde es perpendicular a \(\nabla I\).</p>
+        <div class="formula-mini">\( \|\nabla I\|=\sqrt{I_x^2+I_y^2} \)</div>
+        <p>Se usa en radiología médica, OCR, control de calidad y autos autónomos: en todos ellos, «encontrar el borde» es encontrar la dirección de máximo cambio de brillo.</p>
+        <p class="app-link">Conexión: teoría §4.2 (máximo cambio y perpendicularidad).</p>
+      </article>
+
+      <article class="app-card gold">
+        <span class="app-badge">Navegación · Meteorología</span>
+        <h3>Rutas de máxima pendiente</h3>
+        <p>Un dron de reparto quiere ganar altura con el mínimo avance horizontal: debe volar en la dirección \(\nabla h\) del campo de elevación. Un excursionista evita el desgaste caminando <em>a lo largo</em> de las curvas de nivel (\(D_{\vec u}h=0\)). En meteorología, los modelos viento-gradiente siguen razonamientos análogos con los campos de presión.</p>
+        <div class="formula-mini">\( D_{\vec u}h=\|\nabla h\|\cos\varphi \)</div>
+        <p>Girar la dirección \(\vec u\) cambia \(\varphi\) y con ello la pendiente efectiva: de \(\|\nabla h\|\) (subiendo recto) a \(0\) (contorneando) e incluso \(-\|\nabla h\|\) (bajando).</p>
+        <p class="app-link">Conexión: teoría §4.2 · pruébalo girando θ en el simulador.</p>
+      </article>
+    </div>
+
+    <div class="app-cta">
+      <p>Explora estas ideas en vivo: mueve el ángulo \(\theta\), alinea \(\vec u\) con \(\nabla f\) y observa cómo cambia \(D_{\vec u}f\) sobre la superficie.</p>
+      <button class="btn" data-goto-sim="direccionales"><i data-lucide="layout-dashboard"></i>Abrir el simulador</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SIMULADOR 3D ==================== -->
+<section class="view" id="v-simulador" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Laboratorio de simulación · Actividad práctica</p>
+      <h2>Máximos, mínimos, puntos silla, Lagrange y derivadas direccionales</h2>
+      <p class="sub">Explora en 3D el comportamiento de funciones alrededor de puntos críticos, la optimización con restricciones y la derivada direccional junto con el gradiente.</p>
+    </div>
+
+    <div class="lab-grid">
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="sliders-horizontal"></i>Controles 3D</div>
+        <div class="panel-body">
+          <div class="sim-tabs">
+            <button class="sim-tab active" data-stab="extremos">Extremos y Hessiana</button>
+            <button class="sim-tab" data-stab="lagrange">Multiplicadores de Lagrange</button>
+            <button class="sim-tab" data-stab="direccionales">Direccionales y gradiente</button>
+          </div>
+
+          <!-- Pestaña: Extremos -->
+          <div class="sim-panel active" id="st-extremos">
+            <div class="field" style="margin-bottom:12px">
+              <label for="funcExtremos">Función \(f(x,y)\)</label>
+              <select id="funcExtremos">
+                <option value="paraboloide" selected>x² + y² (mínimo)</option>
+                <option value="paraboloideNeg">−x² − y² (máximo)</option>
+                <option value="silla">x² − y² (punto silla)</option>
+                <option value="silla2">x² − 4y² (punto silla)</option>
+                <option value="copa">x⁴ + y⁴ − 4xy + 1 (varios extremos)</option>
+              </select>
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" data-extremo="mostrar">Mostrar puntos críticos</button>
+              <button class="btn sm ghost" data-extremo="hessiana">Calcular Hessiana</button>
+              <button class="btn sm ghost" data-extremo="curvas">Curvas de nivel</button>
+            </div>
+            <button class="btn" id="btnExtremos"><i data-lucide="refresh-cw"></i>Actualizar visualización</button>
+
+            <div class="info-box" id="infoExtremos">
+              <div><span class="label">Punto crítico:</span> <span id="puntoCritico" class="valor">—</span></div>
+              <div><span class="label">Tipo:</span> <span id="tipoPunto" class="valor">—</span></div>
+              <div><span class="label">Hessiana:</span> <span id="hessianaVal" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="detalleExtremo">Selecciona una función para ver su análisis.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#143466;"></span>Superficie (azul → dorado)</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Mínimo</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Máximo</span>
+              <span><span class="dot" style="background:#D4EDDA;"></span>Punto silla</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Multiplicadores de Lagrange -->
+          <div class="sim-panel" id="st-lagrange">
+            <div class="field" style="margin-bottom:12px">
+              <label for="funcLagrange">Función \(f(x,y)\) a optimizar</label>
+              <select id="funcLagrange">
+                <option value="xy" selected>x · y</option>
+                <option value="x2y2">x² + y²</option>
+                <option value="x2y2d">x² − y²</option>
+                <option value="sincos">sin(x) + cos(y)</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label for="restriccion">Restricción \(g(x,y)=0\)</label>
+              <select id="restriccion">
+                <option value="circulo" selected>x² + y² = 1 (círculo)</option>
+                <option value="elipse">x²/4 + y² = 1 (elipse)</option>
+                <option value="linea">x + y = 1 (recta)</option>
+                <option value="parabola">y = x² (parábola)</option>
+              </select>
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" data-lagrange="gradientes">Mostrar gradientes</button>
+              <button class="btn sm ghost" data-lagrange="puntos">Mostrar puntos extremos</button>
+            </div>
+            <button class="btn" id="btnLagrange"><i data-lucide="refresh-cw"></i>Actualizar optimización</button>
+
+            <div class="info-box" id="infoLagrange">
+              <div><span class="label">Puntos extremos:</span> <span id="puntosLagrange" class="valor">—</span></div>
+              <div><span class="label">Valores de \(f\):</span> <span id="valoresLagrange" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="detalleLagrange">Los gradientes \(\nabla f\) y \(\nabla g\) son paralelos en los extremos.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#143466;"></span>Superficie \(f(x,y)\)</span>
+              <span><span class="dot" style="background:transparent;border:2px solid #C9A84C;"></span>Restricción \(g=0\)</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Punto extremo</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Gradiente \(\nabla f\)</span>
+              <span><span class="dot" style="background:#E8D5A3;"></span>Gradiente \(\nabla g\)</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Derivadas direccionales y gradiente -->
+          <div class="sim-panel" id="st-direccionales">
+            <div class="field" style="margin-bottom:12px">
+              <label for="funcDir">Función \(f(x,y)\)</label>
+              <select id="funcDir">
+                <option value="x2y2" selected>x² + y²</option>
+                <option value="silla">x² − y²</option>
+                <option value="xy">x · y</option>
+                <option value="sincos">sin(x) · cos(y)</option>
+              </select>
+            </div>
+            <div class="sim-controls-3d">
+              <div class="field"><label for="puntoA">Punto de análisis a (x)</label><input id="puntoA" type="number" value="1" step="0.1" min="-2.3" max="2.3"></div>
+              <div class="field"><label for="puntoB">Punto de análisis b (y)</label><input id="puntoB" type="number" value="1" step="0.1" min="-2.3" max="2.3"></div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="thetaSlider">Dirección θ = <span id="thetaVal" class="mono">45°</span></label>
+              <input type="range" id="thetaSlider" min="0" max="360" step="1" value="45">
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" data-dir="grad">Alinear \(\vec u\) con \(\nabla f\)</button>
+              <button class="btn sm ghost" data-dir="perp">\(\vec u \perp \nabla f\) (D = 0)</button>
+              <button class="btn sm ghost" data-dir="max">Máximo descenso</button>
+            </div>
+            <button class="btn" id="btnDir"><i data-lucide="refresh-cw"></i>Actualizar visualización</button>
+
+            <div class="info-box" id="infoDir">
+              <div><span class="label">Gradiente \(\nabla f(a,b)\):</span> <span id="gradVal" class="valor">—</span></div>
+              <div><span class="label">\(|\nabla f|\):</span> <span id="gradMag" class="valor">—</span></div>
+              <div><span class="label">\(D_{\vec u}f(\theta)\):</span> <span id="dirVal" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="detalleDir">Gira θ y observa cómo cambia la derivada direccional.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#143466;"></span>Superficie</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Gradiente \(\nabla f\)</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Vector \(\vec u\)</span>
+              <span><span class="dot" style="background:#B8860B;"></span>Corte en dirección \(\vec u\)</span>
+              <span><span class="dot" style="background:#E8D5A3;"></span>Punto \((a,b)\)</span>
+            </div>
+          </div>
+
+          <p class="note">Arrastra con el mouse para rotar. Usa la rueda para acercar/alejar. En «Direccionales y gradiente» mueve θ: la derivada direccional es la pendiente del corte dorado sobre el punto de análisis, y es máxima cuando \(\vec u\) se alinea con el gradiente verde.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="box"></i>Visualización 3D</div>
+        <div class="sim-3d-container" id="threeContainer"></div>
+        <div class="graph-cap" id="graphCap3D">Selecciona una función y explora sus puntos críticos.</div>
+        <div id="equationDisplay">
+          <span id="eqText">\(f(x,y)=x^2+y^2\)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ACTIVIDADES ==================== -->
+<section class="view" id="v-actividades" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Zona de evaluación</p>
+      <h2>Actividades de la Unidad Temática</h2>
+      <p class="sub">Ejercicios guiados, redacción con LaTeX, práctica de derivadas direccionales, quiz y problemas del Marsden-Tromba.</p>
+    </div>
+
+    <!-- Rúbrica -->
+    <div class="act-block">
+      <h3>Rúbrica de evaluación</h3>
+      <p class="act-desc">Ponderación de cada instrumento sobre la calificación de la unidad (nota final sobre 10).</p>
+      <div class="rub-row"><span class="rub-name">Prácticas en el simulador 3D</span><div class="rub-bar"><div style="width:15%"></div></div><span class="rub-pct">15%</span></div>
+      <div class="rub-row"><span class="rub-name">Ejercicios guiados (solución detallada)</span><div class="rub-bar"><div style="width:25%"></div></div><span class="rub-pct">25%</span></div>
+      <div class="rub-row"><span class="rub-name">Quiz de autoevaluación</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+      <div class="rub-row"><span class="rub-name">Tarea: problemas del Marsden-Tromba</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+    </div>
+
+    <!-- Ejercicios guiados -->
+    <div class="act-block" id="ejBlock">
+      <h3>Ejercicios guiados con solución</h3>
+      <p class="act-desc">Intenta resolverlos por escrito antes de desplegar la solución.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 1 · Punto crítico</span>Encuentra los puntos críticos de \(f(x,y)=x^2+y^2-2x-4y+5\).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\(\frac{\partial f}{\partial x}=2x-2=0 \Rightarrow x=1\)</p>
+          <p>\(\frac{\partial f}{\partial y}=2y-4=0 \Rightarrow y=2\)</p>
+          <p>El único punto crítico es \((1,2)\).</p>
+          <p>\(f_{xx}=2,\; f_{yy}=2,\; f_{xy}=0\)</p>
+          <p>\(\det(H)=4>0\) y \(f_{xx}=2>0\) ⇒ <strong>mínimo local</strong> en \((1,2)\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e1"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 2 · Punto silla</span>Analiza el punto crítico de \(f(x,y)=x^2-y^2\).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\(\nabla f=(2x,-2y)=0 \Rightarrow (0,0)\).</p>
+          <p>\(f_{xx}=2,\; f_{yy}=-2,\; f_{xy}=0\)</p>
+          <p>\(\det(H)=2(-2)-0=-4<0\) ⇒ <strong>punto silla</strong> en \((0,0)\).</p>
+          <p>La función crece en la dirección \(x\) y decrece en la dirección \(y\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e2"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 3 · Multiplicadores de Lagrange</span>Maximiza \(f(x,y)=xy\) sujeta a \(x^2+y^2=1\).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\(\nabla f=(y,x)\), \(\nabla g=(2x,2y)\)</p>
+          <p>\(y=2\lambda x,\; x=2\lambda y,\; x^2+y^2=1\)</p>
+          <p>De las primeras dos: \(y=4\lambda^2 y\)</p>
+          <p>Si \(y\neq0\), \(4\lambda^2=1 \Rightarrow \lambda=\pm\frac{1}{2}\)</p>
+          <p>Para \(\lambda=\frac{1}{2}\): \(y=x\) y \(2x^2=1 \Rightarrow x=y=\pm\frac{1}{\sqrt{2}}\)</p>
+          <p>Para \(\lambda=-\frac{1}{2}\): \(y=-x\) y \(2x^2=1 \Rightarrow x=-y=\pm\frac{1}{\sqrt{2}}\)</p>
+          <p>Máximo: \(f(\frac{1}{\sqrt{2}},\frac{1}{\sqrt{2}})=\frac{1}{2}\)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e3"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 4 · Hessiana</span>Calcula la matriz Hessiana de \(f(x,y)=x^3-3xy+y^3\) en \((1,1)\).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\(f_x=3x^2-3y,\; f_y=-3x+3y^2\)</p>
+          <p>\(f_{xx}=6x,\; f_{yy}=6y,\; f_{xy}=-3,\; f_{yx}=-3\)</p>
+          <p>En \((1,1)\): \(f_{xx}=6,\; f_{yy}=6,\; f_{xy}=-3\)</p>
+          <p>\(H = \begin{pmatrix} 6 & -3 \\ -3 & 6 \end{pmatrix}\)</p>
+          <p>\(\det(H)=36-9=27>0\), \(f_{xx}=6>0\) ⇒ <strong>mínimo local</strong>.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e4"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Refuerzo con redacción -->
+    <div class="act-block" id="redBlock">
+      <h3>Refuerzo: redacta tu solución</h3>
+      <p class="act-desc">Cuatro problemas adicionales sin solución visible. Redacta con LaTeX en el editor; puedes guardar tus borradores.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 5 · Extremos de una función cúbica</span>Encuentra y clasifica los puntos críticos de \(f(x,y)=x^3+y^3-3xy\).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e5"></div>
+          <details class="mini-check">
+            <summary>Ayuda: estructura sugerida</summary>
+            <div class="sol-body">
+              <p>\(\nabla f=(3x^2-3y,\;3y^2-3x)=0\)</p>
+              <p>Puntos críticos: \((0,0)\) y \((1,1)\).</p>
+              <p>Hessiana: \(f_{xx}=6x,\; f_{yy}=6y,\; f_{xy}=-3\)</p>
+              <p>En \((0,0)\): \(\det(H)=-9<0\) ⇒ punto silla.</p>
+              <p>En \((1,1)\): \(\det(H)=27>0,\; f_{xx}=6>0\) ⇒ mínimo local.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 6 · Lagrange con elipse</span>Maximiza \(f(x,y)=x^2+y^2\) sujeta a \(\frac{x^2}{4}+y^2=1\).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e6"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>Puntos: \((\pm2,0)\) con \(f=4\), \((0,\pm1)\) con \(f=1\).</p>
+              <p>Máximo: \(4\) en \((\pm2,0)\).</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Hessiana de una función trigonométrica</span>Calcula la Hessiana de \(f(x,y)=\sin(x)\cos(y)\) en \((\pi/2,0)\).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e7"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\(f_x=\cos x\cos y,\; f_y=-\sin x\sin y\)</p>
+              <p>\(f_{xx}=-\sin x\cos y,\; f_{yy}=-\sin x\cos y,\; f_{xy}=-\cos x\sin y\)</p>
+              <p>En \((\pi/2,0)\): \(H = \begin{pmatrix} -1 & 0 \\ 0 & -1 \end{pmatrix}\)</p>
+              <p>\(\det(H)=1>0,\; f_{xx}=-1<0\) ⇒ máximo local.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 8 · Lagrange con restricción no lineal</span>Optimiza \(f(x,y)=x^2+y^2\) sujeta a \(y=x^2\).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e8"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>Punto óptimo en \((0,0)\) con \(f=0\).</p>
+              <p>\(\nabla f=(0,0)\), \(\nabla g=(-2x,1)\).</p>
+              <p>En \((0,0)\): \(\nabla f=(0,0)=0\cdot\nabla g\).</p>
+              <p>Mínimo condicionado.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <!-- Práctica de derivadas direccionales -->
+    <div class="act-block" id="dirBlock">
+      <h3>Práctica: derivadas direccionales y gradiente</h3>
+      <p class="act-desc">Dos ejercicios guiados sobre la sección 4.2. Verifica tus resultados en el simulador, pestaña «Direccionales y gradiente».</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 9 · Derivada direccional</span>Sea \(f(x,y)=x^2+y^2\) y \(P=(3,4)\). Calcula (a) \(\nabla f(P)\), (b) \(D_{\vec u}f(P)\) con \(\vec u=(1/\sqrt2,\,1/\sqrt2)\), y (c) la dirección y la tasa de crecimiento máximo.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>(a) \(\nabla f=(2x,2y)\Rightarrow\nabla f(P)=(6,8)\), con \(\|\nabla f\|=10\).</p>
+          <p>(b) \(D_{\vec u}f(P)=6\cdot\frac{1}{\sqrt2}+8\cdot\frac{1}{\sqrt2}=\frac{14}{\sqrt2}=7\sqrt2\approx9.90\).</p>
+          <p>(c) Dirección de máximo crecimiento: \(\frac{1}{10}(6,8)=(3/5,\,4/5)\), con tasa \(\|\nabla f\|=10\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e9"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 10 · Gradiente y curvas de nivel</span>Sea \(f(x,y)=xy^2\). En \((2,1)\) calcula (a) \(\nabla f\), (b) \(D_{\vec u}f\) con \(\vec u=(3,-4)/5\), y (c) una dirección \(\vec u\) con \(D_{\vec u}f=0\).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>(a) \(\nabla f=(y^2,\,2xy)\Rightarrow\nabla f(2,1)=(1,4)\), \(\|\nabla f\|=\sqrt{17}\).</p>
+          <p>(b) \(D_{\vec u}f=\frac{1\cdot3+4\cdot(-4)}{5}=\frac{3-16}{5}=-\frac{13}{5}=-2.6\): la función <em>decrece</em> en esa dirección.</p>
+          <p>(c) Cualquier dirección perpendicular a \(\nabla f\): \(\vec u=\frac{1}{\sqrt{17}}(-4,1)\), pues \(D_{\vec u}f=\nabla f\cdot\vec u=0\). Esa es la dirección tangente a la curva de nivel \(xy^2=2\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e10"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Tarea Marsden-Tromba -->
+    <div class="act-block" id="tareaBlock">
+      <h3>Tarea · Marsden &amp; Tromba, Cap. 4</h3>
+      <p class="act-desc">Cuatro problemas para entregar por escrito en la próxima sesión (30% de la nota). Marca cada uno al terminarlo.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 1 · Puntos críticos</span>Encuentra y clasifica los puntos críticos de \(f(x,y)=x^3-y^3+3xy\).</span></summary>
+        <div class="sol-body">
+          <p>\(f_x=3x^2+3y=0\Rightarrow y=-x^2\); \(\;f_y=-3y^2+3x=0\Rightarrow x=y^2\).</p>
+          <p>Sustituyendo: \(x=x^4\Rightarrow x=0\) o \(x=1\), con puntos \((0,0)\) y \((1,-1)\).</p>
+          <p>\(f_{xx}=6x,\; f_{yy}=-6y,\; f_{xy}=3\). En \((0,0)\): \(\det(H)=-9<0\) ⇒ punto silla.</p>
+          <p>En \((1,-1)\): \(\det(H)=36-9=27>0,\; f_{xx}=6>0\) ⇒ mínimo local con \(f(1,-1)=-1\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t1"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 2 · Lagrange</span>Halla los puntos de la elipse \(x^2+4y^2=4\) más cercanos y más lejanos al origen.</span></summary>
+        <div class="sol-body">
+          <p>Minimiza \(d^2=x^2+y^2\) sujeta a \(x^2+4y^2=4\): \((2x,2y)=\lambda(2x,8y)\).</p>
+          <p>Si \(x=0\): \(4y^2=4\Rightarrow y=\pm1\), \(d^2=1\). Si \(y=0\): \(x=\pm2\), \(d^2=4\).</p>
+          <p>Más cercanos: \((0,\pm1)\) con \(d=1\). Más lejanos: \((\pm2,0)\) con \(d=2\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t2"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 3 · Derivada direccional</span>La temperatura de una placa es \(T(x,y)=x^2+y^2-2x\). ¿En qué dirección se enfría más rápido en \((2,3)\) y a qué tasa?</span></summary>
+        <div class="sol-body">
+          <p>\(\nabla T=(2x-2,\,2y)\Rightarrow\nabla T(2,3)=(2,6)\), \(\|\nabla T\|=\sqrt{40}=2\sqrt{10}\).</p>
+          <p>Enfriamiento más rápido: \(\vec u=-\nabla T/\|\nabla T\|=\frac{1}{2\sqrt{10}}(-2,-6)=\frac{1}{\sqrt{10}}(-1,-3)\).</p>
+          <p>Tasa: \(D_{\vec u}T=-\|\nabla T\|=-2\sqrt{10}\approx-6.32\) grados por unidad de distancia.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t3"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 4 · Hessiana indecisa</span>Analiza el punto \((0,0)\) de \(f(x,y)=x^2y^2\) con el criterio de la Hessiana y directamente.</span></summary>
+        <div class="sol-body">
+          <p>\(f_{xx}=2y^2,\; f_{yy}=2x^2,\; f_{xy}=4xy\). En \((0,0)\) todo vale \(0\), así que \(\det(H)=0\): <strong>el criterio no decide</strong>.</p>
+          <p>Análisis directo: \(f=x^2y^2\geq0=f(0,0)\) para todo \((x,y)\), luego \((0,0)\) es un <strong>mínimo local no estricto</strong>.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t4"><span>Problema entregado</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Quiz -->
+    <div class="act-block" id="quizBlock">
+      <h3>Quiz de autoevaluación</h3>
+      <p class="act-desc">Seis preguntas de opción múltiple sobre toda la unidad (incluida la sección 4.2). Selecciona una opción y se verificará al instante.</p>
+
+      <div class="quiz-q" data-qid="q1" data-correct="b">
+        <header><span class="qnum">1</span><p class="q-text">Sea \(f(x,y)=x^2+y^2\) y \(\vec u=(1/\sqrt2,\;1/\sqrt2)\). La derivada direccional \(D_{\vec u}f(1,2)\) vale:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q1" value="a"><span class="opt-key">A</span><span>\(6\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="b"><span class="opt-key">B</span><span>\(3\sqrt2\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="c"><span class="opt-key">C</span><span>\(6\sqrt2\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="d"><span class="opt-key">D</span><span>\(\sqrt2\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\nabla f=(2,4)\), así que \(D_{\vec u}f=\frac{2+4}{\sqrt2}=\frac{6}{\sqrt2}=3\sqrt2\approx4.24\). Además \(\vec u\parallel\nabla f\): es la dirección de máximo crecimiento.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q2" data-correct="b">
+        <header><span class="qnum">2</span><p class="q-text">El gradiente \(\nabla f(a,b)\) es siempre perpendicular a:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q2" value="a"><span class="opt-key">A</span><span>el eje \(x\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="b"><span class="opt-key">B</span><span>la curva de nivel que pasa por \((a,b)\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="c"><span class="opt-key">C</span><span>el vector \((0,0,1)\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="d"><span class="opt-key">D</span><span>la gráfica de \(f\)</span></label>
+        </div>
+        <div class="explain" hidden>A lo largo de una curva de nivel \(f\) es constante, luego la derivada direccional en la dirección tangente es \(0\); eso obliga a \(\vec u\perp\nabla f\).</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q3" data-correct="c">
+        <header><span class="qnum">3</span><p class="q-text">Si en un punto crítico \(\det(H)>0\) y \(f_{xx}>0\), entonces el punto es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q3" value="a"><span class="opt-key">A</span><span>un máximo local</span></label>
+          <label class="opt"><input type="radio" name="q3" value="b"><span class="opt-key">B</span><span>un punto silla</span></label>
+          <label class="opt"><input type="radio" name="q3" value="c"><span class="opt-key">C</span><span>un mínimo local</span></label>
+          <label class="opt"><input type="radio" name="q3" value="d"><span class="opt-key">D</span><span>no clasificable con la Hessiana</span></label>
+        </div>
+        <div class="explain" hidden>\(\det(H)>0\) significa que las curvaturas tienen el mismo signo, y \(f_{xx}>0\) indica cóncava hacia arriba en \(x\): mínimo local.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q4" data-correct="c">
+        <header><span class="qnum">4</span><p class="q-text">En el método de multiplicadores de Lagrange, en un extremo condicionado se cumple:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q4" value="a"><span class="opt-key">A</span><span>\(\nabla f\perp\nabla g\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="b"><span class="opt-key">B</span><span>\(\nabla f=\vec 0\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="c"><span class="opt-key">C</span><span>\(\nabla f=\lambda\nabla g\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="d"><span class="opt-key">D</span><span>\(\nabla g=\vec 0\)</span></label>
+        </div>
+        <div class="explain" hidden>En el óptimo, la derivada direccional de \(f\) en toda dirección tangente a \(g=0\) se anula, así que \(\nabla f\) solo tiene componente normal a la restricción, igual que \(\nabla g\): son paralelos.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q5" data-correct="b">
+        <header><span class="qnum">5</span><p class="q-text">La tasa máxima de cambio de \(f\) en un punto es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q5" value="a"><span class="opt-key">A</span><span>\(|f|\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="b"><span class="opt-key">B</span><span>\(\|\nabla f\|\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="c"><span class="opt-key">C</span><span>\(\|\nabla f\|^2\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="d"><span class="opt-key">D</span><span>\(0\)</span></label>
+        </div>
+        <div class="explain" hidden>Como \(D_{\vec u}f=\|\nabla f\|\cos\varphi\), el máximo sobre todos los \(\vec u\) unitarios es \(\|\nabla f\|\), alcanzado cuando \(\vec u\parallel\nabla f\).</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q6" data-correct="b">
+        <header><span class="qnum">6</span><p class="q-text">El punto \((0,0)\) de \(f(x,y)=x^2-y^2\) es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q6" value="a"><span class="opt-key">A</span><span>un mínimo local</span></label>
+          <label class="opt"><input type="radio" name="q6" value="b"><span class="opt-key">B</span><span>un punto silla</span></label>
+          <label class="opt"><input type="radio" name="q6" value="c"><span class="opt-key">C</span><span>un máximo local</span></label>
+          <label class="opt"><input type="radio" name="q6" value="d"><span class="opt-key">D</span><span>un punto no crítico</span></label>
+        </div>
+        <div class="explain" hidden>\(\det(H)=f_{xx}f_{yy}-f_{xy}^2=2(-2)-0=-4<0\): punto silla.</div>
+      </div>
+
+      <div class="quiz-foot">
+        <div class="quiz-result" id="quizResult"><strong>0</strong> de 6 aciertos</div>
+        <button class="btn ghost sm" id="btnQuizReset"><i data-lucide="rotate-ccw"></i>Reiniciar quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BOLETA ==================== -->
+<section class="view" id="v-boleta" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Seguimiento personal</p>
+      <h2>Mi registro y notas de la Unidad Temática</h2>
+      <p class="sub">Regístrate para activar tu boleta. El progreso (simulador, ejercicios, quiz y tarea) se acumula automáticamente y se guarda solo en tu navegador.</p>
+    </div>
+
+    <div class="panel" id="boletaForm" style="max-width:700px">
+      <div class="panel-head"><i data-lucide="user-plus"></i>Registro del estudiante</div>
+      <div class="panel-body">
+        <div class="field" style="max-width:420px">
+          <label for="studentName">Tu nombre</label>
+          <input id="studentName" placeholder="Nombre y apellido" autocomplete="name">
+        </div>
+        <button class="btn" id="btnRegister" style="margin-top:14px"><i data-lucide="badge-check"></i>Registrarme</button>
+        <p class="hint" style="margin-top:10px">No se envía nada a un servidor: todo vive en el <em>localStorage</em> de este navegador.</p>
+      </div>
+    </div>
+
+    <div class="boleta-card" id="boletaCard" hidden>
+      <div class="b-head">
+        <div class="avatar" id="bAvatar">—</div>
+        <div>
+          <div class="b-title">Cálculo Vectorial · Diferenciación Multivariable</div>
+          <div class="b-name" id="bName">—</div>
+          <div class="b-meta" id="bMeta">0 de 23 evidencias registradas</div>
+        </div>
+        <div class="b-seal"><span>Unidad Temática</span><strong id="bSeal">0.0</strong><span>nota / 10</span></div>
+      </div>
+      <div class="b-body">
+        <div class="b-row">
+          <div><div class="b-rubname">Prácticas en el simulador 3D</div><div class="b-rubdet" id="bdSim">0 de 3 módulos explorados</div></div>
+          <div class="b-bar"><div id="barSim" style="width:0%"></div></div>
+          <div class="b-pts" id="ptSim">0.0 <small>/ 1.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Ejercicios guiados</div><div class="b-rubdet" id="bdEj">0 de 10 ejercicios resueltos</div></div>
+          <div class="b-bar"><div id="barEj" style="width:0%"></div></div>
+          <div class="b-pts" id="ptEj">0.0 <small>/ 2.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Quiz de autoevaluación</div><div class="b-rubdet" id="bdQuiz">0 de 6 respondidas · 0 aciertos</div></div>
+          <div class="b-bar"><div id="barQuiz" style="width:0%"></div></div>
+          <div class="b-pts" id="ptQuiz">0.0 <small>/ 3.0</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Tarea Marsden-Tromba</div><div class="b-rubdet" id="bdTar">0 de 4 problemas entregados</div></div>
+          <div class="b-bar"><div id="barTar" style="width:0%"></div></div>
+          <div class="b-pts" id="ptTar">0.0 <small>/ 3.0</small></div>
+        </div>
+      </div>
+      <div class="b-total">
+        <div>
+          <div class="b-total-lbl">Calificación final de la unidad</div>
+          <div class="b-total-det">Simulador 15% · Ejercicios 25% · Quiz 30% · Tarea 30%</div>
+        </div>
+        <div class="b-score"><span class="big" id="bTotal">0.0</span><span class="den">/ 10</span></div>
+      </div>
+      <div class="b-foot"><span id="bFootDate">—</span><span>Dr. Adrián Cerda · Cálculo Vectorial · 9 sep 2026</span></div>
+    </div>
+
+    <div class="boleta-actions" id="boletaActions" hidden>
+      <button class="del-btn" id="btnDelete"><i data-lucide="trash-2"></i>Eliminar registro</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="toasts"></div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span><strong>Cálculo Vectorial · UP</strong> — Derivadas direccionales, gradiente y comportamiento local</span>
+    <span>Dr. Adrián Cerda ·Basado en el libro de Texto Marsden &amp; Tromba, Cap. 4 </span>
+  </div>
+</footer>
+
+<!-- ==================== LIBRERÍAS ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+/* ============================================================
+   UTILIDADES Y ESTADO
+============================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const f2 = n => (+n).toFixed(2);
+const f3 = n => (+n).toFixed(3);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+const KEY = 'calc2-u4-state';
+const freshState = () => ({ name:'', ej:{}, tar:{}, quiz:{answers:{}}, sim:{}, ed:{} });
+let state = freshState();
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') state = Object.assign(freshState(), s); } catch(e){}
+state.quiz = state.quiz || {answers:{}};
+state.sim = state.sim || {}; state.ej = state.ej || {}; state.tar = state.tar || {}; state.ed = state.ed || {};
+
+function persist(){ localStorage.setItem(KEY, JSON.stringify(state)); updateBoleta(); }
+
+function typeset(el){
+  if (window.renderMathInElement) renderMathInElement(el || document.body, {
+    delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}],
+    throwOnError:false
+  });
+}
+function showToast(msg, ok=true){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.innerHTML = `<i data-lucide="${ok?'check-circle-2':'alert-circle'}"></i><span>${esc(msg)}</span>`;
+  $('#toasts').appendChild(t);
+  if (window.lucide) lucide.createIcons();
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 3200);
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+function showView(name){
+  $$('.view').forEach(v => v.hidden = (v.id !== 'v-' + name));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if (name === 'simulador' || name === 'inicio') setTimeout(()=>{ /* el bucle de render ajusta el tamaño */ }, 60);
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-view]');
+  if (t) showView(t.dataset.view);
+});
+ $$('[data-goto-sim]').forEach(b => b.addEventListener('click', () => {
+  showView('simulador');
+  const tab = document.querySelector(`.sim-tab[data-stab="${b.dataset.gotoSim}"]`);
+  if (tab) tab.click();
+}));
+
+/* ============================================================
+   DATOS MATEMÁTICOS
+============================================================ */
+const TIPO = { min:'Mínimo local', max:'Máximo local', silla:'Punto silla' };
+
+const EXT = {
+  paraboloide:{ tex:'x^2+y^2', f:(x,y)=>x*x+y*y, pts:[{p:[0,0],t:'min'}],
+    hess:'f_{xx}=2,\\; f_{yy}=2,\\; f_{xy}=0\\;\\Rightarrow\\; \\det(H)=4',
+    extra:'\\det(H)=4>0 y f_{xx}=2>0: mínimo local (en realidad global) en (0,0), con f(0,0)=0. Las curvas de nivel son circunferencias.',
+    msg:'det(H) = 4 > 0 y f_xx = 2 > 0 ⇒ mínimo local.' },
+  paraboloideNeg:{ tex:'-x^2-y^2', f:(x,y)=>-(x*x+y*y), pts:[{p:[0,0],t:'max'}],
+    hess:'f_{xx}=-2,\\; f_{yy}=-2,\\; f_{xy}=0\\;\\Rightarrow\\; \\det(H)=4',
+    extra:'\\det(H)=4>0 y f_{xx}=-2<0: máximo local (global) en (0,0), con f(0,0)=0. Es el paraboloide invertido.',
+    msg:'det(H) = 4 > 0 y f_xx = −2 < 0 ⇒ máximo local.' },
+  silla:{ tex:'x^2-y^2', f:(x,y)=>x*x-y*y, pts:[{p:[0,0],t:'silla'}],
+    hess:'f_{xx}=2,\\; f_{yy}=-2,\\; f_{xy}=0\\;\\Rightarrow\\; \\det(H)=-4',
+    extra:'\\det(H)=-4<0: punto silla. La superficie sube en la dirección x y baja en la y: de ahí la forma de "silla de montar".',
+    msg:'det(H) = −4 < 0 ⇒ punto silla.' },
+  silla2:{ tex:'x^2-4y^2', f:(x,y)=>x*x-4*y*y, pts:[{p:[0,0],t:'silla'}],
+    hess:'f_{xx}=2,\\; f_{yy}=-8,\\; f_{xy}=0\\;\\Rightarrow\\; \\det(H)=-16',
+    extra:'\\det(H)=-16<0: punto silla, ahora más "estrecho" en la dirección y (la curvatura f_{yy}=-8 es mayor en magnitud).',
+    msg:'det(H) = −16 < 0 ⇒ punto silla.' },
+  copa:{ tex:'x^4+y^4-4xy+1', sc:.5, rng:1.8, f:(x,y)=>Math.pow(x,4)+Math.pow(y,4)-4*x*y+1,
+    pts:[{p:[0,0],t:'silla'},{p:[1,1],t:'min'},{p:[-1,-1],t:'min'}],
+    hess:'f_{xx}=12x^2,\\; f_{yy}=12y^2,\\; f_{xy}=-4',
+    extra:'En (0,0): \\det(H)=-16<0 \\Rightarrow punto silla. En (1,1) y (-1,-1): \\det(H)=128>0 con f_{xx}=12>0 \\Rightarrow mínimos locales con f=-1.',
+    msg:'En (0,0): det = −16 ⇒ silla · en (±1,±1): det = 128 ⇒ mínimos.' }
+};
+
+const LAGF = {
+  xy:    { tex:'xy',            gtex:'(y,\\;x)',            f:(x,y)=>x*y,                  fx:(x,y)=>y,        fy:(x,y)=>x },
+  x2y2:  { tex:'x^2+y^2',       gtex:'(2x,\\;2y)',           f:(x,y)=>x*x+y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>2*y },
+  x2y2d: { tex:'x^2-y^2',       gtex:'(2x,\\;-2y)',          f:(x,y)=>x*x-y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>-2*y },
+  sincos:{ tex:'\\sin x+\\cos y', gtex:'(\\cos x,\\;-\\sin y)', f:(x,y)=>Math.sin(x)+Math.cos(y), fx:(x,y)=>Math.cos(x), fy:(x,y)=>-Math.sin(y) }
+};
+const LAGG = {
+  circulo:{ tex:'x^2+y^2-1',       gtex:'(2x,\\;2y)',   param:t=>[Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x)=>2*x, gy:(y)=>2*y },
+  elipse: { tex:'\\tfrac{x^2}{4}+y^2-1', gtex:'(x/2,\\;2y)', param:t=>[2*Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x)=>x/2, gy:(y)=>2*y },
+  linea:  { tex:'x+y-1',           gtex:'(1,\\;1)',     param:t=>[t,1-t], t0:-1.5, t1:2.4, gx:()=>1, gy:()=>1, note:' Extremos calculados sobre el tramo visualizado de la recta.' },
+  parabola:{ tex:'y-x^2',          gtex:'(-2x,\\;1)',   param:t=>[t,t*t], t0:-1.58, t1:1.58, gx:(x)=>-2*x, gy:()=>1 }
+};
+
+const DIRF = {
+  x2y2:  { tex:'x^2+y^2', f:(x,y)=>x*x+y*y, fx:(x,y)=>2*x, fy:(x,y)=>2*y },
+  silla: { tex:'x^2-y^2', f:(x,y)=>x*x-y*y, fx:(x,y)=>2*x, fy:(x,y)=>-2*y },
+  xy:    { tex:'xy',      f:(x,y)=>x*y,     fx:(x,y)=>y,   fy:(x,y)=>x },
+  sincos:{ tex:'\\sin x\\cos y', f:(x,y)=>Math.sin(x)*Math.cos(y), fx:(x,y)=>Math.cos(x)*Math.cos(y), fy:(x,y)=>-Math.sin(x)*Math.sin(y) }
+};
+
+/* ============================================================
+   THREE.JS — ESCENA
+============================================================ */
+const PAL = { ink:0x0A1C3A, blue:0x143466, pine:0x007B5D, gold:0xC9A84C, goldL:0xE8D5A3, goldD:0xB8860B, greenL:0xD4EDDA, gray:0x8f9aa8 };
+let hero = null, sim = null, simSurface = null, simOverlay = null;
+const SIM = { tab:'extremos', showPts:true, showCurves:false, showGrads:true, showLagPts:true };
+
+function makeScene(canvas, opts={}){
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf6f7f9);
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300);
+  camera.position.set(...(opts.cam || [6,5,7]));
+  const controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true; controls.dampingFactor = .08;
+  controls.target.set(...(opts.target || [0,.9,0]));
+  controls.minDistance = 2; controls.maxDistance = 40;
+  if (opts.autoRotate){ controls.autoRotate = true; controls.autoRotateSpeed = 1.0; }
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe4ea, .95));
+  const d1 = new THREE.DirectionalLight(0xffffff, .7); d1.position.set(6,10,5); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, .28); d2.position.set(-7,5,-6); scene.add(d2);
+  return { renderer, scene, camera, controls };
+}
+function buildSurface(f, range=2.5, res=64){
+  const geo = new THREE.PlaneGeometry(range*2, range*2, res, res);
+  geo.rotateX(-Math.PI/2);
+  const pos = geo.attributes.position, n = pos.count;
+  const zs = new Float32Array(n);
+  let zmin = 1e9, zmax = -1e9;
+  for (let i=0;i<n;i++){
+    const z = f(pos.getX(i), pos.getZ(i));
+    pos.setY(i, z); zs[i] = z;
+    if (z < zmin) zmin = z; if (z > zmax) zmax = z;
+  }
+  const cLow = new THREE.Color(PAL.blue), cHigh = new THREE.Color(PAL.gold);
+  const cols = new Float32Array(n*3), c = new THREE.Color();
+  const span = (zmax - zmin) || 1;
+  for (let i=0;i<n;i++){
+    c.copy(cLow).lerp(cHigh, (zs[i]-zmin)/span);
+    cols[i*3]=c.r; cols[i*3+1]=c.g; cols[i*3+2]=c.b;
+  }
+  geo.setAttribute('color', new THREE.BufferAttribute(cols,3));
+  geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors:true, side:THREE.DoubleSide }));
+  const grid = new THREE.GridHelper(Math.max(6, range*4), 10, 0xaab4c0, 0xdadfe6);
+  grid.position.y = zmin - 0.7;
+  return { mesh, grid, zmin, zmax };
+}
+function dot(x,y,z,color,r=.16){
+  return new THREE.Mesh(new THREE.SphereGeometry(r,18,14), new THREE.MeshBasicMaterial({ color }));
+}
+function ringed(x,y,z,color){
+  const g = new THREE.Group();
+  g.add(dot(x,y,z,PAL.ink,.27));
+  g.add(dot(x,y,z,color,.17));
+  return g;
+}
+function arrow(origin, dir2, color, len=1.3){
+  const d = new THREE.Vector3(dir2[0],0,dir2[1]);
+  if (d.lengthSq() < 1e-10) return new THREE.Group();
+  d.normalize();
+  return new THREE.ArrowHelper(d, new THREE.Vector3(origin[0],origin[1],origin[2]), len, color, .34, .2);
+}
+function lineFromPoints(pts, color, opacity){
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const mat = new THREE.LineBasicMaterial({ color, transparent:(opacity||1) < 1, opacity:opacity||1 });
+  return new THREE.Line(geo, mat);
+}
+function clearGroup(g){
+  [...g.children].forEach(c => {
+    g.remove(c);
+    c.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m => m.dispose && m.dispose());
+    });
+  });
+}
+function contours(f, zmin, zmax, range=2.5){
+  const pairs = [];
+  const N = 90, levels = 8, fy = zmin - 0.7;
+  for (let l=1; l<=levels; l++){
+    const c = zmin + (zmax - zmin)*l/(levels+1);
+    for (let i=0;i<N;i++) for (let j=0;j<N;j++){
+      const x0=-range+2*range*i/N, x1=x0+2*range/N;
+      const y0=-range+2*range*j/N, y1=y0+2*range/N;
+      const a=f(x0,y0), b=f(x1,y0), cc=f(x0,y1), dd=f(x1,y1), P=[];
+      if((a-c)*(b-c)<0)  P.push([x0+(c-a)/(b-a)*(x1-x0), y0]);
+      if((cc-c)*(dd-c)<0)P.push([x0+(c-cc)/(dd-cc)*(x1-x0), y1]);
+      if((a-c)*(cc-c)<0) P.push([x0, y0+(c-a)/(cc-a)*(y1-y0)]);
+      if((b-c)*(dd-c)<0) P.push([x1, y0+(c-b)/(dd-b)*(y1-y0)]);
+      if (P.length>=2) pairs.push(P[0], P[1]);
+      if (P.length===4) pairs.push(P[2], P[3]);
+    }
+  }
+  const pts = pairs.map(p => new THREE.Vector3(p[0], fy, p[1]));
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  return new THREE.LineSegments(geo, new THREE.LineBasicMaterial({ color:PAL.blue, transparent:true, opacity:.35 }));
+}
+function sizeCheck(o){
+  const c = o.renderer.domElement;
+  const w = c.clientWidth, h = c.clientHeight;
+  if (w < 4 || h < 4) return false;
+  const s = o.renderer.getSize(new THREE.Vector2());
+  if (s.x !== w || s.y !== h){ o.renderer.setSize(w, h, false); o.camera.aspect = w/h; o.camera.updateProjectionMatrix(); }
+  return true;
+}
+function loop(){
+  requestAnimationFrame(loop);
+  if (hero && sizeCheck(hero)){ hero.controls.update(); hero.renderer.render(hero.scene, hero.camera); }
+  if (sim  && sizeCheck(sim)) { sim.controls.update();  sim.renderer.render(sim.scene, sim.camera); }
+}
+
+/* ---------- HERO ---------- */
+function initHero(){
+  hero = makeScene($('#heroCanvas'), { cam:[0,6.5,10.5], target:[0,.8,0], autoRotate:true });
+  const defs = [
+    { f:(x,y)=>.45*(x*x+y*y), x:-3.4, t:'min' },
+    { f:(x,y)=>-.45*(x*x+y*y), x:0,   t:'max' },
+    { f:(x,y)=>.45*(x*x-y*y), x:3.4,  t:'silla' }
+  ];
+  defs.forEach(d => {
+    const s = buildSurface(d.f, 1.4, 36);
+    s.mesh.position.x = d.x; s.grid.position.x = d.x; s.grid.position.y = -1.35;
+    hero.scene.add(s.mesh, s.grid);
+    const m = ringed(0, d.f(0,0), 0, d.t==='min'?PAL.pine : d.t==='max'?PAL.gold : PAL.greenL);
+    m.position.x = d.x;
+    hero.scene.add(m);
+  });
+}
+
+/* ---------- SIMULADOR ---------- */
+function initSim(){
+  sim = makeScene($('#threeContainer'), { cam:[6,5,7], target:[0,.9,0] });
+  simSurface = new THREE.Group(); simOverlay = new THREE.Group();
+  sim.scene.add(simSurface, simOverlay);
+  rebuildSim();
+}
+function rebuildSim(){
+  if (!sim) return;
+  clearGroup(simSurface); clearGroup(simOverlay);
+  if (SIM.tab === 'extremos') buildExtremos();
+  else if (SIM.tab === 'lagrange') buildLagrange();
+  else buildDir();
+  updateEq(); updateCap();
+}
+function buildExtremos(){
+  const d = EXT[$('#funcExtremos').value];
+  const sc = d.sc || 1, rng = d.rng || 2.5;
+  const disp = (x,y) => d.f(x,y)*sc;
+  const s = buildSurface(disp, rng);
+  simSurface.add(s.mesh, s.grid);
+  if (SIM.showPts) d.pts.forEach(p => {
+    simOverlay.add(ringed(p.p[0], disp(p.p[0], p.p[1]), p.p[1], p.t==='min'?PAL.pine : p.t==='max'?PAL.gold : PAL.greenL));
+  });
+  if (SIM.showCurves) simOverlay.add(contours(disp, s.zmin, s.zmax, rng));
+  fillExtremosInfo(d);
+}
+function fillExtremosInfo(d){
+  $('#puntoCritico').textContent = d.pts.map(p=>`(${p.p[0]}, ${p.p[1]})`).join('  ·  ');
+  $('#tipoPunto').textContent = d.pts.map(p => TIPO[p.t]).join(' · ');
+  const hv = $('#hessianaVal'); hv.innerHTML = `\\(${d.hess}\\)`; typeset(hv);
+  const dv = $('#detalleExtremo'); dv.innerHTML = `\\(${d.extra}\\)`; typeset(dv);
+}
+function buildLagrange(){
+  const fn = LAGF[$('#funcLagrange').value], gd = LAGG[$('#restriccion').value];
+  const s = buildSurface(fn.f);
+  simSurface.add(s.mesh, s.grid);
+  const N = 720, samples = [];
+  for (let i=0;i<=N;i++){
+    const t = gd.t0 + (gd.t1-gd.t0)*i/N;
+    const [x,y] = gd.param(t);
+    samples.push({ x, y, v: fn.f(x,y) });
+  }
+  simOverlay.add(lineFromPoints(samples.map(p => new THREE.Vector3(p.x, p.v, p.y)), PAL.goldD));
+  simOverlay.add(lineFromPoints(samples.map(p => new THREE.Vector3(p.x, s.zmin-0.7, p.y)), PAL.gray));
+  let mx = samples[0], mn = samples[0];
+  samples.forEach(p => { if (p.v > mx.v) mx = p; if (p.v < mn.v) mn = p; });
+  if (SIM.showLagPts){ simOverlay.add(ringed(mx.x, mx.v, mx.y, PAL.gold)); simOverlay.add(ringed(mn.x, mn.v, mn.y, PAL.gold)); }
+  if (SIM.showGrads){
+    [mx, mn].forEach(p => {
+      simOverlay.add(arrow([p.x, p.v, p.y], [fn.fx(p.x,p.y), fn.fy(p.x,p.y)], PAL.pine, 1.3));
+      simOverlay.add(arrow([p.x, p.v, p.y], [gd.gx(p.x,p.y), gd.gy(p.x,p.y)], PAL.goldL, 1.3));
+    });
+  }
+  $('#puntosLagrange').textContent = `máx ≈ (${f3(mx.x)}, ${f3(mx.y)}) · mín ≈ (${f3(mn.x)}, ${f3(mn.y)})`;
+  $('#valoresLagrange').textContent = `f(máx) ≈ ${f3(mx.v)} · f(mín) ≈ ${f3(mn.v)}`;
+  const dv = $('#detalleLagrange');
+  dv.innerHTML = `En los extremos, \\(\\nabla f${fn.gtex}\\) y \\(\\nabla g${gd.gtex}\\) son <strong>paralelos</strong>: existe \\(\\lambda\\) con \\(\\nabla f=\\lambda\\nabla g\\). Observa las flechas verde (\\(\\nabla f\\)) y dorada clara (\\(\\nabla g\\)) alineadas sobre cada punto extremo.${gd.note||''}`;
+  typeset(dv);
+}
+function clampP(v){ const n = parseFloat(v); return isNaN(n) ? 1 : Math.max(-2.3, Math.min(2.3, n)); }
+function dirParams(){
+  const d = DIRF[$('#funcDir').value];
+  const a = clampP($('#puntoA').value), b = clampP($('#puntoB').value);
+  const th = +$('#thetaSlider').value, rad = th*Math.PI/180;
+  return { d, a, b, th, ux: Math.cos(rad), uy: Math.sin(rad) };
+}
+function buildDir(){
+  const { d } = dirParams();
+  const s = buildSurface(d.f);
+  simSurface.add(s.mesh, s.grid);
+  buildDirOverlay();
+  fillDirInfo();
+}
+function buildDirOverlay(){
+  if (!sim) return;
+  clearGroup(simOverlay);
+  const { d, a, b, ux, uy } = dirParams();
+  const f0 = d.f(a,b);
+  simOverlay.add(ringed(a, f0, b, PAL.goldL));
+  simOverlay.add(arrow([a, f0, b], [d.fx(a,b), d.fy(a,b)], PAL.pine, 1.3));
+  simOverlay.add(arrow([a, f0, b], [ux, uy], PAL.gold, 1.3));
+  const pts = [new THREE.Vector3(a, f0, b)];
+  for (let t=.05; t<=2.4; t+=.05){ const X=a+t*ux, Y=b+t*uy; if (Math.abs(X)>2.45||Math.abs(Y)>2.45) break; pts.push(new THREE.Vector3(X, d.f(X,Y), Y)); }
+  for (let t=.05; t<=2.4; t+=.05){ const X=a-t*ux, Y=b-t*uy; if (Math.abs(X)>2.45||Math.abs(Y)>2.45) break; pts.unshift(new THREE.Vector3(X, d.f(X,Y), Y)); }
+  simOverlay.add(lineFromPoints(pts, PAL.goldD));
+}
+function fillDirInfo(){
+  const { d, a, b, th, ux, uy } = dirParams();
+  const gx = d.fx(a,b), gy = d.fy(a,b);
+  const mag = Math.hypot(gx, gy);
+  const D = gx*ux + gy*uy;
+  $('#gradVal').textContent = `(${f2(gx)}, ${f2(gy)})`;
+  $('#gradMag').textContent = mag > 1e-9 ? f2(mag) : '0 (punto crítico)';
+  $('#dirVal').textContent  = `${f3(D)}   (θ = ${th}°)`;
+  let det;
+  if (Math.abs(D) < 1e-9) det = 'f no cambia: u es tangente a la curva de nivel.';
+  else det = D > 0 ? 'f crece en esa dirección.' : 'f decrece en esa dirección.';
+  const thMax = mag > 1e-9 ? (Math.atan2(gy,gx)*180/Math.PI + 360) % 360 : 0;
+  $('#detalleDir').textContent = mag > 1e-9
+    ? `Con θ = ${th}°, D_u f = ${f3(D)}: ${det} Máxima tasa |∇f| = ${f2(mag)} en θ ≈ ${thMax.toFixed(0)}° (u ∥ ∇f); D_u f = 0 en θ ≈ ${((thMax+90)%360).toFixed(0)}° (u ⊥ ∇f).`
+    : `∇f = (0, 0): punto crítico; toda derivada direccional en él vale 0.`;
+}
+function updateEq(){
+  const el = $('#eqText');
+  let tex;
+  if (SIM.tab === 'extremos'){ tex = `f(x,y)=${EXT[$('#funcExtremos').value].tex}`; }
+  else if (SIM.tab === 'lagrange'){ tex = `f(x,y)=${LAGF[$('#funcLagrange').value].tex},\\quad g(x,y)=${LAGG[$('#restriccion').value].tex}`; }
+  else { const { d, th } = dirParams(); tex = `f(x,y)=${d.tex},\\quad \\theta=${th}^{\\circ}`; }
+  el.innerHTML = `\\(${tex}\\)`; typeset(el);
+}
+function updateCap(){
+  const CAPS = {
+    extremos:'Arrastra para rotar. Los aros marcan los puntos críticos; activa las curvas de nivel para ver la geometría.',
+    lagrange:'La curva dorada es la restricción levantada sobre la superficie; los extremos ocurren donde los gradientes se alinean.',
+    direccionales:'El vector verde es ∇f y el dorado es u. La curva oscura es el corte de la superficie en la dirección u.'
+  };
+  $('#graphCap3D').textContent = CAPS[SIM.tab];
+}
+function simMilestone(tab, msg){
+  if (!state.sim[tab]){ state.sim[tab] = true; persist(); showToast(msg, true); }
+}
+
+/* ---------- Controles del simulador ---------- */
+ $$('.sim-tab').forEach(b => b.addEventListener('click', () => {
+  $$('.sim-tab').forEach(x => x.classList.remove('active'));
+  $$('.sim-panel').forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+  $('#st-' + b.dataset.stab).classList.add('active');
+  SIM.tab = b.dataset.stab;
+  rebuildSim();
+}));
+ $('#funcExtremos').addEventListener('change', rebuildSim);
+ $$('[data-extremo]').forEach(b => b.addEventListener('click', () => {
+  const m = b.dataset.extremo;
+  if (m === 'mostrar') SIM.showPts = !SIM.showPts;
+  if (m === 'curvas')  SIM.showCurves = !SIM.showCurves;
+  if (m === 'hessiana'){ const d = EXT[$('#funcExtremos').value]; showToast('Hessiana: ' + d.msg, true); }
+  rebuildSim();
+}));
+ $('#btnExtremos').addEventListener('click', () => { rebuildSim(); simMilestone('extremos','Módulo «Extremos y Hessiana» registrado en tu boleta.'); });
+
+ $('#funcLagrange').addEventListener('change', rebuildSim);
+ $('#restriccion').addEventListener('change', rebuildSim);
+ $$('[data-lagrange]').forEach(b => b.addEventListener('click', () => {
+  if (b.dataset.lagrange === 'gradientes') SIM.showGrads = !SIM.showGrads;
+  else SIM.showLagPts = !SIM.showLagPts;
+  rebuildSim();
+}));
+ $('#btnLagrange').addEventListener('click', () => { rebuildSim(); simMilestone('lagrange','Módulo «Multiplicadores de Lagrange» registrado en tu boleta.'); });
+
+ $('#funcDir').addEventListener('change', rebuildSim);
+['puntoA','puntoB'].forEach(id => $('#'+id).addEventListener('input', () => { buildDirOverlay(); fillDirInfo(); updateEq(); }));
+ $('#thetaSlider').addEventListener('input', e => {
+  $('#thetaVal').textContent = e.target.value + '°';
+  buildDirOverlay(); fillDirInfo(); updateEq();
+});
+ $$('[data-dir]').forEach(b => b.addEventListener('click', () => {
+  const { d, a, b } = dirParams();
+  const base = Math.atan2(d.fy(a,b), d.fx(a,b)) * 180/Math.PI;
+  let deg = base;
+  if (b.dataset.dir === 'perp') deg = base + 90;
+  if (b.dataset.dir === 'max')  deg = base + 180;
+  deg = ((Math.round(deg) % 360) + 360) % 360;
+  $('#thetaSlider').value = deg;
+  $('#thetaVal').textContent = deg + '°';
+  buildDirOverlay(); fillDirInfo(); updateEq();
+}));
+ $('#btnDir').addEventListener('click', () => { rebuildSim(); simMilestone('direccionales','Módulo «Direccionales y gradiente» registrado en tu boleta.'); });
+
+/* ============================================================
+   QUIZ
+============================================================ */
+function quizCorrect(){
+  let n = 0;
+  $$('.quiz-q').forEach(q => { const a = state.quiz.answers[q.dataset.qid]; if (a && a === q.dataset.correct) n++; });
+  return n;
+}
+function updateQuizResult(){
+  $('#quizResult').innerHTML = `<strong>${quizCorrect()}</strong> de 6 aciertos`;
+}
+function gradeQuestion(q, correct, chosen, reveal){
+  q.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('is-correct','is-wrong','locked');
+    if (o.querySelector('input').value === correct) o.classList.add('is-correct');
+    else if (reveal && o.querySelector('input').value === chosen) o.classList.add('is-wrong');
+    o.classList.add('locked');
+  });
+  const ex = q.querySelector('.explain'); if (ex) ex.hidden = !reveal;
+}
+ $$('.quiz-q').forEach(q => {
+  const qid = q.dataset.qid, correct = q.dataset.correct;
+  q.querySelectorAll('.opt input').forEach(inp => inp.addEventListener('change', () => {
+    gradeQuestion(q, correct, inp.value, true);
+    state.quiz.answers[qid] = inp.value;
+    persist(); updateQuizResult();
+  }));
+});
+ $('#btnQuizReset').addEventListener('click', () => {
+  state.quiz.answers = {}; persist();
+  $$('.quiz-q').forEach(q => {
+    q.querySelectorAll('input').forEach(i => i.checked = false);
+    q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+    const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+  });
+  updateQuizResult(); showToast('Quiz reiniciado.', true);
+});
+
+/* ============================================================
+   CHECKBOXES (ejercicios y tarea)
+============================================================ */
+function syncChk(i){ const c = i.closest('.chk'); if (c) c.classList.toggle('done', i.checked); }
+ $$('input[data-ej]').forEach(i => {
+  i.checked = !!state.ej[i.dataset.ej]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.ej[i.dataset.ej] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Ejercicio marcado como resuelto. ¡Bien!', true);
+  });
+});
+ $$('input[data-tar]').forEach(i => {
+  i.checked = !!state.tar[i.dataset.tar]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.tar[i.dataset.tar] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Problema de tarea registrado.', true);
+  });
+});
+
+/* ============================================================
+   EDITOR LATEX
+============================================================ */
+const CMDS = [
+  { g:'Fracciones y potencias', items:[
+    { code:'\\frac{a}{b}', view:'\\frac{a}{b}' },
+    { code:'x^{2}', view:'x^{2}' },
+    { code:'\\sqrt{x}', view:'\\sqrt{x}' }
+  ]},
+  { g:'Cálculo diferencial', items:[
+    { code:'\\frac{\\partial f}{\\partial x}', view:'\\frac{\\partial f}{\\partial x}' },
+    { code:'\\nabla f', view:'\\nabla f' },
+    { code:'D_{\\vec u} f', view:'D_{\\vec u} f' },
+    { code:'f_{xx}', view:'f_{xx}' }
+  ]},
+  { g:'Matrices y símbolos', items:[
+    { code:'\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}', view:'\\begin{pmatrix} a & b \\\\ c & d \\end{pmatrix}' },
+    { code:'\\det(H)', view:'\\det(H)' },
+    { code:'\\lambda', view:'\\lambda' },
+    { code:'\\Rightarrow', view:'\\Rightarrow' }
+  ]}
+];
+function initEditors(){
+  $$('.ed-box').forEach(box => {
+    const key = box.dataset.ed;
+    const manual = CMDS.map(g => `<div class="ed-cmd-title">${g.g}</div>` + g.items.map(it => `
+      <div class="cmd-row">
+        <span class="cmd-code">${esc(it.code)}</span>
+        <span class="cmd-view">\\(${it.view}\\)</span>
+        <button class="cmd-add" data-code="${esc(it.code).replace(/"/g,'&quot;')}" title="Insertar en el cursor">+</button>
+      </div>`).join('')).join('');
+    box.innerHTML = `
+      <div class="ed-toolbar">
+        <span class="ed-title"><i data-lucide="pen-line"></i>Editor LaTeX · Ejercicio ${key.slice(1)}</span>
+        <span class="ed-status" data-role="status"><span class="dot"></span><span data-role="statusTxt">Sin guardar</span></span>
+      </div>
+      <div class="ed-grid">
+        <div class="ed-main">
+          <textarea class="ed-ta" data-role="ta" placeholder="Escribe tu solución. Usa \\( ... \\) para fórmulas en línea y $$ ... $$ para centradas."></textarea>
+          <div class="ed-preview-wrap">
+            <div class="ed-preview-head">Vista previa</div>
+            <div class="ed-preview" data-role="prev"><span class="ed-ph">La vista previa aparecerá aquí…</span></div>
+          </div>
+        </div>
+        <div class="ed-manual">
+          <p class="ed-note">Haz clic en <b>+</b> para insertar un comando en el cursor. Delimitadores: <code>\\( \\)</code> en línea, <code>$$ $$</code> centrado.</p>
+          ${manual}
+        </div>
+      </div>
+      <div class="ed-foot">
+        <span class="ed-count" data-role="count">0 caracteres</span>
+        <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-role="clear">Limpiar</button>
+          <button class="btn sm" data-role="save"><i data-lucide="save"></i>Guardar borrador</button>
+        </span>
+      </div>`;
+    const ta = box.querySelector('[data-role=ta]');
+    const prev = box.querySelector('[data-role=prev]');
+    const statusEl = box.querySelector('[data-role=status]');
+    const statusTxt = box.querySelector('[data-role=statusTxt]');
+    const count = box.querySelector('[data-role=count]');
+    if (state.ed[key]) ta.value = state.ed[key];
+    const renderPrev = () => {
+      if (!ta.value.trim()){ prev.innerHTML = '<span class="ed-ph">La vista previa aparecerá aquí…</span>'; return; }
+      prev.textContent = ta.value;
+      typeset(prev);
+    };
+    const setSaved = s => { statusEl.classList.toggle('saved', s); statusTxt.textContent = s ? 'Guardado' : 'Sin guardar'; };
+    let deb;
+    ta.addEventListener('input', () => {
+      count.textContent = ta.value.length + ' caracteres';
+      setSaved(false);
+      clearTimeout(deb); deb = setTimeout(renderPrev, 350);
+    });
+    box.querySelectorAll('.cmd-add').forEach(btn => btn.addEventListener('click', () => {
+      const code = btn.dataset.code;
+      const s = ta.selectionStart, e2 = ta.selectionEnd;
+      ta.value = ta.value.slice(0, s) + code + ta.value.slice(e2);
+      ta.focus(); ta.selectionStart = ta.selectionEnd = s + code.length;
+      ta.dispatchEvent(new Event('input'));
+    }));
+    box.querySelector('[data-role=save]').addEventListener('click', () => {
+      state.ed[key] = ta.value; persist(); setSaved(true);
+      showToast('Borrador del ejercicio ' + key.slice(1) + ' guardado.', true);
+    });
+    box.querySelector('[data-role=clear]').addEventListener('click', () => {
+      ta.value = ''; ta.dispatchEvent(new Event('input')); renderPrev();
+    });
+    if (state.ed[key]) setSaved(true);
+    renderPrev();
+    count.textContent = ta.value.length + ' caracteres';
+  });
+  if (window.lucide) lucide.createIcons();
+}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+function initials(name){
+  return (name.trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase()) || '?';
+}
+function updateBoleta(){
+  const simN = ['extremos','lagrange','direccionales'].filter(k => state.sim[k]).length;
+  const ejN  = Object.values(state.ej).filter(Boolean).length;
+  const qN   = Object.keys(state.quiz.answers).length;
+  const qC   = quizCorrect();
+  const tarN = Object.values(state.tar).filter(Boolean).length;
+  const pSim = 1.5*simN/3, pEj = 2.5*ejN/10, pQ = 3*qC/6, pT = 3*tarN/4;
+  const total = pSim + pEj + pQ + pT;
+
+  $('#barSim').style.width = (simN/3*100)+'%';
+  $('#bdSim').textContent  = `${simN} de 3 módulos explorados`;
+  $('#ptSim').innerHTML    = `${pSim.toFixed(1)} <small>/ 1.5</small>`;
+  $('#barEj').style.width  = (ejN/10*100)+'%';
+  $('#bdEj').textContent   = `${ejN} de 10 ejercicios resueltos`;
+  $('#ptEj').innerHTML     = `${pEj.toFixed(1)} <small>/ 2.5</small>`;
+  $('#barQuiz').style.width = (qC/6*100)+'%';
+  $('#bdQuiz').textContent  = `${qN} de 6 respondidas · ${qC} aciertos`;
+  $('#ptQuiz').innerHTML    = `${pQ.toFixed(1)} <small>/ 3.0</small>`;
+  $('#barTar').style.width  = (tarN/4*100)+'%';
+  $('#bdTar').textContent   = `${tarN} de 4 problemas entregados`;
+  $('#ptTar').innerHTML     = `${pT.toFixed(1)} <small>/ 3.0</small>`;
+
+  $('#bTotal').textContent = total.toFixed(1);
+  $('#bSeal').textContent  = total.toFixed(1);
+  $('#bMeta').textContent  = `${simN + ejN + qN + tarN} de 23 evidencias registradas`;
+  $('#statNota').textContent = total > 0 ? total.toFixed(1) : '—';
+
+  const has = !!state.name;
+  $('#boletaForm').hidden = has;
+  $('#boletaCard').hidden = !has;
+  $('#boletaActions').hidden = !has;
+  if (has){
+    $('#bName').textContent = state.name;
+    const av = $('#bAvatar');
+    av.textContent = initials(state.name);
+    av.style.background = ['#C9A84C','#007B5D','#143466'][state.name.length % 3];
+  }
+}
+ $('#btnRegister').addEventListener('click', () => {
+  const v = $('#studentName').value.trim();
+  if (v.length < 3){ showToast('Escribe tu nombre completo para registrarte.', false); return; }
+  state.name = v; persist();
+  showToast('¡Registrado! Tu boleta está lista.', true);
+});
+ $('#studentName').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btnRegister').click(); });
+
+let delTO = null;
+ $('#btnDelete').addEventListener('click', function(){
+  if (!this.classList.contains('confirm')){
+    this.classList.add('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>¿Confirmar?';
+    if (window.lucide) lucide.createIcons();
+    delTO = setTimeout(() => {
+      this.classList.remove('confirm');
+      this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+      if (window.lucide) lucide.createIcons();
+    }, 2600);
+  } else {
+    clearTimeout(delTO);
+    localStorage.removeItem(KEY);
+    state = freshState();
+    $$('input[data-ej],input[data-tar]').forEach(i => { i.checked = false; syncChk(i); });
+    $$('.quiz-q').forEach(q => {
+      q.querySelectorAll('input').forEach(i => i.checked = false);
+      q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+      const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+    });
+    updateQuizResult();
+    $$('.ed-box').forEach(b => { const ta = b.querySelector('.ed-ta'); if (ta){ ta.value = ''; ta.dispatchEvent(new Event('input')); } });
+    $('#studentName').value = '';
+    this.classList.remove('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+    if (window.lucide) lucide.createIcons();
+    updateBoleta();
+    showToast('Registro y progreso eliminados.', false);
+  }
+});
+
+/* ============================================================
+   RESTAURAR E INICIALIZAR
+============================================================ */
+function restore(){
+  if (state.name) $('#studentName').value = state.name;
+  $$('.quiz-q').forEach(q => {
+    const a = state.quiz.answers[q.dataset.qid];
+    if (a){
+      const inp = q.querySelector(`input[value="${a}"]`);
+      if (inp){ inp.checked = true; gradeQuestion(q, q.dataset.correct, a, true); }
+    }
+  });
+  updateQuizResult();
+}
+ $('#bFootDate').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+
+if (window.lucide) lucide.createIcons();
+typeset(document.body);
+initEditors();
+restore();
+if (window.THREE){
+  initHero();
+  initSim();
+  loop();
+} else {
+  $('#graphCap3D').textContent = 'No se pudo cargar Three.js: el modo 3D no está disponible, pero la teoría y las actividades funcionan.';
+}
+updateBoleta();
+</script>
+</body>
+</html>
