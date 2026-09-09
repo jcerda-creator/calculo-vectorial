@@ -512,7 +512,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
           </div>
         </article>
 
-        <!-- 4.2 NUEVA SECCIÓN -->
+        <!-- 4.2 -->
         <article class="sec" id="t42">
           <div class="sec-no">4.2</div>
           <h3>Derivadas direccionales y gradiente</h3>
@@ -643,7 +643,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
         <h3>Pendiente máxima y drenaje</h3>
         <p>Si \(h(x,y)\) modela la elevación de un terreno, \(\nabla h\) apunta hacia donde la ladera sube más rápido y \(\|\nabla h\|\) es la pendiente máxima. El agua escurre en la dirección \(-\nabla h\), y las curvas de nivel son las isolíneas de un mapa topográfico.</p>
         <div class="formula-mini">\( h(x,y)=100-x^2-2y^2 \;\Rightarrow\; \nabla h(1,1)=(-2,\,-4) \)</div>
-        <p>En \((1,1)\): pendiente máxima \(\|\nabla h\|=\sqrt{20}\approx4.47\) m por unidad de distancia; el agua fluye en la dirección \((2,4)/\sqrt{20}\), es decir, hacia la cima del terreno invertido.</p>
+        <p>En \((1,1)\): pendiente máxima \(\|\nabla h\|=\sqrt{20}\approx4.47\) m por unidad de distancia; el agua fluye en la dirección \((2,4)/\sqrt{20}\).</p>
         <p class="app-link">Conexión: teoría §4.2 · simulador «Direccionales y gradiente».</p>
       </article>
 
@@ -762,7 +762,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
             </div>
           </div>
 
-          <!-- Pestaña: Multiplicadores de Lagrange -->
+          <!-- Pestaña: Lagrange -->
           <div class="sim-panel" id="st-lagrange">
             <div class="field" style="margin-bottom:12px">
               <label for="funcLagrange">Función \(f(x,y)\) a optimizar</label>
@@ -803,7 +803,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
             </div>
           </div>
 
-          <!-- Pestaña: Derivadas direccionales y gradiente -->
+          <!-- Pestaña: Direccionales -->
           <div class="sim-panel" id="st-direccionales">
             <div class="field" style="margin-bottom:12px">
               <label for="funcDir">Función \(f(x,y)\)</label>
@@ -845,14 +845,14 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
             </div>
           </div>
 
-          <p class="note">Arrastra con el mouse para rotar. Usa la rueda para acercar/alejar. En «Direccionales y gradiente» mueve θ: la derivada direccional es la pendiente del corte dorado sobre el punto de análisis, y es máxima cuando \(\vec u\) se alinea con el gradiente verde.</p>
+          <p class="note">Arrastra con el mouse (o el dedo) para rotar. Usa la rueda para acercar/alejar. En «Direccionales y gradiente» mueve θ: la derivada direccional es la pendiente del corte dorado sobre el punto de análisis, y es máxima cuando \(\vec u\) se alinea con el gradiente verde.</p>
         </div>
       </div>
 
       <div class="panel">
         <div class="panel-head"><i data-lucide="box"></i>Visualización 3D</div>
         <div class="sim-3d-container" id="threeContainer"></div>
-        <div class="graph-cap" id="graphCap3D">Selecciona una función y explora sus puntos críticos.</div>
+        <div class="graph-cap" id="graphCap3D">Cargando motor 3D…</div>
         <div id="equationDisplay">
           <span id="eqText">\(f(x,y)=x^2+y^2\)</span>
         </div>
@@ -866,7 +866,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
   <div class="wrap">
     <div class="view-head">
       <p class="overline">Zona de evaluación</p>
-      <h2>Actividades de la Unidad Temática</h2>
+      <h2>Actividades de la Unidad 4</h2>
       <p class="sub">Ejercicios guiados, redacción con LaTeX, práctica de derivadas direccionales, quiz y problemas del Marsden-Tromba.</p>
     </div>
 
@@ -1036,7 +1036,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
       </details>
     </div>
 
-    <!-- Tarea Marsden-Tromba -->
+    <!-- Tarea -->
     <div class="act-block" id="tareaBlock">
       <h3>Tarea · Marsden &amp; Tromba, Cap. 4</h3>
       <p class="act-desc">Cuatro problemas para entregar por escrito en la próxima sesión (30% de la nota). Marca cada uno al terminarlo.</p>
@@ -1066,7 +1066,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
         <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 3 · Derivada direccional</span>La temperatura de una placa es \(T(x,y)=x^2+y^2-2x\). ¿En qué dirección se enfría más rápido en \((2,3)\) y a qué tasa?</span></summary>
         <div class="sol-body">
           <p>\(\nabla T=(2x-2,\,2y)\Rightarrow\nabla T(2,3)=(2,6)\), \(\|\nabla T\|=\sqrt{40}=2\sqrt{10}\).</p>
-          <p>Enfriamiento más rápido: \(\vec u=-\nabla T/\|\nabla T\|=\frac{1}{2\sqrt{10}}(-2,-6)=\frac{1}{\sqrt{10}}(-1,-3)\).</p>
+          <p>Enfriamiento más rápido: \(\vec u=-\nabla T/\|\nabla T\|=\frac{1}{\sqrt{10}}(-1,-3)\).</p>
           <p>Tasa: \(D_{\vec u}T=-\|\nabla T\|=-2\sqrt{10}\approx-6.32\) grados por unidad de distancia.</p>
           <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t3"><span>Problema entregado</span></label>
         </div>
@@ -1166,7 +1166,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
   <div class="wrap">
     <div class="view-head">
       <p class="overline">Seguimiento personal</p>
-      <h2>Mi registro y notas de la Unidad Temática</h2>
+      <h2>Mi boleta de la Unidad 4</h2>
       <p class="sub">Regístrate para activar tu boleta. El progreso (simulador, ejercicios, quiz y tarea) se acumula automáticamente y se guarda solo en tu navegador.</p>
     </div>
 
@@ -1186,11 +1186,11 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
       <div class="b-head">
         <div class="avatar" id="bAvatar">—</div>
         <div>
-          <div class="b-title">Cálculo Vectorial · Diferenciación Multivariable</div>
+          <div class="b-title">Cálculo Vectorial · Unidad 4</div>
           <div class="b-name" id="bName">—</div>
           <div class="b-meta" id="bMeta">0 de 23 evidencias registradas</div>
         </div>
-        <div class="b-seal"><span>Unidad Temática</span><strong id="bSeal">0.0</strong><span>nota / 10</span></div>
+        <div class="b-seal"><span>Unidad 4</span><strong id="bSeal">0.0</strong><span>nota / 10</span></div>
       </div>
       <div class="b-body">
         <div class="b-row">
@@ -1236,14 +1236,12 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
 
 <footer>
   <div class="wrap foot-row">
-    <span><strong>Cálculo Vectorial · UP</strong> — Derivadas direccionales, gradiente y comportamiento local</span>
-    <span>Dr. Adrián Cerda ·Basado en el libro de Texto Marsden &amp; Tromba, Cap. 4 </span>
+    <span><strong>Cálculo Vectorial</strong> — Derivadas direccionales, gradiente y comportamiento local</span>
+    <span>Dr. Adrián Cerda · Marsden &amp; Tromba, Cap. 4 · 2026</span>
   </div>
 </footer>
 
-<!-- ==================== LIBRERÍAS ==================== -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<!-- ==================== LIBRERÍAS (KaTeX y Lucide; Three.js se carga dinámicamente con respaldo) ==================== -->
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
@@ -1257,6 +1255,16 @@ const $$ = s => [...document.querySelectorAll(s)];
 const f2 = n => (+n).toFixed(2);
 const f3 = n => (+n).toFixed(3);
 const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src;
+    s.onload = res;
+    s.onerror = () => { s.remove(); rej(new Error('fallo: ' + src)); };
+    document.head.appendChild(s);
+  });
+}
 
 const KEY = 'calc2-u4-state';
 const freshState = () => ({ name:'', ej:{}, tar:{}, quiz:{answers:{}}, sim:{}, ed:{} });
@@ -1289,7 +1297,6 @@ function showView(name){
   $$('.view').forEach(v => v.hidden = (v.id !== 'v-' + name));
   $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
   window.scrollTo({ top:0, behavior:'smooth' });
-  if (name === 'simulador' || name === 'inicio') setTimeout(()=>{ /* el bucle de render ajusta el tamaño */ }, 60);
 }
 document.addEventListener('click', e => {
   const t = e.target.closest('[data-view]');
@@ -1331,16 +1338,16 @@ const EXT = {
 };
 
 const LAGF = {
-  xy:    { tex:'xy',            gtex:'(y,\\;x)',            f:(x,y)=>x*y,                  fx:(x,y)=>y,        fy:(x,y)=>x },
-  x2y2:  { tex:'x^2+y^2',       gtex:'(2x,\\;2y)',           f:(x,y)=>x*x+y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>2*y },
-  x2y2d: { tex:'x^2-y^2',       gtex:'(2x,\\;-2y)',          f:(x,y)=>x*x-y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>-2*y },
+  xy:    { tex:'xy',              gtex:'(y,\\;x)',            f:(x,y)=>x*y,                  fx:(x,y)=>y,        fy:(x,y)=>x },
+  x2y2:  { tex:'x^2+y^2',         gtex:'(2x,\\;2y)',           f:(x,y)=>x*x+y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>2*y },
+  x2y2d: { tex:'x^2-y^2',         gtex:'(2x,\\;-2y)',          f:(x,y)=>x*x-y*y,              fx:(x,y)=>2*x,      fy:(x,y)=>-2*y },
   sincos:{ tex:'\\sin x+\\cos y', gtex:'(\\cos x,\\;-\\sin y)', f:(x,y)=>Math.sin(x)+Math.cos(y), fx:(x,y)=>Math.cos(x), fy:(x,y)=>-Math.sin(y) }
 };
 const LAGG = {
-  circulo:{ tex:'x^2+y^2-1',       gtex:'(2x,\\;2y)',   param:t=>[Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x)=>2*x, gy:(y)=>2*y },
-  elipse: { tex:'\\tfrac{x^2}{4}+y^2-1', gtex:'(x/2,\\;2y)', param:t=>[2*Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x)=>x/2, gy:(y)=>2*y },
-  linea:  { tex:'x+y-1',           gtex:'(1,\\;1)',     param:t=>[t,1-t], t0:-1.5, t1:2.4, gx:()=>1, gy:()=>1, note:' Extremos calculados sobre el tramo visualizado de la recta.' },
-  parabola:{ tex:'y-x^2',          gtex:'(-2x,\\;1)',   param:t=>[t,t*t], t0:-1.58, t1:1.58, gx:(x)=>-2*x, gy:()=>1 }
+  circulo:{ tex:'x^2+y^2-1',           gtex:'(2x,\\;2y)', param:t=>[Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x,y)=>2*x, gy:(x,y)=>2*y },
+  elipse: { tex:'\\tfrac{x^2}{4}+y^2-1', gtex:'(x/2,\\;2y)', param:t=>[2*Math.cos(t),Math.sin(t)], t0:0, t1:2*Math.PI, gx:(x,y)=>x/2, gy:(x,y)=>2*y },
+  linea:  { tex:'x+y-1',               gtex:'(1,\\;1)',   param:t=>[t,1-t], t0:-1.5, t1:2.4, gx:(x,y)=>1, gy:(x,y)=>1, note:' Extremos calculados sobre el tramo visualizado de la recta.' },
+  parabola:{ tex:'y-x^2',              gtex:'(-2x,\\;1)', param:t=>[t,t*t], t0:-1.58, t1:1.58, gx:(x,y)=>-2*x, gy:(x,y)=>1 }
 };
 
 const DIRF = {
@@ -1352,23 +1359,74 @@ const DIRF = {
 
 /* ============================================================
    THREE.JS — ESCENA
+   (Three.js se carga dinámicamente en start3D(); todas las
+   funciones de aquí abajo solo se usan después de cargarlo)
 ============================================================ */
 const PAL = { ink:0x0A1C3A, blue:0x143466, pine:0x007B5D, gold:0xC9A84C, goldL:0xE8D5A3, goldD:0xB8860B, greenL:0xD4EDDA, gray:0x8f9aa8 };
 let hero = null, sim = null, simSurface = null, simOverlay = null;
 const SIM = { tab:'extremos', showPts:true, showCurves:false, showGrads:true, showLagPts:true };
 
-function makeScene(canvas, opts={}){
+/* Controles de órbita propios: se usan si OrbitControls no está disponible */
+function SimpleOrbit(camera, el, opts={}){
+  const tgt = new THREE.Vector3(...(opts.target || [0,1,0]));
+  const off = new THREE.Vector3(...(opts.cam || [6,5,7])).sub(tgt);
+  const r0 = off.length() || 1;
+  const st = { r: r0, theta: Math.atan2(off.x, off.z), phi: Math.acos(Math.max(-1, Math.min(1, off.y / r0))) };
+  const api = { autoRotate: !!opts.autoRotate, autoRotateSpeed: 1.1 };
+  function apply(){
+    const sp = Math.sin(st.phi);
+    camera.position.set(tgt.x + st.r*sp*Math.sin(st.theta), tgt.y + st.r*Math.cos(st.phi), tgt.z + st.r*sp*Math.cos(st.theta));
+    camera.lookAt(tgt);
+  }
+  let drag = false, px = 0, py = 0;
+  el.style.touchAction = 'none';
+  el.addEventListener('pointerdown', e => { drag = true; px = e.clientX; py = e.clientY; try { el.setPointerCapture(e.pointerId); } catch(_){} });
+  el.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - px, dy = e.clientY - py; px = e.clientX; py = e.clientY;
+    st.theta -= dx * .008;
+    st.phi = Math.max(.2, Math.min(Math.PI - .2, st.phi - dy * .008));
+    apply();
+  });
+  const stop = () => { drag = false; };
+  el.addEventListener('pointerup', stop);
+  el.addEventListener('pointercancel', stop);
+  el.addEventListener('lostpointercapture', stop);
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    st.r = Math.max(3, Math.min(45, st.r * (1 + Math.sign(e.deltaY) * .07)));
+    apply();
+  }, { passive:false });
+  api.update = () => { if (api.autoRotate){ st.theta += .0035 * (api.autoRotateSpeed || 1); apply(); } };
+  apply();
+  return api;
+}
+function attachControls(camera, el, opts){
+  if (THREE.OrbitControls){
+    const c = new THREE.OrbitControls(camera, el);
+    c.enableDamping = true; c.dampingFactor = .08;
+    c.target.set(...(opts.target || [0,1,0]));
+    c.minDistance = 3; c.maxDistance = 45;
+    if (opts.autoRotate){ c.autoRotate = true; c.autoRotateSpeed = 1.1; }
+    c.update();
+    return c;
+  }
+  return SimpleOrbit(camera, el, opts);
+}
+
+/* FIX PRINCIPAL: si recibimos un <div>, creamos el <canvas> dentro.
+   Antes se pasaba el div directo a WebGLRenderer y eso rompía todo. */
+function makeScene(el, opts={}){
+  let canvas, evEl;
+  if (el && el.tagName === 'CANVAS'){ canvas = el; evEl = el; }
+  else { canvas = document.createElement('canvas'); el.appendChild(canvas); evEl = el; }
   const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf6f7f9);
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300);
   camera.position.set(...(opts.cam || [6,5,7]));
-  const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enableDamping = true; controls.dampingFactor = .08;
-  controls.target.set(...(opts.target || [0,.9,0]));
-  controls.minDistance = 2; controls.maxDistance = 40;
-  if (opts.autoRotate){ controls.autoRotate = true; controls.autoRotateSpeed = 1.0; }
+  const controls = attachControls(camera, evEl, opts);
   scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe4ea, .95));
   const d1 = new THREE.DirectionalLight(0xffffff, .7); d1.position.set(6,10,5); scene.add(d1);
   const d2 = new THREE.DirectionalLight(0xffffff, .28); d2.position.set(-7,5,-6); scene.add(d2);
@@ -1888,9 +1946,57 @@ let delTO = null;
 });
 
 /* ============================================================
-   RESTAURAR E INICIALIZAR
+   CARGA DEL MOTOR 3D (aislada: si falla, el resto sigue vivo)
 ============================================================ */
-function restore(){
+async function start3D(){
+  const cap = $('#graphCap3D');
+  try{
+    if (!window.THREE){
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+        'https://unpkg.com/three@0.128.0/build/three.min.js'
+      ];
+      for (const u of urls){
+        try { await loadScript(u); } catch(e){ console.warn('CDN falló:', u); }
+        if (window.THREE) break;
+      }
+    }
+    if (!window.THREE) throw new Error('Three.js no disponible');
+    if (!window.THREE.OrbitControls){
+      try { await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'); } catch(e){}
+    }
+    initHero();
+    initSim();
+    loop();
+  } catch(err){
+    console.error('[3D]', err);
+    if (cap) cap.textContent = 'No se pudo cargar Three.js (revisa tu conexión a internet y recarga la página). La teoría, las actividades y la boleta funcionan con normalidad.';
+    showToast('Visor 3D no disponible: sin conexión a los CDN.', false);
+  }
+}
+
+/* ============================================================
+   INICIALIZACIÓN (el 3D va al final y aislado)
+============================================================ */
+if (window.lucide){
+  lucide.createIcons();
+} else {
+  loadScript('https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js')
+    .then(() => { if (window.lucide) lucide.createIcons(); })
+    .catch(()=>{});
+}
+typeset(document.body);
+(async function ensureKatex(){
+  if (window.renderMathInElement) return;
+  try{
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
+    typeset(document.body);
+  }catch(e){}
+})();
+initEditors();
+(function restore(){
   if (state.name) $('#studentName').value = state.name;
   $$('.quiz-q').forEach(q => {
     const a = state.quiz.answers[q.dataset.qid];
@@ -1900,21 +2006,10 @@ function restore(){
     }
   });
   updateQuizResult();
-}
+})();
  $('#bFootDate').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
-
-if (window.lucide) lucide.createIcons();
-typeset(document.body);
-initEditors();
-restore();
-if (window.THREE){
-  initHero();
-  initSim();
-  loop();
-} else {
-  $('#graphCap3D').textContent = 'No se pudo cargar Three.js: el modo 3D no está disponible, pero la teoría y las actividades funcionan.';
-}
 updateBoleta();
+start3D();
 </script>
 </body>
 </html>
