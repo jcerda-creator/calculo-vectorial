@@ -1458,72 +1458,70 @@ function drawLagrange(){
     addObject(restLine);
   }
   
-  // Mostrar gradientes en puntos extremos (simulados)
-  if(showLagrangeMode === 'gradientes' || showLagrangeMode === 'puntos'){
-    // Puntos extremos aproximados para la restricción
-    const extremos = [];
-    if(restName === 'circulo'){
-      extremos.push({x: 0.707, y: 0.707, z: f(0.707, 0.707)});
-      extremos.push({x: -0.707, y: -0.707, z: f(-0.707, -0.707)});
-      if(funcName === 'xy'){
-        extremos.push({x: 0.707, y: -0.707, z: f(0.707, -0.707)});
-        extremos.push({x: -0.707, y: 0.707, z: f(-0.707, 0.707)});
-      }
-    } else if(restName === 'elipse'){
-      extremos.push({x: 2, y: 0, z: f(2, 0)});
-      extremos.push({x: -2, y: 0, z: f(-2, 0)});
-      extremos.push({x: 0, y: 1, z: f(0, 1)});
-      extremos.push({x: 0, y: -1, z: f(0, -1)});
-    } else if(restName === 'linea'){
-      extremos.push({x: 0.5, y: 0.5, z: f(0.5, 0.5)});
-    } else if(restName === 'parabola'){
-      extremos.push({x: 0, y: 0, z: f(0, 0)});
+  // Calcular puntos extremos según la restricción (definir extremos dentro del ámbito de la función)
+  let extremos = [];
+  
+  if(restName === 'circulo'){
+    extremos.push({x: 0.707, y: 0.707, z: f(0.707, 0.707)});
+    extremos.push({x: -0.707, y: -0.707, z: f(-0.707, -0.707)});
+    if(funcName === 'xy'){
+      extremos.push({x: 0.707, y: -0.707, z: f(0.707, -0.707)});
+      extremos.push({x: -0.707, y: 0.707, z: f(-0.707, 0.707)});
     }
-    
-    extremos.forEach(p => {
-      // Punto en la superficie
-      const sphereGeo = new THREE.SphereGeometry(0.1, 12, 12);
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0x8a6d10 });
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-      sphere.position.set(p.x, p.y, p.z);
-      addObject(sphere);
-      
-      if(showLagrangeMode === 'gradientes'){
-        // Gradiente de f (∇f)
-        const eps = 0.01;
-        const dfx = (f(p.x+eps, p.y) - f(p.x-eps, p.y))/(2*eps);
-        const dfy = (f(p.x, p.y+eps) - f(p.x, p.y-eps))/(2*eps);
-        const gradF = new THREE.Vector3(dfx, dfy, 0).normalize().multiplyScalar(0.5);
-        const startF = new THREE.Vector3(p.x, p.y, p.z);
-        const endF = startF.clone().add(gradF);
-        const arrowGeoF = new THREE.BufferGeometry().setFromPoints([startF, endF]);
-        const arrowMatF = new THREE.LineBasicMaterial({ color: 0x6b4c8a, linewidth: 2 });
-        const arrowF = new THREE.Line(arrowGeoF, arrowMatF);
-        addObject(arrowF);
-        
-        // Gradiente de g (∇g) en el punto proyectado
-        const dgx = (g(p.x+eps, p.y) - g(p.x-eps, p.y))/(2*eps);
-        const dgy = (g(p.x, p.y+eps) - g(p.x, p.y-eps))/(2*eps);
-        const gradG = new THREE.Vector3(dgx, dgy, 0).normalize().multiplyScalar(0.5);
-        const startG = new THREE.Vector3(p.x, p.y, p.z);
-        const endG = startG.clone().add(gradG);
-        const arrowGeoG = new THREE.BufferGeometry().setFromPoints([startG, endG]);
-        const arrowMatG = new THREE.LineBasicMaterial({ color: 0x2a6b6b, linewidth: 2 });
-        const arrowG = new THREE.Line(arrowGeoG, arrowMatG);
-        addObject(arrowG);
-      }
-    });
+  } else if(restName === 'elipse'){
+    extremos.push({x: 2, y: 0, z: f(2, 0)});
+    extremos.push({x: -2, y: 0, z: f(-2, 0)});
+    extremos.push({x: 0, y: 1, z: f(0, 1)});
+    extremos.push({x: 0, y: -1, z: f(0, -1)});
+  } else if(restName === 'linea'){
+    extremos.push({x: 0.5, y: 0.5, z: f(0.5, 0.5)});
+  } else if(restName === 'parabola'){
+    extremos.push({x: 0, y: 0, z: f(0, 0)});
   }
   
+  // Mostrar puntos extremos y gradientes
+  extremos.forEach(p => {
+    // Punto en la superficie
+    const sphereGeo = new THREE.SphereGeometry(0.1, 12, 12);
+    const sphereMat = new THREE.MeshBasicMaterial({ color: 0x8a6d10 });
+    const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+    sphere.position.set(p.x, p.y, p.z);
+    addObject(sphere);
+    
+    if(showLagrangeMode === 'gradientes'){
+      // Gradiente de f (∇f)
+      const eps = 0.01;
+      const dfx = (f(p.x+eps, p.y) - f(p.x-eps, p.y))/(2*eps);
+      const dfy = (f(p.x, p.y+eps) - f(p.x, p.y-eps))/(2*eps);
+      const gradF = new THREE.Vector3(dfx, dfy, 0).normalize().multiplyScalar(0.5);
+      const startF = new THREE.Vector3(p.x, p.y, p.z);
+      const endF = startF.clone().add(gradF);
+      const arrowGeoF = new THREE.BufferGeometry().setFromPoints([startF, endF]);
+      const arrowMatF = new THREE.LineBasicMaterial({ color: 0x6b4c8a, linewidth: 2 });
+      const arrowF = new THREE.Line(arrowGeoF, arrowMatF);
+      addObject(arrowF);
+      
+      // Gradiente de g (∇g) en el punto proyectado
+      const dgx = (g(p.x+eps, p.y) - g(p.x-eps, p.y))/(2*eps);
+      const dgy = (g(p.x, p.y+eps) - g(p.x, p.y-eps))/(2*eps);
+      const gradG = new THREE.Vector3(dgx, dgy, 0).normalize().multiplyScalar(0.5);
+      const startG = new THREE.Vector3(p.x, p.y, p.z);
+      const endG = startG.clone().add(gradG);
+      const arrowGeoG = new THREE.BufferGeometry().setFromPoints([startG, endG]);
+      const arrowMatG = new THREE.LineBasicMaterial({ color: 0x2a6b6b, linewidth: 2 });
+      const arrowG = new THREE.Line(arrowGeoG, arrowMatG);
+      addObject(arrowG);
+    }
+  });
+  
   // Actualizar información
-  const info = document.getElementById('infoLagrange');
   const puntosLagrange = document.getElementById('puntosLagrange');
   const valoresLagrange = document.getElementById('valoresLagrange');
   const detalleLagrange = document.getElementById('detalleLagrange');
   
   const vals = extremos.map(p => f(p.x, p.y));
-  puntosLagrange.textContent = extremos.map(p => `(${p.x.toFixed(2)},${p.y.toFixed(2)})`).join('; ');
-  valoresLagrange.textContent = vals.map(v => v.toFixed(2)).join('; ');
+  puntosLagrange.textContent = extremos.map(p => `(${p.x.toFixed(2)},${p.y.toFixed(2)})`).join('; ') || '—';
+  valoresLagrange.textContent = vals.map(v => v.toFixed(2)).join('; ') || '—';
   detalleLagrange.textContent = showLagrangeMode === 'gradientes' ? 
     'Los gradientes ∇f (morado) y ∇g (verde) son paralelos en los extremos.' :
     'Puntos extremos condicionados (amarillo).';
@@ -1691,13 +1689,13 @@ const QUIZ = [
   ans:1, why:'En un punto crítico, todas las derivadas parciales se anulan: \(\nabla f=(0,0)\).'},
  {q:'Si \(\det(H)>0\) y \(f_{xx}<0\) en un punto crítico, entonces:',
   opts:['Es un mínimo local','Es un máximo local','Es un punto silla','El criterio no decide'],
-  ans:1, why:'\(\det(H)>0\) y \(f_{xx}<0\) indican un máximo local. La superficie es cóncava hacia abajo.'],
+  ans:1, why:'\(\det(H)>0\) y \(f_{xx}<0\) indican un máximo local. La superficie es cóncava hacia abajo.'},
  {q:'En un punto silla, el determinante de la Hessiana es:',
   opts:['Positivo','Negativo','Cero','Indefinido'],
-  ans:1, why:'En un punto silla, \(\det(H)<0\), lo que indica que la superficie tiene curvatura en direcciones opuestas.'],
+  ans:1, why:'En un punto silla, \(\det(H)<0\), lo que indica que la superficie tiene curvatura en direcciones opuestas.'},
  {q:'En el método de multiplicadores de Lagrange, la condición para extremos es:',
   opts:['\(\nabla f=0\)','\(\nabla g=0\)','\(\nabla f=\lambda\nabla g\)','\(f=g\)'],
-  ans:2, why:'La condición de Lagrange es que los gradientes sean paralelos: \(\nabla f=\lambda\nabla g\).'],
+  ans:2, why:'La condición de Lagrange es que los gradientes sean paralelos: \(\nabla f=\lambda\nabla g\).'},
  {q:'La matriz Hessiana está formada por:',
   opts:['Derivadas primeras','Derivadas segundas','Derivadas mixtas','Integrales'],
   ans:1, why:'La Hessiana es la matriz de segundas derivadas parciales: \(f_{xx}, f_{xy}, f_{yx}, f_{yy}\).'},
@@ -1953,8 +1951,11 @@ function avColor(name){ return AV_COLORS[[...name].reduce((a,c)=>a+c.charCodeAt(
 
 function progresoUnidad(){
   const c=act()[CURSO];
-  const ejOk=['e1','e2','e3','e4'].filter(k=>c.ej[k]).length;
-  const tOk=PROBLEMAS.filter(p=>c.tarea[p]).length;
+  // Asegurar que c.ej existe
+  const ej = c.ej || {};
+  const ejOk = ['e1','e2','e3','e4'].filter(k=>ej[k]).length;
+  const tarea = c.tarea || {};
+  const tOk = PROBLEMAS.filter(p=>tarea[p]).length;
   return {
     sim: 100,
     ej: ejOk/4*100,
@@ -2074,7 +2075,4 @@ window.addEventListener('resize', ()=>{ drawHero(); });
 init();
 </script>
 </body>
-</html>  
-
-
-  
+</html>
