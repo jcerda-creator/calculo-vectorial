@@ -12,22 +12,24 @@
 
 <style>
 /* ============================================================
-   VARIABLES Y BASE (mismo estilo que el original)
+   VARIABLES — colores oficiales UNII (azul #1670C8 / #2E9BF0,
+   negro del escudo #0B0D10) + base
 ============================================================ */
 :root{
-  --paper:#f7f3eb;
-  --card:#fffdf8;
-  --ink:#1c2b25;
-  --pine:#1e4636;
-  --pine-soft:#2c5e49;
-  --terra:#c2542f;
-  --terra-soft:#f3e0d6;
-  --gold:#c9a227;
-  --line:rgba(28,43,37,.16);
-  --line-strong:rgba(28,43,37,.4);
-  --muted:rgba(28,43,37,.62);
-  --ok-bg:#e7efe6;
-  --err-bg:#f7e6dd;
+  --paper:#F5F9FD;
+  --card:#FFFFFF;
+  --ink:#0B0D10;
+  --pine:#1670C8;
+  --pine-soft:#2E9BF0;
+  --terra:#0B4E8F;
+  --terra-soft:#E4F0FB;
+  --gold:#2E9BF0;
+  --line:rgba(11,13,16,.12);
+  --line-strong:rgba(11,13,16,.26);
+  --muted:rgba(11,13,16,.62);
+  --ok-bg:#E4F1FC;
+  --err:#C24E36;
+  --err-bg:#F9E9E4;
   --radius:12px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
@@ -39,7 +41,7 @@ body{
   background:var(--paper);
   color:var(--ink);
   line-height:1.6;
-  background-image:radial-gradient(rgba(30,70,54,.075) 1px, transparent 1px);
+  background-image:radial-gradient(rgba(22,112,200,.08) 1px, transparent 1px);
   background-size:26px 26px;
 }
 .wrap{max-width:1150px;margin:0 auto;padding:0 24px}
@@ -55,14 +57,15 @@ svg.lucide{width:16px;height:16px;stroke-width:2}
 ============================================================ */
 header.topbar{
   position:sticky;top:0;z-index:60;
-  background:rgba(247,243,235,.93);
+  background:rgba(245,249,253,.94);
   backdrop-filter:blur(10px);
   border-bottom:1.5px solid var(--ink);
 }
 .topbar-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem}
-.brand .brand-ico{width:34px;height:34px;border:1.5px solid var(--ink);border-radius:9px;display:grid;place-items:center;background:var(--ink);color:var(--paper)}
-.brand .brand-ico svg{width:17px;height:17px}
+.brand .brand-ico{width:38px;height:38px;border-radius:9px;display:grid;place-items:center;background:transparent;border:none;color:var(--pine)}
+.brand .brand-ico img{width:36px;height:36px;object-fit:contain;display:block}
+.brand .brand-ico svg{width:20px;height:20px}
 .brand small{display:block;font-family:'Instrument Sans';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .topbar-side{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:right}
 nav.tabs{display:flex;gap:6px;border-top:1px solid var(--line);padding:10px 0;overflow-x:auto;scrollbar-width:none}
@@ -97,7 +100,7 @@ nav.tabs::-webkit-scrollbar{display:none}
 }
 .btn:hover{background:var(--pine);border-color:var(--pine);transform:translateY(-1px)}
 .btn.ghost{background:transparent;color:var(--ink)}
-.btn.ghost:hover{background:rgba(28,43,37,.06);transform:translateY(-1px)}
+.btn.ghost:hover{background:rgba(11,13,16,.06);transform:translateY(-1px)}
 .btn.sm{padding:8px 12px;font-size:13px;border-radius:8px}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .field{display:flex;flex-direction:column;gap:6px}
@@ -108,7 +111,7 @@ nav.tabs::-webkit-scrollbar{display:none}
   border-radius:8px;padding:10px 12px;width:100%;
   transition:border-color .15s, box-shadow .15s;
 }
-.field input:focus,.field select:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(30,70,54,.14)}
+.field input:focus,.field select:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(22,112,200,.16)}
 .hint{font-size:12px;color:var(--muted)}
 
 /* ============================================================
@@ -123,14 +126,14 @@ nav.tabs::-webkit-scrollbar{display:none}
 .meta-grid>div{padding:12px 14px 12px 0;border-bottom:1px solid var(--line)}
 .meta-grid dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
 .meta-grid dd{font-weight:600;font-size:14.5px}
-.hero-fig{border:1.5px solid var(--ink);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:6px 6px 0 rgba(28,43,37,.12)}
+.hero-fig{border:1.5px solid var(--ink);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:6px 6px 0 rgba(11,13,16,.10)}
 .hero-fig canvas{display:block;width:100%;height:320px}
 .hero-fig figcaption{padding:12px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .home-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:44px;border-top:1.5px solid var(--ink);padding-top:38px}
 .route-item{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-top:1px solid var(--line);padding:22px 4px;cursor:pointer;transition:background .15s}
 .route-item:first-child{border-top:none}
-.route-item:hover{background:rgba(28,43,37,.045)}
-.route-no{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:400;color:rgba(30,70,54,.28)}
+.route-item:hover{background:rgba(22,112,200,.05)}
+.route-no{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:400;color:rgba(22,112,200,.25)}
 .route-item h3{font-size:1.2rem;margin-bottom:4px}
 .route-item p{font-size:13.5px;color:var(--muted)}
 .route-go{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--ink);transition:all .18s}
@@ -148,30 +151,30 @@ nav.tabs::-webkit-scrollbar{display:none}
 .toc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 0 10px 16px}
 .toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);padding:9px 16px;font-size:13.5px;font-weight:500;border-left:3px solid transparent;margin-left:-1.5px;transition:all .15s}
 .toc a span{font-family:'Fraunces',serif;color:var(--terra);font-weight:600;min-width:30px}
-.toc a:hover{border-left-color:var(--pine);background:rgba(28,43,37,.05)}
+.toc a:hover{border-left-color:var(--pine);background:rgba(11,13,16,.05)}
 .sec{border-top:1px solid var(--line);padding:44px 0}
 .sec:first-child{border-top:none;padding-top:0}
-.sec-no{font-family:'Fraunces',serif;font-size:3rem;font-weight:400;color:rgba(30,70,54,.22);line-height:1}
+.sec-no{font-family:'Fraunces',serif;font-size:3rem;font-weight:400;color:rgba(22,112,200,.20);line-height:1}
 .sec h3{font-size:1.55rem;margin:6px 0 16px}
 .prose p{margin:0 0 14px;max-width:70ch}
 .prose ul,.prose ol{margin:0 0 14px 22px;max-width:70ch}
 .prose li{margin-bottom:6px}
-.def{background:#ecf1ea;border:1px solid rgba(30,70,54,.28);border-radius:0 10px 10px 0;border-left:4px solid var(--pine);padding:18px 22px;margin:20px 0}
+.def{background:#E9F2FC;border:1px solid rgba(22,112,200,.30);border-radius:0 10px 10px 0;border-left:4px solid var(--pine);padding:18px 22px;margin:20px 0}
 .def .def-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--pine)}
 .def p{margin:6px 0 0}
 .ex{background:var(--card);border:1px solid var(--line-strong);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:18px 22px;margin:20px 0}
-.ex .ex-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#8a6d10}
+.ex .ex-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#0B4E8F}
 .formula-hero{display:flex;justify-content:center;padding:16px 0;font-size:1.15rem}
 .tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
 .tbl th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
 .tbl td{padding:9px 10px;border-bottom:1px solid var(--line)}
-.tbl tbody tr:hover{background:rgba(28,43,37,.04)}
+.tbl tbody tr:hover{background:rgba(11,13,16,.04)}
 .tbl td.center,.tbl th.center{text-align:center}
 .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid}
-.tag.d{color:var(--pine);border-color:rgba(30,70,54,.45);background:#ecf1ea}
-.tag.c{color:var(--terra);border-color:rgba(194,84,47,.45);background:var(--terra-soft)}
+.tag.d{color:#0B4E8F;border-color:rgba(11,78,143,.40);background:#E9F2FC}
+.tag.c{color:var(--terra);border-color:rgba(11,78,143,.45);background:var(--terra-soft)}
 .spec-row{display:grid;grid-template-columns:120px 1fr 1fr;gap:18px;align-items:center;border-top:1px solid var(--line);padding:18px 6px;transition:background .15s}
-.spec-row:hover{background:rgba(28,43,37,.04)}
+.spec-row:hover{background:rgba(11,13,16,.04)}
 .spec-row:last-child{border-bottom:1px solid var(--line)}
 .spec-id{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
 .spec-id .no{font-family:'Fraunces',serif;font-size:1.15rem;color:var(--muted)}
@@ -180,7 +183,7 @@ nav.tabs::-webkit-scrollbar{display:none}
 .spec-math{text-align:right;font-size:1rem;overflow-x:auto}
 
 /* ============================================================
-   PANELES / SIMULADOR (nuevo para la Unidad 1)
+   PANELES / SIMULADOR
 ============================================================ */
 .panel{background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);overflow:hidden}
 .panel-head{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
@@ -191,25 +194,24 @@ nav.tabs::-webkit-scrollbar{display:none}
 .sim-tab.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 .sim-panel{display:none}
 .sim-panel.active{display:block}
+.lab-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.lab-grid .graph-frame canvas{height:420px}
 .vec-input{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px}
+.vec-input.cols2{grid-template-columns:1fr 1fr}
 .vec-input .field{margin-bottom:0}
 .vec-input .field label{font-size:9px}
 .vec-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
 .vec-result{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
-.vec-result .res-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.vec-result .res-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line);font-size:14px;gap:12px}
 .vec-result .res-row:last-child{border-bottom:none}
-.region-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
-.region-presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.region-presets button{font-size:11px;padding:6px 12px}
 .region-result{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
 .region-result .info{font-size:13px;color:var(--muted);margin-top:6px}
 .graph-frame canvas{display:block;width:100%;height:340px}
 .graph-cap{padding:11px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
 .note{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line-strong);margin-top:18px;padding-top:12px}
-.vec-stat{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
 
 /* ============================================================
-   ACTIVIDADES (mismo estilo)
+   ACTIVIDADES
 ============================================================ */
 .act-block{margin-bottom:52px}
 .act-block>h3{font-size:1.45rem;margin:8px 0 6px}
@@ -223,7 +225,7 @@ nav.tabs::-webkit-scrollbar{display:none}
 details.sol{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);margin-bottom:14px;overflow:hidden}
 details.sol summary{list-style:none;display:flex;align-items:flex-start;gap:12px;padding:16px 18px;cursor:pointer;font-weight:600;transition:background .15s}
 details.sol summary::-webkit-details-marker{display:none}
-details.sol summary:hover{background:rgba(28,43,37,.04)}
+details.sol summary:hover{background:rgba(11,13,16,.04)}
 .sol-marker{flex:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;transition:transform .2s;margin-top:1px}
 details[open].sol .sol-marker{transform:rotate(45deg);background:var(--ink);color:var(--paper)}
 .sol-body{border-top:1px dashed var(--line-strong);padding:16px 20px;font-size:14.5px}
@@ -235,26 +237,26 @@ details[open].sol .sol-marker{transform:rotate(45deg);background:var(--ink);colo
 .chk.done{background:var(--ok-bg);border-color:var(--pine)}
 
 /* ============================================================
-   EDITOR DE REDACCIÓN (ejercicios de refuerzo)
+   EDITOR DE REDACCIÓN
 ============================================================ */
 .ed-box{border:1.5px solid var(--ink);border-radius:10px;margin-top:18px;overflow:hidden;background:var(--card)}
-.ed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);background:#ecf1ea;flex-wrap:wrap}
+.ed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);background:#E9F2FC;flex-wrap:wrap}
 .ed-title{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--pine)}
 .ed-title svg{width:13px;height:13px}
 .ed-status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
-.ed-status .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ed-status .dot{width:7px;height:7px;border-radius:50%;background:rgba(11,13,16,.25)}
 .ed-status.saved{color:var(--pine);font-weight:600}
-.ed-status.saved .dot{background:#4a8a5c}
+.ed-status.saved .dot{background:#2E9BF0}
 .ed-grid{display:grid;grid-template-columns:1fr 330px}
 .ed-main{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .ed-ta{width:100%;min-height:200px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.6;padding:12px 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:var(--ink)}
-.ed-ta:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(30,70,54,.14)}
+.ed-ta:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(22,112,200,.16)}
 .ed-preview-wrap{border:1px dashed var(--line-strong);border-radius:8px;overflow:hidden;background:var(--paper)}
-.ed-preview-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 12px;background:rgba(28,43,37,.04);border-bottom:1px dashed var(--line)}
+.ed-preview-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 12px;background:rgba(11,13,16,.04);border-bottom:1px dashed var(--line)}
 .ed-preview{padding:12px 14px;font-size:14.5px;min-height:56px;overflow-x:auto}
 .ed-preview .katex-display{margin:6px 0}
 .ed-ph{color:var(--muted);font-size:13px}
-.ed-manual{border-left:1px solid var(--line);padding:12px 14px;background:rgba(28,43,37,.03);max-height:460px;overflow:auto}
+.ed-manual{border-left:1px solid var(--line);padding:12px 14px;background:rgba(11,13,16,.03);max-height:460px;overflow:auto}
 .ed-note{font-size:12px;color:var(--muted);margin-bottom:10px}
 .ed-note code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px}
 .ed-cmd-title{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);margin:12px 0 4px}
@@ -286,8 +288,8 @@ details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-to
 .opt-key{flex:none;width:26px;height:26px;border:1.5px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;transition:all .15s}
 .opt.is-correct{border-color:var(--pine);background:var(--ok-bg)}
 .opt.is-correct .opt-key{background:var(--pine);border-color:var(--pine);color:var(--paper)}
-.opt.is-wrong{border-color:var(--terra);background:var(--err-bg)}
-.opt.is-wrong .opt-key{background:var(--terra);border-color:var(--terra);color:var(--paper)}
+.opt.is-wrong{border-color:var(--err);background:var(--err-bg)}
+.opt.is-wrong .opt-key{background:var(--err);border-color:var(--err);color:#fff}
 .opt.locked{cursor:default}
 .explain{margin:12px 0 0 56px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:8px 14px;background:var(--card)}
 .quiz-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;border-top:1.5px solid var(--ink);padding-top:20px}
@@ -300,9 +302,9 @@ details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-to
 ============================================================ */
 .avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
 .del-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;transition:all .15s}
-.del-btn:hover{border-color:var(--terra);color:var(--terra)}
-.del-btn.confirm{background:var(--terra);border-color:var(--terra);color:#fff}
-.boleta-card{position:relative;max-width:700px;background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 rgba(28,43,37,.12);overflow:hidden}
+.del-btn:hover{border-color:var(--err);color:var(--err)}
+.del-btn.confirm{background:var(--err);border-color:var(--err);color:#fff}
+.boleta-card{position:relative;max-width:700px;background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 rgba(11,13,16,.10);overflow:hidden}
 .b-head{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1.5px solid var(--ink)}
 .b-head .avatar{width:52px;height:52px;font-size:17px;border:1.5px solid var(--ink)}
 .b-head>div{flex:1;min-width:0}
@@ -321,7 +323,7 @@ details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-to
 .b-bar>div{height:100%;background:var(--pine);transition:width .4s ease}
 .b-pts{text-align:right;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem}
 .b-pts small{font-weight:400;color:var(--muted);font-size:.75em}
-.b-total{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:2px solid var(--ink);background:#ecf1ea;padding:16px 24px}
+.b-total{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:2px solid var(--ink);background:#E9F2FC;padding:16px 24px}
 .b-total-lbl{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem}
 .b-total-det{font-size:11.5px;color:var(--muted);margin-top:2px}
 .b-score{display:flex;align-items:baseline;gap:6px}
@@ -331,19 +333,21 @@ details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-to
 .boleta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;max-width:700px}
 
 /* ============================================================
-   TOASTS / FOOTER
+   TOASTS / FOOTER (footer estaba truncado en el original)
 ============================================================ */
 #toasts{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:340px}
-.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(28,43,37,.28);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(11,13,16,.28);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
 .toast svg{flex:none;width:17px;height:17px}
-.toast.ok svg{color:#8fd0a5}
-.toast.err svg{color:#f0a284}
+.toast.ok svg{color:#7CC4F8}
+.toast.err svg{color:#F0A284}
 .toast.out{animation:toastOut .3s ease forwards}
 @keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
 @keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
-footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
+footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
 .foot-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
 .foot-row strong{color:var(--ink)}
+.conv-bar{height:12px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper)}
+.conv-bar>div{height:100%;width:0;background:var(--pine);transition:width .4s ease}
 
 /* ============================================================
    RESPONSIVE
@@ -365,13 +369,14 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
   .ed-grid{grid-template-columns:1fr}
   .ed-manual{border-left:none;border-top:1px solid var(--line);max-height:none}
   .vec-input{grid-template-columns:1fr}
-  .region-inputs{grid-template-columns:1fr}
+  .vec-input.cols2{grid-template-columns:1fr 1fr}
 }
 @media (max-width:640px){
   .b-row{grid-template-columns:1fr 86px}
   .b-bar{display:none}
   .b-seal{display:none}
   .b-total{flex-direction:column;align-items:flex-start;gap:6px}
+  .vec-input.cols2{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -381,10 +386,14 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
 <header class="topbar">
   <div class="wrap topbar-row">
     <div class="brand">
-      <span class="brand-ico"><i data-lucide="sigma"></i></span>
+      <span class="brand-ico">
+        <img src="unii-logo.png" alt="UNII"
+             onerror="this.style.display='none';this.nextElementSibling.style.display=''">
+        <i data-lucide="sigma" style="display:none"></i>
+      </span>
       <span>Cálculo II · Unidad 1<small>Aula interactiva — Dr. Adrián Cerda</small></span>
     </div>
-    <div class="topbar-side"> UNII<br>7 sep – 3 oct 2026</div>
+    <div class="topbar-side">UNII<br>7 sep – 3 oct 2026</div>
   </div>
   <div class="wrap">
     <nav class="tabs" id="mainNav">
@@ -607,80 +616,103 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
   </div>
 </section>
 
-<!-- ==================== SIMULADOR MEJORADO ==================== -->
+<!-- ==================== SIMULADOR (rediseñado: elegir opción → ejecutar) ==================== -->
 <section class="view" id="v-simulador" hidden>
   <div class="wrap">
     <div class="view-head">
       <p class="overline">Laboratorio de simulación · Actividad práctica</p>
-      <h2>Operaciones vectoriales y visualización de regiones</h2>
-      <p class="sub">Ejes de -15 a 15. Explora vectores en \(\mathbb{R}^2\), realiza operaciones, y visualiza conjuntos abiertos, cerrados y dominios de funciones.</p>
+      <h2>Simulador de vectores y regiones</h2>
+      <p class="sub">Elige una operación o una región, ajusta los datos y presiona Ejecutar. El resultado se dibuja en el panel derecho.</p>
     </div>
 
     <div class="lab-grid">
       <div class="panel">
-        <div class="panel-head"><i data-lucide="sliders-horizontal"></i>Simulador interactivo</div>
+        <div class="panel-head"><i data-lucide="sliders-horizontal"></i>Panel de control</div>
         <div class="panel-body">
+
           <div class="sim-tabs">
-            <button class="sim-tab active" data-stab="vec">Vectores</button>
-            <button class="sim-tab" data-stab="region">Regiones</button>
+            <button class="sim-tab active" data-stab="vec" type="button">Vectores</button>
+            <button class="sim-tab" data-stab="region" type="button">Regiones</button>
           </div>
 
-          <!-- Pestaña: Vectores -->
+          <!-- MODO VECTORES -->
           <div class="sim-panel active" id="st-vec">
-            <div class="vec-input">
-              <div class="field"><label>Vector \(\mathbf{u}\)</label><input id="vx1" type="number" value="5" step="0.5"></div>
-              <div class="field"><label>\(u_y\)</label><input id="vy1" type="number" value="3" step="0.5"></div>
-              <div class="field"><label>\(\alpha\) (escalar)</label><input id="vscalar" type="number" value="2" step="0.5"></div>
+            <div class="field" style="margin-bottom:14px">
+              <label>1 · Elige la operación</label>
+              <select id="vecOp">
+                <option value="suma">Suma — u + v</option>
+                <option value="resta">Resta — u − v</option>
+                <option value="punto">Producto punto — u · v</option>
+                <option value="escalar">Producto por escalar — α·u</option>
+                <option value="norma">Norma y distancia — ‖u‖, ‖v‖, d(u,v)</option>
+              </select>
             </div>
-            <div class="vec-input">
-              <div class="field"><label>Vector \(\mathbf{v}\)</label><input id="vx2" type="number" value="-4" step="0.5"></div>
-              <div class="field"><label>\(v_y\)</label><input id="vy2" type="number" value="5" step="0.5"></div>
-              <div class="field"><label style="visibility:hidden">.</label><button class="btn" id="btnVecUpdate"><i data-lucide="refresh-cw"></i>Actualizar</button></div>
+            <p class="overline" style="margin:4px 0 8px">2 · Datos</p>
+            <div class="vec-input cols2">
+              <div class="field"><label>u — x</label><input id="ux1" type="number" value="5" step="0.5"></div>
+              <div class="field"><label>u — y</label><input id="uy1" type="number" value="3" step="0.5"></div>
+            </div>
+            <div class="vec-input cols2" id="rowV">
+              <div class="field"><label>v — x</label><input id="ux2" type="number" value="-4" step="0.5"></div>
+              <div class="field"><label>v — y</label><input id="uy2" type="number" value="5" step="0.5"></div>
+            </div>
+            <div class="vec-input" id="rowAlpha" hidden>
+              <div class="field"><label>α (escalar)</label><input id="vscalar" type="number" value="2" step="0.5"></div>
             </div>
             <div class="vec-actions">
-              <button class="btn sm" data-vecop="suma"><i data-lucide="plus"></i>Suma</button>
-              <button class="btn sm" data-vecop="resta"><i data-lucide="minus"></i>Resta</button>
-              <button class="btn sm" data-vecop="punto"><i data-lucide="circle-dot"></i>Producto punto</button>
-              <button class="btn sm" data-vecop="escalar"><i data-lucide="asterisk"></i>Producto por escalar</button>
-              <button class="btn sm" data-vecop="norma"><i data-lucide="ruler"></i>Norma y distancia</button>
+              <button class="btn" id="btnVecRun" type="button" style="flex:1;justify-content:center">
+                <i data-lucide="play"></i>Ejecutar
+              </button>
             </div>
-            <div class="vec-result" id="vecResult"></div>
-            <p class="note"><strong>Consejo:</strong> Los ejes van de -15 a 15. Usa vectores en ese rango para visualizar la <strong>ley del paralelogramo</strong>.</p>
+            <div class="vec-result" id="vecResult"><p class="hint">El resultado aparecerá aquí.</p></div>
+            <p class="note"><strong>Consejo:</strong> los ejes van de −15 a 15. Con la <strong>suma</strong> se muestra la ley del paralelogramo.</p>
           </div>
 
-          <!-- Pestaña: Regiones MEJORADA -->
+          <!-- MODO REGIONES -->
           <div class="sim-panel" id="st-region">
-            <div class="region-presets">
-              <button class="btn sm ghost" data-region="disco">Disco abierto</button>
-              <button class="btn sm ghost" data-region="disco-cerrado">Disco cerrado</button>
-              <button class="btn sm ghost" data-region="semiespacio">\(y > x+1\)</button>
-              <button class="btn sm ghost" data-region="banda">\(1 < x^2+y^2 < 4\)</button>
-              <button class="btn sm ghost" data-region="dominio1">\(\sqrt{x+y}\)</button>
-              <button class="btn sm ghost" data-region="dominio2">\(\ln(x^2-1)\)</button>
-              <button class="btn sm ghost" data-region="interseccion">Intersección</button>
-              <button class="btn sm ghost" data-region="triangulo">Triángulo: \(x>0,y>0,x+y<1\)</button>
+            <div class="field" style="margin-bottom:10px">
+              <label>1 · Elige la región</label>
+              <select id="regionSel">
+                <option value="disco">Disco abierto — x² + y² &lt; 4</option>
+                <option value="disco-cerrado">Disco cerrado — x² + y² ≤ 4</option>
+                <option value="banda">Corona abierta — 1 &lt; x² + y² &lt; 4</option>
+                <option value="banda-mixta">Corona mixta — 1 ≤ x² + y² &lt; 4 (Ejercicio 3)</option>
+                <option value="semiespacio">Semiplano — y &gt; x + 1</option>
+                <option value="dominio1">Dominio de √(x+y) — x + y ≥ 0</option>
+                <option value="dominio2">Dominio de ln(x²−1) — x² − 1 &gt; 0</option>
+                <option value="triangulo">Triángulo — x&gt;0, y&gt;0, x+y&lt;1</option>
+                <option value="custom">Personalizada…</option>
+              </select>
             </div>
-            <div class="region-inputs">
-              <div class="field"><label>Expresión (usar x, y)</label>
-                <input id="regExpr" type="text" value="x^2+y^2 < 4" placeholder="Ej: x^2+y^2 < 4">
-              </div>
-              <div class="field"><label>Segunda condición (opcional)</label>
-                <input id="regExpr2" type="text" value="" placeholder="Ej: x > 0">
+            <p class="hint" id="regionDesc" style="margin-bottom:12px"></p>
+            <div id="regionInputs" hidden>
+              <div class="vec-input">
+                <div class="field" style="grid-column:1/-1">
+                  <label>Condición principal</label>
+                  <input id="regExpr" type="text" spellcheck="false" placeholder="Ej: x^2+y^2 &lt; 4">
+                </div>
+                <div class="field" style="grid-column:1/-1">
+                  <label>Condición adicional (opcional)</label>
+                  <input id="regExpr2" type="text" spellcheck="false" placeholder="Ej: y &gt; 0">
+                </div>
               </div>
             </div>
-            <button class="btn" id="btnRegionPlot"><i data-lucide="paintbrush-2"></i>Graficar región</button>
-            <div class="region-result" id="regionResult"></div>
-            <p class="note"><strong>Ejemplos válidos:</strong> <code>x^2+y^2 < 4</code>, <code>x^2+y^2 >= 1</code>, <code>y > x+1</code>, <code>x > 0</code>, <code>y < 0</code>. Usa <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>==</code>.</p>
+            <div class="vec-actions">
+              <button class="btn" id="btnRegionPlot" type="button" style="flex:1;justify-content:center">
+                <i data-lucide="paintbrush-2"></i>Graficar
+              </button>
+            </div>
+            <div class="region-result" id="regionResult"><p class="hint">La clasificación aparecerá aquí.</p></div>
+            <p class="note"><strong>Personalizada:</strong> usa <code>x</code>, <code>y</code>, números, <code>^</code>, <code>sqrt</code>, <code>ln</code>, <code>abs</code> y comparaciones <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>. También cadenas como <code>1 &lt; x^2+y^2 &lt; 4</code>.</p>
           </div>
 
-          <p class="note">Las operaciones se visualizan en el gráfico de la derecha. Para regiones, la frontera se muestra con línea punteada (abierta) o continua (cerrada), y el interior se ilumina.</p>
         </div>
       </div>
 
       <div class="panel graph-frame">
         <div class="panel-head"><i data-lucide="chart-line"></i>Visualización</div>
         <canvas id="simCanvas"></canvas>
-        <div class="graph-cap" id="graphCap">Ejes de -15 a 15. Arrastra para ver las operaciones vectoriales y las regiones.</div>
+        <div class="graph-cap" id="graphCap">Ventana de −15 a 15 en ambos ejes.</div>
       </div>
     </div>
   </div>
@@ -772,6 +804,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
         </div>
       </details>
 
+      <!-- RECONSTRUIDO (revisa redacción) -->
       <details class="sol">
         <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 6 · Dominio de una función</span>Encuentra y describe geométricamente el dominio de \(f(x,y) = \sqrt{x+y} + \ln(x^2-1)\).</span></summary>
         <div class="sol-body">
@@ -780,23 +813,23 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
           <details class="mini-check">
             <summary>Respuestas de control (solo resultados)</summary>
             <div class="sol-body">
-              <p>Condiciones: \(x+y \ge 0\) y \(x^2-1 > 0 \implies |x| > 1\).</p>
-              <p>Dominio: \(\{(x,y) : x+y \ge 0,\; x>1 \text{ o } x<-1\}\).</p>
+              <p>Condiciones: \(x+y \ge 0\) y \(x^2-1 > 0\) (es decir, \(x>1\) o \(x<-1\)).</p>
+              <p>Dominio: \(D = \{(x,y) : x+y \ge 0 \text{ y } (x>1 \text{ o } x<-1)\}\). No es abierto (la frontera \(x+y=0\) está incluida) ni cerrado (las fronteras \(x=\pm1\) están excluidas).</p>
             </div>
           </details>
         </div>
       </details>
 
+      <!-- PROPUESTO POR ASISTENTE (revisa y ajusta a tu gusto) -->
       <details class="sol">
-        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Propiedades de la norma</span>Verifica la desigualdad triangular para \(\mathbf{u}=(1,2)\) y \(\mathbf{v}=(3,-1)\) en \(\mathbb{R}^2\).</span></summary>
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Desigualdad triangular</span>Con \(\mathbf{u}=(3,-4)\) y \(\mathbf{v}=(-4,3)\), verifica numéricamente que \(\|\mathbf{u}+\mathbf{v}\| \le \|\mathbf{u}\|+\|\mathbf{v}\|\) y explica en qué caso se cumple la igualdad.</span></summary>
         <div class="sol-body">
-          <p>Calcula \(\|\mathbf{u}+\mathbf{v}\|\), \(\|\mathbf{u}\|\) y \(\|\mathbf{v}\|\), y muestra que se cumple la desigualdad.</p>
+          <p>Calcula cada norma por separado, la norma de la suma, y compara. Para la igualdad, piensa en la relación geométrica que deben tener \(\mathbf{u}\) y \(\mathbf{v}\).</p>
           <div class="ed-box" data-ed="e7"></div>
           <details class="mini-check">
-            <summary>Resultados de control</summary>
+            <summary>Respuestas de control (solo resultados)</summary>
             <div class="sol-body">
-              <p>\(\|\mathbf{u}\|=\sqrt{5}\approx2.236\), \(\|\mathbf{v}\|=\sqrt{10}\approx3.162\), \(\mathbf{u}+\mathbf{v}=(4,1)\), \(\|\mathbf{u}+\mathbf{v}\|=\sqrt{17}\approx4.123\).</p>
-              <p>Se cumple: \(\sqrt{17} \le \sqrt{5}+\sqrt{10}\) (aproximadamente \(4.123 \le 5.398\)).</p>
+              <p>\(\|\mathbf{u}\| = 5\), \(\|\mathbf{v}\| = 5\), \(\mathbf{u}+\mathbf{v} = (-1,-1)\), \(\|\mathbf{u}+\mathbf{v}\| = \sqrt{2} \approx 1.414 \le 10\). La igualdad \(\|\mathbf{u}+\mathbf{v}\| = \|\mathbf{u}\|+\|\mathbf{v}\|\) se da solo si un vector es múltiplo escalar no negativo del otro (\(\mathbf{v} = \alpha\mathbf{u}\) con \(\alpha \ge 0\)).</p>
             </div>
           </details>
         </div>
@@ -834,7 +867,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
             <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px">
               <span>Progreso</span><span id="taskPct">0 / 8 · 0%</span>
             </div>
-            <div class="conv-bar" style="margin-bottom:18px"><div id="taskBar" style="background:var(--pine)"></div></div>
+            <div class="conv-bar" style="margin-bottom:18px"><div id="taskBar"></div></div>
             <div id="taskList"></div>
           </div>
         </div>
@@ -927,7 +960,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
 <footer>
   <div class="wrap foot-row">
     <div><strong>Referencia:</strong> Marsden, J. E. &amp; Tromba, A. J. — <em>Cálculo Vectorial</em>, 6.ª ed., Capítulo 1.</div>
-    <div>Aula interactiva de Cálculo II · uso educativo · los datos se guardan solo en este navegador.</div>
+    <div>Aula interactiva de Cálculo II · Universidad Internacional de Innovación · los datos se guardan solo en este navegador.</div>
   </div>
 </footer>
 
@@ -943,26 +976,26 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20
 ============================================================ */
 const $  = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
-const INK='#1c2b25', PINE='#1e4636', TERRA='#c2542f', PAPER='#fffdf8';
+const INK='#0B0D10', PINE='#1670C8', TERRA='#0B4E8F', AZUL='#2E9BF0';
 
 function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function fmtP(v){ if(!isFinite(v)) return '—'; if(v!==0 && Math.abs(v)<1e-6) return v.toExponential(3); return String(parseFloat(v.toFixed(6))); }
+function fmt(n){ if(!isFinite(n)) return '—'; return String(Math.round(n*1000)/1000); }
+function fmtV(v){ return '('+fmt(v[0])+', '+fmt(v[1])+')'; }
+function refreshIcons(){ if(window.lucide) lucide.createIcons(); }
 function toast(msg, type='ok'){
   const box=$('#toasts'), t=document.createElement('div');
   t.className='toast '+type;
   t.innerHTML = `<i data-lucide="${type==='ok'?'check-circle-2':'alert-circle'}"></i><span>${msg}</span>`;
-  box.appendChild(t); lucide.createIcons();
+  box.appendChild(t); refreshIcons();
   setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 3200);
 }
-function refreshIcons(){ if(window.lucide) lucide.createIcons(); }
 
 /* ============================================================
-   PERSISTENCIA
+   PERSISTENCIA (mismas claves: no se pierde el avance)
 ============================================================ */
 const LS_EST='aula_estudiante';
 const LS_ACT='aula_actividades';
 const CURSO='unidad1';
-
 function loadEst(){ try{ return JSON.parse(localStorage.getItem(LS_EST)); }catch(e){ return null; } }
 function saveEst(e){ localStorage.setItem(LS_EST, JSON.stringify(e)); }
 function loadAct(){ try{ return JSON.parse(localStorage.getItem(LS_ACT)||'{}'); }catch(e){ return {}; } }
@@ -985,347 +1018,366 @@ function showView(v){
   $('#v-'+v).hidden = false;
   $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === v));
   window.scrollTo({top:0, behavior:'smooth'});
-  if(v==='inicio')      drawHero();
-  if(v==='simulador')   { drawVecCanvas(); drawRegionCanvas(); }
+  if(v==='inicio')    requestAnimationFrame(drawHero);
+  if(v==='simulador') requestAnimationFrame(renderSim);
 }
-$$('[data-view]').forEach(el => el.addEventListener('click', e => {
+ $$('[data-view]').forEach(el => el.addEventListener('click', e => {
   if(el.tagName==='A'){ e.preventDefault(); }
-  showView(el.dataset.view);
+  if(document.getElementById('v-'+el.dataset.view)) showView(el.dataset.view);
 }));
 
 /* ============================================================
-   HERO CANVAS
-============================================================ */
-function drawHero(){
-  const cv=$('#heroCanvas'); if(!cv || cv.offsetParent===null) return;
-  const {ctx,w,h}=setupCanvas(cv);
-  const cx=w/2, cy=h/2, scale=70;
-  // Ejes
-  ctx.strokeStyle=INK; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(20, cy); ctx.lineTo(w-20, cy); ctx.moveTo(cx, 20); ctx.lineTo(cx, h-20); ctx.stroke();
-  ctx.font='12px Instrument Sans'; ctx.fillStyle=INK;
-  ctx.fillText('x', w-20, cy-6); ctx.fillText('y', cx+8, 24);
-  // Vectores
-  const u=[2,1], v=[-1,3];
-  const drawVec=(p, color, label)=>{
-    const x1=cx, y1=cy, x2=cx+p[0]*scale, y2=cy-p[1]*scale;
-    ctx.strokeStyle=color; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-    // punta
-    const ang=Math.atan2(y2-y1,x2-x1);
-    ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(x2-10*Math.cos(ang-0.5), y2-10*Math.sin(ang-0.5)); ctx.lineTo(x2-10*Math.cos(ang+0.5), y2-10*Math.sin(ang+0.5)); ctx.closePath(); ctx.fillStyle=color; ctx.fill();
-    ctx.fillStyle=color; ctx.font='700 14px Instrument Sans';
-    ctx.fillText(label, x2+8, y2-8);
-  };
-  drawVec(u, PINE, 'u');
-  drawVec(v, TERRA, 'v');
-  // Suma
-  const s=[u[0]+v[0], u[1]+v[1]];
-  ctx.strokeStyle='#8a6d10'; ctx.lineWidth=2.5; ctx.setLineDash([6,4]);
-  ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(cx+s[0]*scale, cy-s[1]*scale); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle='#8a6d10'; ctx.font='700 14px Instrument Sans';
-  ctx.fillText('u+v', cx+s[0]*scale+8, cy-s[1]*scale-8);
-  ctx.fillStyle='rgba(28,43,37,.5)'; ctx.font='12px Instrument Sans';
-  ctx.fillText('Regla del paralelogramo', 20, h-12);
-}
-
-/* ============================================================
-   CANVAS UTILITY
+   CANVAS: utilidades de dibujo
 ============================================================ */
 function setupCanvas(cv){
   const dpr = window.devicePixelRatio||1;
   const r = cv.getBoundingClientRect();
-  cv.width = Math.max(10, r.width*dpr); cv.height = Math.max(10, r.height*dpr);
-  const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
-  return {ctx, w:r.width, h:r.height};
+  const w = Math.max(40, r.width), h = Math.max(40, r.height);
+  if(cv.width !== Math.round(w*dpr)) cv.width = Math.round(w*dpr);
+  if(cv.height !== Math.round(h*dpr)) cv.height = Math.round(h*dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function drawGrid(ctx,w,h,s,R){
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#FBFDFF'; ctx.fillRect(0,0,w,h);
+  const xmax=w/2/s, ymax=h/2/s;
+  ctx.lineWidth=1;
+  for(let i=Math.ceil(-xmax); i<=Math.floor(xmax); i++){
+    ctx.strokeStyle=(i%5===0)?'rgba(11,13,16,.16)':'rgba(11,13,16,.06)';
+    ctx.beginPath(); ctx.moveTo(w/2+i*s,0); ctx.lineTo(w/2+i*s,h); ctx.stroke();
+  }
+  for(let j=Math.ceil(-ymax); j<=Math.floor(ymax); j++){
+    ctx.strokeStyle=(j%5===0)?'rgba(11,13,16,.16)':'rgba(11,13,16,.06)';
+    ctx.beginPath(); ctx.moveTo(0,h/2-j*s); ctx.lineTo(w,h/2-j*s); ctx.stroke();
+  }
+  drawAxes(ctx,w,h,s,R);
+}
+function drawAxes(ctx,w,h,s,R){
+  ctx.strokeStyle=INK; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
+  ctx.fillStyle='rgba(11,13,16,.55)'; ctx.font='10px "Instrument Sans", sans-serif';
+  const xmax=Math.floor(w/2/s), ymax=Math.floor(h/2/s);
+  ctx.textAlign='center'; ctx.textBaseline='top';
+  for(let i=Math.ceil(-xmax/5)*5; i<=xmax; i+=5){ if(i!==0) ctx.fillText(String(i), w/2+i*s, h/2+5); }
+  ctx.textAlign='left'; ctx.textBaseline='middle';
+  for(let j=Math.ceil(-ymax/5)*5; j<=ymax; j+=5){ if(j!==0) ctx.fillText(String(j), w/2+6, h/2-j*s); }
+}
+function drawArrow(ctx,w,h,s,x,y,color,label){
+  const qx=w/2+x*s, qy=h/2-y*s;
+  ctx.save();
+  ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=2.4;
+  ctx.beginPath(); ctx.moveTo(w/2,h/2); ctx.lineTo(qx,qy); ctx.stroke();
+  const ang=Math.atan2(qy-h/2, qx-w/2);
+  ctx.beginPath();
+  ctx.moveTo(qx,qy);
+  ctx.lineTo(qx-11*Math.cos(ang-0.4), qy-11*Math.sin(ang-0.4));
+  ctx.lineTo(qx-11*Math.cos(ang+0.4), qy-11*Math.sin(ang+0.4));
+  ctx.closePath(); ctx.fill();
+  if(label){
+    ctx.font='700 12px "Instrument Sans", sans-serif';
+    const lx=qx+10*Math.cos(ang), ly=qy+10*Math.sin(ang);
+    ctx.textAlign=Math.cos(ang)>=0?'left':'right';
+    ctx.textBaseline=Math.sin(ang)>=0?'bottom':'top';
+    ctx.fillText(label, Math.max(6,Math.min(w-6,lx)), Math.max(6,Math.min(h-6,ly)));
+  }
+  ctx.restore();
+}
+function drawDash(ctx,w,h,s,pts,color,dash){
+  ctx.save();
+  ctx.strokeStyle=color; ctx.lineWidth=1.3; ctx.setLineDash(dash||[5,4]);
+  ctx.beginPath();
+  pts.forEach((p,i)=>{ const px=w/2+p[0]*s, py=h/2-p[1]*s; i? ctx.lineTo(px,py) : ctx.moveTo(px,py); });
+  ctx.stroke(); ctx.restore();
 }
 
 /* ============================================================
-   SIMULADOR DE VECTORES
+   HERO (inicio)
 ============================================================ */
-let vecState = {u:[2,1], v:[-1,3], op:'suma', result:null};
+function drawHero(){
+  const cv=$('#heroCanvas'); if(!cv || cv.offsetParent===null) return;
+  const {ctx,w,h}=setupCanvas(cv);
+  const s=Math.min(w,h)/(2*10);
+  drawGrid(ctx,w,h,s,10);
+  const u=[6,2], v=[-2,6], r=[u[0]+v[0], u[1]+v[1]];
+  drawDash(ctx,w,h,s,[u,r,v,u],'rgba(11,13,16,.40)');
+  drawArrow(ctx,w,h,s,u[0],u[1],PINE,'u = (6, 2)');
+  drawArrow(ctx,w,h,s,v[0],v[1],INK,'v = (−2, 6)');
+  drawArrow(ctx,w,h,s,r[0],r[1],AZUL,'u+v = (4, 8)');
+}
 
-function drawVecCanvas(){
+/* ============================================================
+   SIMULADOR — VECTORES
+============================================================ */
+let simMode='vec', lastVecDraw={u:[5,3], v:[-4,5]}, lastPreds=null, lastBounded=true;
+const RANGE=15;
+
+function drawSim(d){
   const cv=$('#simCanvas'); if(!cv || cv.offsetParent===null) return;
   const {ctx,w,h}=setupCanvas(cv);
-  ctx.clearRect(0,0,w,h);
-  const cx=w*0.35, cy=h*0.5, scale=55;
-  // Ejes
-  ctx.strokeStyle='rgba(28,43,37,.3)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(30, cy); ctx.lineTo(w-30, cy); ctx.moveTo(cx, 20); ctx.lineTo(cx, h-20); ctx.stroke();
-  ctx.font='11px Instrument Sans'; ctx.fillStyle='rgba(28,43,37,.5)';
-  ctx.fillText('x', w-25, cy-5); ctx.fillText('y', cx+8, 24);
-  // Cuadrícula
-  ctx.strokeStyle='rgba(28,43,37,.06)'; ctx.lineWidth=0.5;
-  for(let i=-8;i<=8;i++){ const p=cx+i*scale; if(p>20 && p<w-20){ ctx.beginPath(); ctx.moveTo(p,20); ctx.lineTo(p,h-20); ctx.stroke(); } }
-  for(let i=-5;i<=5;i++){ const p=cy+i*scale; if(p>20 && p<h-20){ ctx.beginPath(); ctx.moveTo(30,p); ctx.lineTo(w-30,p); ctx.stroke(); } }
-  // Función para dibujar vector
-  const drawVec=(p, color, label, offset=8)=>{
-    const x1=cx, y1=cy, x2=cx+p[0]*scale, y2=cy-p[1]*scale;
-    ctx.strokeStyle=color; ctx.lineWidth=3;
-    ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
-    const ang=Math.atan2(y2-y1,x2-x1);
-    ctx.fillStyle=color;
-    ctx.beginPath(); ctx.moveTo(x2,y2); ctx.lineTo(x2-10*Math.cos(ang-0.5), y2-10*Math.sin(ang-0.5)); ctx.lineTo(x2-10*Math.cos(ang+0.5), y2-10*Math.sin(ang+0.5)); ctx.closePath(); ctx.fill();
-    ctx.font='700 13px Instrument Sans'; ctx.fillText(label, x2+offset, y2-8);
-  };
-  // Dibujar u y v
-  if(vecState.u){ drawVec(vecState.u, PINE, 'u'); }
-  if(vecState.v){ drawVec(vecState.v, TERRA, 'v'); }
-  // Dibujar resultado según operación
-  if(vecState.result){
-    const r=vecState.result;
-    if(vecState.op==='suma'){
-      drawVec(r, '#8a6d10', 'u+v', 12);
-      // Paralelogramo
-      ctx.strokeStyle='rgba(138,109,16,.2)'; ctx.lineWidth=1; ctx.setLineDash([4,4]);
-      const ux=cx+vecState.u[0]*scale, uy=cy-vecState.u[1]*scale;
-      const vx=cx+vecState.v[0]*scale, vy=cy-vecState.v[1]*scale;
-      ctx.beginPath(); ctx.moveTo(cx,cy); ctx.lineTo(ux,uy); ctx.lineTo(cx+r[0]*scale, cy-r[1]*scale); ctx.lineTo(vx,vy); ctx.closePath(); ctx.stroke();
-      ctx.setLineDash([]);
-      $('#graphCap').textContent = `Suma: u + v = (${r[0]}, ${r[1]})`;
-    } else if(vecState.op==='resta'){
-      drawVec(r, '#6b4c8a', 'u-v', 12);
-      $('#graphCap').textContent = `Resta: u - v = (${r[0]}, ${r[1]})`;
-    } else if(vecState.op==='punto'){
-      $('#graphCap').textContent = `Producto punto: u·v = ${r}`;
-      ctx.fillStyle=INK; ctx.font='600 16px Instrument Sans'; ctx.textAlign='center';
-      ctx.fillText(`u·v = ${r}`, cx+150, 40);
-    } else if(vecState.op==='escalar'){
-      drawVec(r, '#2a6b6b', `αu (α=${vecState.alpha||2})`, 12);
-      $('#graphCap').textContent = `Producto escalar: ${vecState.alpha||2}u = (${r[0]}, ${r[1]})`;
-    } else if(vecState.op==='norma'){
-      const [nu, nv, d] = r;
-      $('#graphCap').textContent = `||u||=${nu.toFixed(3)}, ||v||=${nv.toFixed(3)}, d(u,v)=${d.toFixed(3)}`;
-      ctx.fillStyle=INK; ctx.font='600 14px Instrument Sans'; ctx.textAlign='center';
-      ctx.fillText(`||u||=${nu.toFixed(2)}  ||v||=${nv.toFixed(2)}  d=${d.toFixed(2)}`, cx+130, 40);
+  const s=Math.min(w,h)/(2*RANGE);
+  drawGrid(ctx,w,h,s,RANGE);
+  if(d.par){
+    drawDash(ctx,w,h,s,[d.u, d.res, d.v, [0,0]],'rgba(11,13,16,.40)');
+    ctx.save(); ctx.fillStyle='rgba(46,155,240,.07)';
+    ctx.beginPath();
+    ctx.moveTo(w/2,h/2);
+    [[d.u],[d.res],[d.v]].forEach(p=>ctx.lineTo(w/2+p[0][0]*s, h/2-p[0][1]*s));
+    ctx.closePath(); ctx.fill(); ctx.restore();
+  }
+  if(d.seg) drawDash(ctx,w,h,s,[d.u, d.v],'rgba(11,13,16,.45)');
+  drawArrow(ctx,w,h,s,d.u[0],d.u[1],PINE,'u');
+  if(d.v) drawArrow(ctx,w,h,s,d.v[0],d.v[1],INK,'v');
+  if(d.res) drawArrow(ctx,w,h,s,d.res[0],d.res[1],AZUL, d.resLabel||'r');
+}
+
+function syncVecForm(){
+  const op=$('#vecOp').value;
+  $('#rowV').hidden = (op==='escalar');
+  $('#rowAlpha').hidden = (op!=='escalar');
+}
+
+function runVectors(){
+  const op=$('#vecOp').value;
+  const u=[+$('#ux1').value||0, +$('#uy1').value||0];
+  const v=[+$('#ux2').value||0, +$('#uy2').value||0];
+  const a=+$('#vscalar').value||0;
+  let rows=[], draw=null, cap='';
+  if(op==='suma' || op==='resta'){
+    const sg=(op==='suma')?1:-1;
+    const r=[u[0]+sg*v[0], u[1]+sg*v[1]];
+    rows.push([op==='suma'?'u + v':'u − v', fmtV(r)]);
+    rows.push([op==='suma'?'‖u + v‖':'‖u − v‖ = d(u,v)', fmt(Math.hypot(r[0],r[1]))]);
+    draw={u,v,res:r, par:(op==='suma'), resLabel:(op==='suma'?'u+v':'u−v')};
+    cap=(op==='suma')
+      ? 'Suma — regla del paralelogramo: la diagonal desde el origen es u+v.'
+      : 'Resta — u−v va desde la punta de v hasta la punta de u.';
+  } else if(op==='punto'){
+    const d=u[0]*v[0]+u[1]*v[1];
+    rows.push(['u · v', fmt(d)]);
+    const nu=Math.hypot(u[0],u[1]), nv=Math.hypot(v[0],v[1]);
+    if(nu>0 && nv>0){
+      const c=Math.max(-1,Math.min(1,d/(nu*nv)));
+      rows.push(['θ entre u y v', fmt(Math.acos(c)*180/Math.PI)+'°']);
     }
+    draw={u,v};
+    cap = d>0 ? 'Producto punto positivo → ángulo agudo entre u y v.'
+        : d<0 ? 'Producto punto negativo → ángulo obtuso entre u y v.'
+        : 'Producto punto cero → vectores ortogonales.';
+  } else if(op==='escalar'){
+    const r=[a*u[0], a*u[1]];
+    rows.push(['α · u con α = '+fmt(a), fmtV(r)]);
+    rows.push(['‖α·u‖ = |α|·‖u‖', fmt(Math.abs(a)*Math.hypot(u[0],u[1]))]);
+    draw={u,res:r,resLabel:'α·u'};
+    cap='Si |α|>1 estira, si 0<|α|<1 encoge, si α<0 además invierte el sentido.';
   } else {
-    $('#graphCap').textContent = 'Define vectores y elige una operación.';
+    rows.push(['‖u‖', fmt(Math.hypot(u[0],u[1]))]);
+    rows.push(['‖v‖', fmt(Math.hypot(v[0],v[1]))]);
+    rows.push(['d(u,v) = ‖u − v‖', fmt(Math.hypot(u[0]-v[0], u[1]-v[1]))]);
+    draw={u,v,seg:true};
+    cap='La distancia es la longitud del segmento que une las puntas de u y v.';
   }
+  $('#vecResult').innerHTML = rows.map(r=>
+    '<div class="res-row"><span>'+r[0]+'</span><strong class="mono">'+r[1]+'</strong></div>').join('');
+  $('#graphCap').textContent = cap;
+  lastVecDraw = draw;
+  if(simMode==='vec') drawSim(draw);
 }
-
-// Operaciones vectoriales
-function vecOp(op){
-  const ux=parseFloat($('#vx1').value)||0, uy=parseFloat($('#vy1').value)||0;
-  const vx=parseFloat($('#vx2').value)||0, vy=parseFloat($('#vy2').value)||0;
-  const alpha=parseFloat($('#vscalar').value)||1;
-  vecState.u=[ux,uy]; vecState.v=[vx,vy]; vecState.op=op;
-  let result;
-  switch(op){
-    case 'suma': result=[ux+vx, uy+vy]; break;
-    case 'resta': result=[ux-vx, uy-vy]; break;
-    case 'punto': result=ux*vx+uy*vy; break;
-    case 'escalar': result=[alpha*ux, alpha*uy]; vecState.alpha=alpha; break;
-    case 'norma': {
-      const nu=Math.sqrt(ux*ux+uy*uy), nv=Math.sqrt(vx*vx+vy*vy);
-      const d=Math.sqrt((ux-vx)**2+(uy-vy)**2);
-      result=[nu,nv,d];
-      break;
-    }
-  }
-  vecState.result=result;
-  // Mostrar resultado textual
-  const resDiv=$('#vecResult');
-  if(op==='suma') resDiv.innerHTML=`<div class="res-row"><span>u + v =</span><span class="mono">(${result[0]}, ${result[1]})</span></div>`;
-  else if(op==='resta') resDiv.innerHTML=`<div class="res-row"><span>u - v =</span><span class="mono">(${result[0]}, ${result[1]})</span></div>`;
-  else if(op==='punto') resDiv.innerHTML=`<div class="res-row"><span>u · v =</span><span class="mono">${result}</span></div>`;
-  else if(op==='escalar') resDiv.innerHTML=`<div class="res-row"><span>${alpha}u =</span><span class="mono">(${result[0]}, ${result[1]})</span></div>`;
-  else if(op==='norma'){
-    resDiv.innerHTML=`
-      <div class="res-row"><span>||u|| =</span><span class="mono">${result[0].toFixed(4)}</span></div>
-      <div class="res-row"><span>||v|| =</span><span class="mono">${result[1].toFixed(4)}</span></div>
-      <div class="res-row"><span>d(u,v) =</span><span class="mono">${result[2].toFixed(4)}</span></div>
-    `;
-  }
-  drawVecCanvas();
-  toast(`Operación "${op}" realizada.`);
-}
-
-// Eventos de vectores
-$('#btnVecUpdate').addEventListener('click', ()=>{
-  vecState.u=[parseFloat($('#vx1').value)||0, parseFloat($('#vy1').value)||0];
-  vecState.v=[parseFloat($('#vx2').value)||0, parseFloat($('#vy2').value)||0];
-  drawVecCanvas();
-  toast('Vectores actualizados.');
-});
-$$('[data-vecop]').forEach(b=>b.addEventListener('click', ()=>vecOp(b.dataset.vecop)));
 
 /* ============================================================
-   SIMULADOR DE REGIONES
+   SIMULADOR — REGIONES (parser real de condiciones)
 ============================================================ */
-let regionState = {type:'disco', expr:'x^2+y^2<4', expr2:''};
+const REGIONS={
+  'disco':        {c:['x^2+y^2 < 4'],      d:'Disco abierto B(0,2): la frontera x²+y²=4 queda excluida.'},
+  'disco-cerrado':{c:['x^2+y^2 <= 4'],     d:'Disco cerrado de radio 2: frontera incluida.'},
+  'banda':        {c:['1 < x^2+y^2 < 4'],  d:'Corona abierta: ninguna frontera incluida.'},
+  'banda-mixta':  {c:['1 <= x^2+y^2 < 4'], d:'Corona mixta (Ejercicio 3): ni abierta ni cerrada.'},
+  'semiespacio':  {c:['y > x+1'],          d:'Semiplano abierto por encima de la recta y = x+1.'},
+  'dominio1':     {c:['x+y >= 0'],         d:'Dominio de f(x,y)=√(x+y): semiplano cerrado.'},
+  'dominio2':     {c:['x^2-1 > 0'],        d:'Dominio de g(x,y)=ln(x²−1): x>1 o x<−1, abierto.'},
+  'triangulo':    {c:['x > 0','y > 0','x+y < 1'], d:'Triángulo abierto: intersección de tres condiciones.'},
+  'custom':       {c:null, d:'Escribe tus condiciones (usa x, y) y presiona Graficar.'}
+};
+function syncRegionForm(){
+  const val=$('#regionSel').value;
+  $('#regionDesc').textContent = REGIONS[val].d;
+  $('#regionInputs').hidden = (val!=='custom');
+}
 
-function drawRegionCanvas(){
+/* Parser seguro: convierte "x^2+y^2 < 4" en una función evaluable */
+const HELPERS={sqrt:Math.sqrt, ln:Math.log, log:Math.log10, abs:Math.abs, exp:Math.exp,
+  sin:Math.sin, cos:Math.cos, tan:Math.tan, asin:Math.asin, acos:Math.acos,
+  atan:Math.atan, pi:Math.PI, e:Math.E};
+const FN_NAMES=Object.keys(HELPERS).sort((a,b)=>b.length-a.length);
+const FN_RE=new RegExp(FN_NAMES.join('|'),'g');
+
+function compileSide(raw){
+  let t=String(raw||'').toLowerCase().replace(/\s+/g,'')
+    .replace(/sen/g,'sin').replace(/\*\*/g,'^')
+    .replace(/²/g,'^2').replace(/³/g,'^3').replace(/[−–—]/g,'-')
+    .replace(/·|×/g,'*');
+  if(!t) throw new Error('Falta una parte de la condición.');
+  const store=[];
+  const prot=t.replace(FN_RE, m=>{ store.push(m); return '\u0001'+(store.length-1)+'\u0001'; });
+  let n=prot
+    .replace(/(\d)(?=[xy(\u0001])/g,'$1*')
+    .replace(/([xy)])(?=\()/g,'$1*')
+    .replace(/([xy)])(?=[xy])/g,'$1*')
+    .replace(/([xy)])(?=\u0001)/g,'$1*')
+    .replace(/\^/g,'**');
+  let prev; /* menos unario → (0-1)* para que -x^2 funcione */
+  do{ prev=n;
+    n=n.replace(/(\*\*|[(+*,\/]|^)-/g,(m,p1)=>(p1==='**')?'-':p1+'(0-1)*');
+  }while(n!==prev);
+  n=n.replace(/\u0001(\d+)\u0001/g,(_,i)=>store[+i]);
+  if(!/^[-+*/().,\d\s@xy]*$/.test(n.replace(FN_RE,'@')))
+    throw new Error('No reconozco símbolos en «'+raw+'». Usa x, y, números y + − * / ^ ( ).');
+  let f;
+  try{ f=new Function('x','y','H','const {'+FN_NAMES.join(',')+'}=H; return ('+n+');'); }
+  catch(err){ throw new Error('La expresión «'+raw+'» no es válida.'); }
+  return (x,y)=>{ const v=f(x,y,HELPERS); return (typeof v==='number')?v:NaN; };
+}
+function compileCondition(str){
+  let s=String(str||'').trim();
+  if(!s) return [];
+  s=s.replace(/≤/g,'<=').replace(/≥/g,'>=')
+     .replace(/<=/g,'\u0002').replace(/>=/g,'\u0003')
+     .replace(/==/g,'=').replace(/=/g,'==')
+     .replace(/\u0002/g,'<=').replace(/\u0003/g,'>=')
+     .replace(/\s+/g,'');
+  const parts=s.split(/(<=|>=|==|<|>)/), preds=[];
+  if(parts.length===3){
+    preds.push({op:parts[1], raw:parts[0]+' '+parts[1]+' '+parts[2],
+      f:(L=>((x,y)=>L(x,y)-parts[2]===undefined?0:0))(compileSide(parts[0]))});
+    /* (se reemplaza abajo) */
+    preds[0]={op:parts[1], raw:parts[0]+' '+parts[1]+' '+parts[2],
+      f:mkDiff(compileSide(parts[0]), compileSide(parts[2]))};
+  } else if(parts.length===5){
+    const a=parts[0], o1=parts[1], f=parts[2], o2=parts[3], b=parts[4];
+    if(!(((o1==='<'||o1==='<=')&&(o2==='<'||o2==='<=')) && a && f && b))
+      throw new Error('Cadenas tipo a < f < b: usa solo < o <= en ambas comparaciones.');
+    const A=compileSide(a), F=compileSide(f), B=compileSide(b);
+    preds.push({op:(o1==='<'?'>':'>='), raw:f+' '+(o1==='<'?'>':'>=')+' '+a, f:mkDiff(F,A)});
+    preds.push({op:o2, raw:f+' '+o2+' '+b, f:mkDiff(F,B)});
+  } else {
+    throw new Error('Usa UNA comparación (a < b) o una cadena (a < f < b).');
+  }
+  return preds;
+}
+function mkDiff(L,R){ return (x,y)=>L(x,y)-R(x,y); }
+function holds(p,x,y){
+  const v=p.f(x,y);
+  switch(p.op){
+    case '<': return v<0;  case '<=': return v<=0;
+    case '>': return v>0;  case '>=': return v>=0;
+    case '==': return Math.abs(v)<1e-9; default: return false;
+  }
+}
+function plotRegion(preds){
   const cv=$('#simCanvas'); if(!cv || cv.offsetParent===null) return;
   const {ctx,w,h}=setupCanvas(cv);
-  // Limpiar y dibujar fondo
-  ctx.clearRect(0,0,w,h);
-  const cx=w/2, cy=h/2, scale=70;
-  // Ejes
-  ctx.strokeStyle='rgba(28,43,37,.3)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(30, cy); ctx.lineTo(w-30, cy); ctx.moveTo(cx, 20); ctx.lineTo(cx, h-20); ctx.stroke();
-  ctx.font='11px Instrument Sans'; ctx.fillStyle='rgba(28,43,37,.5)';
-  ctx.fillText('x', w-25, cy-5); ctx.fillText('y', cx+8, 24);
-  // Dibujar región según tipo
-  const r=regionState;
-  if(r.type==='disco' || r.type==='disco-cerrado'){
-    const radius=2*scale;
-    // Interior
-    ctx.beginPath(); ctx.arc(cx, cy, radius, 0, 2*Math.PI);
-    ctx.fillStyle='rgba(30,70,54,.15)'; ctx.fill();
-    // Frontera
-    ctx.strokeStyle=PINE; ctx.lineWidth=2.5;
-    if(r.type==='disco') ctx.setLineDash([6,4]);
-    ctx.beginPath(); ctx.arc(cx, cy, radius, 0, 2*Math.PI); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle=INK; ctx.font='12px Instrument Sans'; ctx.textAlign='center';
-    ctx.fillText(r.type==='disco' ? 'Disco abierto: x²+y² < 4' : 'Disco cerrado: x²+y² ≤ 4', cx, 30);
-    $('#graphCap').textContent = r.type==='disco' ? 'Frontera punteada = abierto' : 'Frontera continua = cerrado';
-  } else if(r.type==='dominio1' || r.type==='dominio2' || r.type==='interseccion'){
-    // Dibujar región de dominio
-    const res=document.createElement('canvas');
-    const off=document.createElement('canvas');
-    // Escaneo de píxeles para dibujar región
-    const step=4;
-    const data=[];
-    let maxY=0;
-    for(let px=0; px<w; px+=step){
-      for(let py=0; py<h; py+=step){
-        const x=(px-cx)/scale, y=(cy-py)/scale;
-        let val=false;
-        if(r.type==='dominio1'){ // sqrt(x+y)
-          val = (x+y >= 0);
-        } else if(r.type==='dominio2'){ // ln(x^2-1)
-          val = (x*x-1 > 0);
-        } else if(r.type==='interseccion'){ // sqrt(x+y) ∩ ln(x^2-1)
-          val = (x+y >= 0) && (x*x-1 > 0);
-        }
-        if(val){ data.push([px,py]); if(Math.abs(y)>maxY) maxY=Math.abs(y); }
-      }
+  const s=Math.min(w,h)/(2*RANGE);
+  drawGrid(ctx,w,h,s,RANGE);
+  const step=2, nx=Math.ceil(w/step), ny=Math.ceil(h/step);
+  const mem=new Uint8Array(nx*ny);
+  lastBounded=true;
+  for(let iy=0; iy<ny; iy++){
+    const y=(h/2-(iy*step+step/2))/s;
+    for(let ix=0; ix<nx; ix++){
+      const x=((ix*step+step/2)-w/2)/s;
+      let ok=true;
+      for(let k=0;k<preds.length;k++){ if(!holds(preds[k],x,y)){ ok=false; break; } }
+      if(ok){ mem[iy*nx+ix]=1;
+        if(ix===0||iy===0||ix===nx-1||iy===ny-1) lastBounded=false; }
     }
-    // Dibujar puntos
-    data.forEach(([px,py])=>{
-      ctx.fillStyle='rgba(30,70,54,.25)';
-      ctx.fillRect(px-2, py-2, 4, 4);
-    });
-    // Fronteras
-    ctx.strokeStyle=PINE; ctx.lineWidth=1.5; ctx.setLineDash([5,4]);
-    // Dibujar curvas de nivel aproximadas
-    const drawCurve=(fn, label, color)=>{
-      ctx.strokeStyle=color||PINE; ctx.lineWidth=1.5;
-      for(let px=20; px<w-20; px+=2){
-        const x=(px-cx)/scale;
-        let y0=fn(x);
-        if(isFinite(y0)){
-          const py=cy-y0*scale;
-          if(py>20 && py<h-20){
-            if(px===20) ctx.beginPath();
-            ctx.lineTo(px, py);
-          }
-        }
-      }
-      ctx.stroke();
-    };
-    ctx.setLineDash([5,4]);
-    if(r.type==='dominio1' || r.type==='interseccion'){
-      // y = -x
-      ctx.strokeStyle=TERRA; ctx.lineWidth=1.5;
-      ctx.beginPath();
-      for(let px=20; px<w-20; px+=2){ const x=(px-cx)/scale; const py=cy-(-x)*scale; if(py>20 && py<h-20) ctx.lineTo(px, py); }
-      ctx.stroke();
-    }
-    if(r.type==='dominio2' || r.type==='interseccion'){
-      // x = ±1
-      ctx.strokeStyle=TERRA; ctx.lineWidth=1.5;
-      const x1=cx+1*scale, x2=cx-1*scale;
-      ctx.beginPath(); ctx.moveTo(x1,20); ctx.lineTo(x1,h-20); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(x2,20); ctx.lineTo(x2,h-20); ctx.stroke();
-    }
-    ctx.setLineDash([]);
-    const labels = {
-      'dominio1': 'Dominio: x+y ≥ 0 (√)',
-      'dominio2': 'Dominio: x²-1 > 0 (ln)',
-      'interseccion': 'Intersección: x+y ≥ 0 ∩ x²-1 > 0'
-    };
-    ctx.fillStyle=INK; ctx.font='12px Instrument Sans'; ctx.textAlign='center';
-    ctx.fillText(labels[r.type]||r.type, cx, 30);
-    $('#graphCap').textContent = 'Región sombreada = dominio de la función. Líneas = fronteras.';
   }
+  ctx.fillStyle='rgba(46,155,240,.20)';
+  for(let i=0;i<mem.length;i++) if(mem[i]) ctx.fillRect((i%nx)*step, Math.floor(i/nx)*step, step, step);
+  const open=preds.length && preds.every(p=>p.op==='<'||p.op==='>');
+  ctx.fillStyle='#0B4E8F';
+  for(let iy=0; iy<ny; iy++) for(let ix=0; ix<nx; ix++){
+    const i=iy*nx+ix;
+    if(!mem[i]) continue;
+    const edge=(ix>0&&!mem[i-1])||(ix<nx-1&&!mem[i+1])||(iy>0&&!mem[i-nx])||(iy<ny-1&&!mem[i+nx]);
+    if(!edge) continue;
+    if(open && ((ix+iy)&1)) continue; /* frontera punteada si es abierto */
+    ctx.fillRect(ix*step, iy*step, step, step);
+  }
+  drawAxes(ctx,w,h,s,RANGE);
+  $('#graphCap').textContent='Ventana [−15, 15] × [−15, 15]. Frontera punteada = excluida (abierto); continua = incluida (cerrado).';
+}
+function runRegion(){
+  const out=$('#regionResult');
+  try{
+    let preds=[];
+    if($('#regionSel').value==='custom'){
+      preds=compileCondition($('#regExpr').value).concat(compileCondition($('#regExpr2').value));
+      if(!preds.length) throw new Error('Escribe al menos una condición.');
+    } else {
+      REGIONS[$('#regionSel').value].c.forEach(c=>{ preds=preds.concat(compileCondition(c)); });
+    }
+    lastPreds=preds;
+    if(simMode==='region') plotRegion(preds);
+    const strict=preds.every(p=>p.op==='<'||p.op==='>');
+    const closed=preds.every(p=>p.op==='<='||p.op==='>='||p.op==='==');
+    const tipo=strict?'ABIERTO':(closed?'CERRADO':'NI ABIERTO NI CERRADO (frontera mixta)');
+    out.innerHTML=
+      '<div class="res-row"><span>Condición(es)</span><strong>'+preds.map(p=>esc(p.raw)).join(' &nbsp;y&nbsp; ')+'</strong></div>'+
+      '<div class="res-row"><span>El conjunto es</span><strong>'+tipo+'</strong></div>'+
+      '<div class="res-row"><span>Acotación en la ventana</span><strong>'+(lastBounded?'acotada':'no acotada (llega al borde)')+'</strong></div>';
+  } catch(err){ toast(err.message,'err'); }
 }
 
-// Presets de regiones
-$$('[data-region]').forEach(b=>b.addEventListener('click', ()=>{
-  const type=b.dataset.region;
-  regionState.type=type;
-  const presets = {
-    'disco': ['x^2+y^2<4', ''],
-    'disco-cerrado': ['x^2+y^2≤4', ''],
-    'dominio1': ['sqrt(x+y)', ''],
-    'dominio2': ['ln(x^2-1)', ''],
-    'interseccion': ['sqrt(x+y)', 'ln(x^2-1)']
-  };
-  if(presets[type]){
-    $('#regExpr').value=presets[type][0];
-    $('#regExpr2').value=presets[type][1]||'';
-    regionState.expr=presets[type][0];
-    regionState.expr2=presets[type][1]||'';
-  }
-  drawRegionCanvas();
-  toast(`Región: ${type}`);
-}));
-
-$('#btnRegionPlot').addEventListener('click', ()=>{
-  regionState.expr=$('#regExpr').value;
-  regionState.expr2=$('#regExpr2').value;
-  // Detectar tipo automáticamente
-  const e=regionState.expr;
-  if(e.includes('sqrt')) regionState.type='dominio1';
-  else if(e.includes('ln')) regionState.type='dominio2';
-  else if(e.includes('<') || e.includes('≤')) regionState.type=e.includes('≤')?'disco-cerrado':'disco';
-  else regionState.type='dominio1';
-  drawRegionCanvas();
-  toast('Región graficada.');
-});
-
-/* ============================================================
-   PESTAÑAS DEL SIMULADOR
-============================================================ */
-$$('.sim-tab').forEach(tab=>{
+/* Pestañas y botones del simulador */
+ $$('.sim-tab').forEach(tab=>{
   tab.addEventListener('click', ()=>{
-    $$('.sim-tab').forEach(t=>t.classList.remove('active'));
-    $$('.sim-panel').forEach(p=>p.classList.remove('active'));
-    tab.classList.add('active');
-    const id=tab.dataset.stab;
-    $('#st-'+id).classList.add('active');
-    if(id==='vec') drawVecCanvas();
-    else drawRegionCanvas();
+    $$('.sim-tab').forEach(t=>t.classList.toggle('active', t===tab));
+    $$('.sim-panel').forEach(p=>p.classList.toggle('active', p.id==='st-'+tab.dataset.stab));
+    simMode=(tab.dataset.stab==='region')?'region':'vec';
+    requestAnimationFrame(renderSim);
   });
 });
+function renderSim(){
+  if(simMode==='region' && lastPreds) plotRegion(lastPreds);
+  else if(lastVecDraw) drawSim(lastVecDraw);
+  else{
+    const cv=$('#simCanvas'); if(!cv || cv.offsetParent===null) return;
+    const {ctx,w,h}=setupCanvas(cv);
+    drawGrid(ctx,w,h,Math.min(w,h)/(2*RANGE),RANGE);
+  }
+}
+ $('#vecOp').addEventListener('change', syncVecForm);
+ $('#btnVecRun').addEventListener('click', runVectors);
+ $('#regionSel').addEventListener('change', syncRegionForm);
+ $('#btnRegionPlot').addEventListener('click', runRegion);
+ $$('#st-vec input, #st-region input').forEach(inp=>{
+  inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ (simMode==='region')?runRegion():runVectors(); } });
+});
 
 /* ============================================================
-   QUIZ (Unidad 1)
+   QUIZ (corregido: String.raw preserva los backslashes de LaTeX)
 ============================================================ */
 const QUIZ=[
- {q:'¿Qué es \(\mathbb{R}^n\)?',
+ {q:String.raw`¿Qué es \(\mathbb{R}^n\)?`,
   opts:['El conjunto de todos los números reales','El conjunto de todas las n-tuplas ordenadas de números reales','El conjunto de los números complejos','El conjunto de los números enteros'],
-  ans:1, why:'\(\mathbb{R}^n\) es el producto cartesiano de \(n\) copias de \(\mathbb{R}\), es decir, todas las n-tuplas ordenadas de números reales.'},
- {q:'¿Cuál de las siguientes operaciones NO está definida para vectores en \(\mathbb{R}^n\)?',
-  opts:['Suma de vectores','Producto escalar','Producto vectorial (para n=3)','División de vectores'],
-  ans:3, why:'La división de vectores no está definida en \(\mathbb{R}^n\). Existen suma, resta, producto escalar y producto por escalar.'},
- {q:'La norma euclidiana de \(\mathbf{x}=(3,-4)\) en \(\mathbb{R}^2\) es:',
+  ans:1, why:String.raw`\(\mathbb{R}^n\) es el producto cartesiano de \(n\) copias de \(\mathbb{R}\), es decir, todas las n-tuplas ordenadas de números reales.`},
+ {q:String.raw`¿Cuál de las siguientes operaciones NO está definida para vectores en \(\mathbb{R}^n\)?`,
+  opts:['Suma de vectores','Producto escalar','Producto vectorial (para \(n=3\))','División de vectores'],
+  ans:3, why:String.raw`La división de vectores no está definida en \(\mathbb{R}^n\). Existen suma, resta, producto escalar y producto por escalar.`},
+ {q:String.raw`La norma euclidiana de \(\mathbf{x}=(3,-4)\) en \(\mathbb{R}^2\) es:`,
   opts:['1','5','7','25'],
-  ans:1, why:'\(\|\mathbf{x}\| = \sqrt{3^2+(-4)^2} = \sqrt{25} = 5\).'},
- {q:'Un conjunto \(A\) es abierto si:',
+  ans:1, why:String.raw`\(\|\mathbf{x}\| = \sqrt{3^2+(-4)^2} = \sqrt{25} = 5\).`},
+ {q:String.raw`Un conjunto \(A\) es abierto si:`,
   opts:['Contiene todos sus puntos frontera','Todo punto tiene una vecindad contenida en \(A\)','Su complemento es vacío','Es un intervalo cerrado'],
-  ans:1, why:'Un conjunto es abierto si para cada punto existe una vecindad (bola abierta) completamente contenida en el conjunto.'},
- {q:'La distancia entre los puntos \((1,2)\) y \((4,6)\) en \(\mathbb{R}^2\) es:',
+  ans:1, why:String.raw`Un conjunto es abierto si para cada punto existe una vecindad (bola abierta) completamente contenida en el conjunto.`},
+ {q:String.raw`La distancia entre los puntos \((1,2)\) y \((4,6)\) en \(\mathbb{R}^2\) es:`,
   opts:['3','4','5','6'],
-  ans:2, why:'\(d = \sqrt{(4-1)^2+(6-2)^2} = \sqrt{9+16} = \sqrt{25} = 5\).'},
- {q:'¿Cuál de los siguientes conjuntos es cerrado en \(\mathbb{R}^2\)?',
-  opts:['El disco abierto \(x^2+y^2<1\)','El disco cerrado \(x^2+y^2\le1\)','El conjunto \(x^2+y^2<1\) con \(y>0\)','El conjunto \(x^2+y^2=1\) solo'],
-  ans:1, why:'El disco cerrado incluye su frontera, por lo que su complemento es abierto. Los otros conjuntos son abiertos o no son ni abiertos ni cerrados.'}
+  ans:2, why:String.raw`\(d = \sqrt{(4-1)^2+(6-2)^2} = \sqrt{9+16} = \sqrt{25} = 5\).`},
+ {q:String.raw`¿Cuál de los siguientes conjuntos es cerrado en \(\mathbb{R}^2\)?`,
+  opts:['El disco abierto \(x^2+y^2<1\)','El disco cerrado \(x^2+y^2\le1\)','El conjunto \(x^2+y^2<1\) con \(y>0\)','La circunferencia \(x^2+y^2=1\) sola'],
+  ans:1, why:String.raw`El disco cerrado incluye su frontera, por lo que su complemento es abierto. (Nota: la circunferencia sola también es cerrada; la opción esperada del curso es el disco cerrado, el ejemplo canónico de la sección 1.5.)`}
 ];
 function renderQuiz(){
   $('#quizList').innerHTML = QUIZ.map((it,i)=>`
@@ -1340,9 +1392,8 @@ function renderQuiz(){
   $('#quizResult').innerHTML='';
   try{ renderMathInElement($('#quizList'),{delimiters:[{left:'\\(',right:'\\)',display:false}],throwOnError:false}); }catch(e){}
 }
-renderQuiz();
 
-$('#btnGrade').addEventListener('click', ()=>{
+ $('#btnGrade').addEventListener('click', ()=>{
   const unanswered = QUIZ.some((_,i)=>!document.querySelector(`input[name="q${i}"]:checked`));
   if(unanswered){ toast('Responde todas las preguntas.','err'); return; }
   let score=0;
@@ -1358,19 +1409,18 @@ $('#btnGrade').addEventListener('click', ()=>{
   });
   const a=act(), prev=(a[CURSO].quiz && a[CURSO].quiz.score!=null)? a[CURSO].quiz.score : -1;
   if(score>prev){ a[CURSO].quiz={score, total:QUIZ.length, ts:Date.now()}; saveAct(a); renderBoleta(); }
-  const msg = score===6?'¡Excelente dominio de la unidad!':score>=4?'Muy bien: revisa los puntos marcados en naranja.':score>=2?'Repasa las secciones 1.1 a 1.5 y vuelve a intentarlo.':'Comienza por la teoría y reintenta con calma.';
+  const msg = score===6?'¡Excelente dominio de la unidad!':score>=4?'Muy bien: revisa los puntos marcados en rojo.':score>=2?'Repasa las secciones 1.1 a 1.5 y vuelve a intentarlo.':'Comienza por la teoría y reintenta con calma.';
   $('#quizResult').innerHTML=`<strong>${score} / ${QUIZ.length}</strong> ${msg}`;
   toast(`Quiz calificado: ${score} de ${QUIZ.length}.`);
 });
-$('#btnQuizReset').addEventListener('click', ()=>{ renderQuiz(); toast('Quiz reiniciado.'); });
+ $('#btnQuizReset').addEventListener('click', ()=>{ renderQuiz(); toast('Quiz reiniciado.'); });
 
 /* ============================================================
-   EJERCICIOS Y TAREA (como en el original)
+   TAREA (Marsden-Tromba)
 ============================================================ */
 const PROBLEMAS=['1.2','1.7','1.11','1.15','1.19','1.23','1.27','1.31'];
 const dl=new Date(Date.now()+7*864e5);
-$('#taskDeadline').textContent = dl.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
-
+ $('#taskDeadline').textContent = dl.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'});
 function renderTaskList(){
   const T=act()[CURSO].tarea;
   $('#taskList').innerHTML = PROBLEMAS.map(p=>`
@@ -1386,14 +1436,12 @@ function updateTaskBar(){
   $('#taskBar').style.width=pct+'%';
   $('#taskPct').textContent=`${done} / ${PROBLEMAS.length} · ${pct}%`;
 }
-$('#taskList').addEventListener('change', e=>{
+ $('#taskList').addEventListener('change', e=>{
   const cb=e.target.closest('input[data-p]'); if(!cb) return;
-  const p=cb.dataset.p;
-  const a=act(); a[CURSO].tarea[p]=cb.checked; saveAct(a);
+  const a=act(); a[CURSO].tarea[cb.dataset.p]=cb.checked; saveAct(a);
   cb.closest('.chk').classList.toggle('done', cb.checked);
   updateTaskBar(); renderBoleta();
 });
-
 function syncEjChecks(){
   const EJ=act()[CURSO].ej;
   $$('#ejBlock .chk-ej input').forEach(cb=>{
@@ -1401,7 +1449,7 @@ function syncEjChecks(){
     cb.closest('.chk').classList.toggle('done', cb.checked);
   });
 }
-$('#ejBlock').addEventListener('change', e=>{
+ $('#ejBlock').addEventListener('change', e=>{
   const cb=e.target.closest('input[data-ej]'); if(!cb) return;
   const a=act(); a[CURSO].ej[cb.dataset.ej]=cb.checked; saveAct(a);
   cb.closest('.chk').classList.toggle('done', cb.checked);
@@ -1409,7 +1457,7 @@ $('#ejBlock').addEventListener('change', e=>{
 });
 
 /* ============================================================
-   EDITOR DE REDACCIÓN (igual que el original)
+   EDITOR DE REDACCIÓN (LaTeX + autoguardado)
 ============================================================ */
 const REDACS=['e5','e6','e7','e8'];
 const redTimers={};
@@ -1427,7 +1475,6 @@ const MANUAL=[
   {code:'\\text{…}', help:'Texto en fórmula', tex:'\\text{abierto}', snip:String.raw`\text{|}`},
   {code:'\\boxed{…}', help:'Respuesta final', tex:'\\boxed{5}', snip:String.raw`\boxed{|}`}
 ];
-
 function buildEditors(){
   $$('.ed-box').forEach(box=>{
     const k=box.dataset.ed;
@@ -1455,14 +1502,12 @@ function buildEditors(){
         </div>
       </div>`;
   });
-  buildManuals();
-  refreshIcons();
+  buildManuals(); refreshIcons();
 }
-
 function buildManuals(){
   $$('.ed-manual').forEach(box=>{
     const views=[];
-    const rows=MANUAL.map((m,i)=>{
+    const rows=MANUAL.map(m=>{
       views.push(m);
       return `
       <div class="cmd-row">
@@ -1480,7 +1525,6 @@ function buildManuals(){
     });
   });
 }
-
 function insertSnippet(ta, snip){
   const s=ta.selectionStart ?? ta.value.length, e=ta.selectionEnd ?? s;
   const before=ta.value.slice(0,s), sel=ta.value.slice(s,e), after=ta.value.slice(e);
@@ -1490,29 +1534,22 @@ function insertSnippet(ta, snip){
     const clean=snip.replace('|','');
     if(sel){ text=clean.slice(0,caret)+sel+clean.slice(caret); pos=s+caret+sel.length; }
     else   { text=clean; pos=s+caret; }
-  }else{
-    text=snip+(sel||''); pos=s+snip.length;
-  }
+  }else{ text=snip+(sel||''); pos=s+snip.length; }
   ta.value=before+text+after;
   ta.selectionStart=ta.selectionEnd=pos;
   ta.focus();
   ta.dispatchEvent(new Event('input'));
 }
-
 function setStatus(k, txt, saved){
   const st=$('#st_'+k); if(!st) return;
   st.classList.toggle('saved', !!saved);
   st.innerHTML='<span class="dot"></span>'+txt;
 }
-
 function redPreview(k){
   const ta=$('#ta_'+k), pv=$('#pv_'+k);
   const raw=ta.value;
   $('#cn_'+k).textContent=(raw.trim()? raw.trim().split(/\s+/).length:0)+' palabras';
-  if(!raw.trim()){
-    pv.innerHTML='<em class="ed-ph">La vista previa aparecerá aquí.</em>';
-    return;
-  }
+  if(!raw.trim()){ pv.innerHTML='<em class="ed-ph">La vista previa aparecerá aquí.</em>'; return; }
   pv.innerHTML=esc(raw).replace(/\n/g,'<br>');
   if(typeof renderMathInElement==='function'){
     try{
@@ -1523,13 +1560,11 @@ function redPreview(k){
     }catch(e){}
   }
 }
-
 function redSave(k, announce){
   const a=act(); a[CURSO].red[k]=$('#ta_'+k).value; saveAct(a);
   setStatus(k,'Guardado '+new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}), true);
   if(announce) toast('Redacción guardada.');
 }
-
 function redInput(k){
   setStatus(k,'Escribiendo…', false);
   clearTimeout(redTimers[k+'p']);
@@ -1537,7 +1572,6 @@ function redInput(k){
   clearTimeout(redTimers[k+'s']);
   redTimers[k+'s']=setTimeout(()=>redSave(k,false),1100);
 }
-
 function initRedacs(){
   const R=act()[CURSO].red||{};
   REDACS.forEach(k=>{
@@ -1569,26 +1603,23 @@ function initRedacs(){
 /* ============================================================
    BOLETA
 ============================================================ */
-const AV_COLORS=[['#e4ecdf','#1e4636'],['#f3e0d6','#8a3d1e'],['#f2e8c9','#7a6210'],
-                 ['#e2e8dd','#3c5a3c'],['#ead9e0','#7a3550'],['#dde7ea','#22505c']];
+const AV_COLORS=[['#E4F0FB','#0B4E8F'],['#DCEAF9','#1670C8'],['#E8F1FA','#2E9BF0'],
+                 ['#EAedef','#0B0D10'],['#FDEEE7','#C24E36'],['#E7F0E9','#2C5E49']];
 function initials(name){
   const p=name.trim().split(/\s+/);
   return ((p[0]?.[0]||'')+(p[1]?.[0]||p[0]?.[1]||'')).toUpperCase();
 }
 function avColor(name){ return AV_COLORS[[...name].reduce((a,c)=>a+c.charCodeAt(0),0)%AV_COLORS.length]; }
-
 function progresoUnidad(){
   const c=act()[CURSO];
   const ejOk=['e1','e2','e3','e4'].filter(k=>c.ej[k]).length;
   const tOk=PROBLEMAS.filter(p=>c.tarea[p]).length;
   return {
-    sim: 100, // Simulador: se considera completo por usar las herramientas
-    ej: ejOk/4*100,
-    ejOk,
+    sim: 100,
+    ej: ejOk/4*100, ejOk,
     quiz: (c.quiz && c.quiz.score!=null)? c.quiz.score/c.quiz.total*100 : 0,
     quizScore: (c.quiz && c.quiz.score!=null)? c.quiz.score : null,
-    tarea: tOk/PROBLEMAS.length*100,
-    tOk
+    tarea: tOk/PROBLEMAS.length*100, tOk
   };
 }
 function notaFinal(){
@@ -1626,8 +1657,6 @@ function renderBoleta(){
   $('#bNota').textContent=notaFinal().toFixed(1);
   $('#bEmit').textContent=new Date().toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'});
 }
-
-// Registro
 let editMode=false;
 function setFormMode(edit){
   editMode=edit;
@@ -1636,7 +1665,7 @@ function setFormMode(edit){
   $('#btnEstCancel').hidden=!edit;
   refreshIcons();
 }
-$('#formEst').addEventListener('submit', e=>{
+ $('#formEst').addEventListener('submit', e=>{
   e.preventDefault();
   const nombre=$('#alNombre').value.trim(), mat=$('#alMat').value.trim(), correo=$('#alMail').value.trim();
   if(nombre.length<3){ toast('Escribe el nombre completo.','err'); return; }
@@ -1648,14 +1677,14 @@ $('#formEst').addEventListener('submit', e=>{
   renderBoleta(); syncEjChecks(); renderTaskList();
   toast(prev? 'Datos actualizados.' : `¡Listo, ${nombre.split(' ')[0]}!`);
 });
-$('#btnEstEdit').addEventListener('click', ()=>{
+ $('#btnEstEdit').addEventListener('click', ()=>{
   const est=loadEst(); if(!est) return;
   $('#alNombre').value=est.nombre; $('#alMat').value=est.matricula; $('#alMail').value=est.correo;
   $('#regEmpty').hidden=false; $('#boletaWrap').hidden=true;
   setFormMode(true); $('#alNombre').focus();
 });
-$('#btnEstCancel').addEventListener('click', ()=>{ $('#formEst').reset(); setFormMode(false); renderBoleta(); });
-$('#btnEstDel').addEventListener('click', ()=>{
+ $('#btnEstCancel').addEventListener('click', ()=>{ $('#formEst').reset(); setFormMode(false); renderBoleta(); });
+ $('#btnEstDel').addEventListener('click', ()=>{
   const b=$('#btnEstDel');
   if(!b.classList.contains('confirm')){
     b.classList.add('confirm'); b.innerHTML='<i data-lucide="alert-triangle"></i><span>¿Borrar todo?</span>'; refreshIcons();
@@ -1668,7 +1697,7 @@ $('#btnEstDel').addEventListener('click', ()=>{
   renderBoleta(); syncEjChecks(); renderTaskList();
   toast('Registro y avance borrados.');
 });
-$('#btnBoletaPng').addEventListener('click', ()=>{
+ $('#btnBoletaPng').addEventListener('click', ()=>{
   if(typeof html2canvas!=='function'){ toast('No se pudo generar la imagen.','err'); return; }
   toast('Generando imagen…');
   html2canvas($('#boletaCard'),{scale:2, backgroundColor:null, useCORS:true}).then(cv=>{
@@ -1683,6 +1712,11 @@ $('#btnBoletaPng').addEventListener('click', ()=>{
 /* ============================================================
    ARRANQUE
 ============================================================ */
+window.addEventListener('resize', ()=>{
+  const v=document.getElementById('v-simulador');
+  if(v && !v.hidden) requestAnimationFrame(renderSim);
+  requestAnimationFrame(drawHero);
+});
 function init(){
   refreshIcons();
   buildEditors();
@@ -1690,23 +1724,16 @@ function init(){
   renderTaskList();
   syncEjChecks();
   renderBoleta();
+  syncVecForm();
+  syncRegionForm();
+  renderQuiz();
   drawHero();
-  drawVecCanvas();
-  drawRegionCanvas();
   if(typeof renderMathInElement==='function'){
     renderMathInElement(document.body,{delimiters:[
       {left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});
   }
-  // Actualizar vectores iniciales
-  vecState.u=[2,1]; vecState.v=[-1,3];
-  drawVecCanvas();
 }
-window.addEventListener('resize', ()=>{ drawHero(); drawVecCanvas(); drawRegionCanvas(); });
 init();
 </script>
 </body>
 </html>
-
-
-
-  
