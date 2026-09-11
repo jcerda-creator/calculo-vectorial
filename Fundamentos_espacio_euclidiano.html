@@ -57,9 +57,13 @@ svg.lucide{width:16px;height:16px;stroke-width:2}
 ============================================================ */
 
 .topbar-logo{
-  position:absolute;top:14px;right:24px;
-  width:64px;height:64px;object-fit:contain;
-  filter:drop-shadow(0 2px 4px rgba(11,13,16,.15));
+  position:absolute;top:18px;right:24px;
+  height:46px;width:auto;
+  filter:drop-shadow(0 2px 4px rgba(11,13,16,.12));
+}
+@media (max-width:640px){
+  .topbar-logo{height:32px;top:14px;right:14px}
+  .topbar-side{padding-right:0}
 }
 .topbar-row{position:relative}
 @media (max-width:640px){
