@@ -55,7 +55,6 @@ svg.lucide{width:16px;height:16px;stroke-width:2}
 /* ============================================================
    HEADER / NAV
 ============================================================ */
-
 .topbar-logo{
   position:absolute;top:14px;right:24px;
   width:64px;height:64px;object-fit:contain;
@@ -66,7 +65,6 @@ svg.lucide{width:16px;height:16px;stroke-width:2}
   .topbar-logo{width:44px;height:44px;top:12px;right:16px}
   .topbar-side{padding-right:56px}
 }
-
 header.topbar{
   position:sticky;top:0;z-index:60;
   background:rgba(245,249,253,.94);
@@ -345,7 +343,7 @@ details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-to
 .boleta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;max-width:700px}
 
 /* ============================================================
-   TOASTS / FOOTER (footer estaba truncado en el original)
+   TOASTS / FOOTER
 ============================================================ */
 #toasts{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:340px}
 .toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper);border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(11,13,16,.28);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
@@ -403,9 +401,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
 .hero-drag-hint{ text-align:center; font-size:11px; color:var(--muted); margin-top:4px; font-style:italic; }
 .hero-op-btn{ padding:4px 12px; border:1.5px solid var(--pine); border-radius:20px; background:transparent; color:var(--pine); font-size:11px; font-family:'Instrument Sans',sans-serif; cursor:pointer; transition:all .15s; }
 .hero-op-btn.active, .hero-op-btn:hover{ background:var(--pine); color:#fff; }
-
 </style>
-<base target="_blank">
 </head>
 <body>
 
@@ -421,7 +417,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
       <span>Cálculo II · Unidad 1<small>Aula interactiva — Dr. Adrián Cerda</small></span>
     </div>
     <div class="topbar-side">UNII<br>7 sep – 3 oct 2026</div>
-      <img class="topbar-logo" src="unii-logo.png" alt="Logotipo UNII">
+    <img class="topbar-logo" src="unii-logo.png" alt="Logotipo UNII" onerror="this.style.display='none'">
   </div>
   <div class="wrap">
     <nav class="tabs" id="mainNav">
@@ -657,7 +653,7 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
   </div>
 </section>
 
-<!-- ==================== SIMULADOR (rediseñado: elegir opción → ejecutar) ==================== -->
+<!-- ==================== SIMULADOR ==================== -->
 <section class="view" id="v-simulador" hidden>
   <div class="wrap">
     <div class="view-head">
@@ -851,7 +847,6 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
         </div>
       </details>
 
-      <!-- RECONSTRUIDO (revisa redacción) -->
       <details class="sol">
         <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 6 · Dominio de una función</span>Encuentra y describe geométricamente el dominio de \(f(x,y) = \sqrt{x+y} + \ln(x^2-1)\).</span></summary>
         <div class="sol-body">
@@ -867,7 +862,6 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
         </div>
       </details>
 
-      <!-- PROPUESTO POR ASISTENTE (revisa y ajusta a tu gusto) -->
       <details class="sol">
         <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Desigualdad triangular</span>Con \(\mathbf{u}=(3,-4)\) y \(\mathbf{v}=(-4,3)\), verifica numéricamente que \(\|\mathbf{u}+\mathbf{v}\| \le \|\mathbf{u}\|+\|\mathbf{v}\|\) y explica en qué caso se cumple la igualdad.</span></summary>
         <div class="sol-body">
@@ -1017,6 +1011,8 @@ footer{border-top:2px solid var(--ink);padding:30px 0 40px;margin-top:20px}
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- ==================== PARTE 2 AQUÍ (bloque <script> principal + cierre del documento) ==================== -->
 <script>
 /* ============================================================
    UTILIDADES
@@ -1086,21 +1082,15 @@ function setupCanvas(cv){
   ctx.setTransform(dpr,0,0,dpr,0,0);
   return {ctx, w, h};
 }
-/* ============================================================
-   CANVAS: drawing utilities (mejoradas — alta calidad)
-============================================================ */
+
 function drawGrid(ctx,w,h,s,R){
   ctx.clearRect(0,0,w,h);
-  // Fondo con gradiente sutil
   const bg = ctx.createLinearGradient(0,0,0,h);
   bg.addColorStop(0,'#FBFDFF'); bg.addColorStop(1,'#F0F6FF');
   ctx.fillStyle=bg; ctx.fillRect(0,0,w,h);
   const xmax=w/2/s, ymax=h/2/s;
-  // Decide step according to zoom
   let step=1;
-  if(s<8) step=5;
-  else if(s<20) step=2;
-  ctx.lineWidth=.8;
+  if(s<8) step=5; else if(s<20) step=2;
   for(let i=Math.ceil(-xmax); i<=Math.floor(xmax); i++){
     const isMaj=(i%5===0);
     ctx.strokeStyle=isMaj?'rgba(11,13,16,.15)':'rgba(11,13,16,.055)';
@@ -1117,24 +1107,17 @@ function drawGrid(ctx,w,h,s,R){
 }
 function drawAxes(ctx,w,h,s,R){
   ctx.strokeStyle=INK; ctx.lineWidth=1.8;
-  // X axis
   ctx.beginPath(); ctx.moveTo(0,h/2); ctx.lineTo(w,h/2); ctx.stroke();
-  // Y axis
   ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2,h); ctx.stroke();
-  // Arrowheads on axes
   ctx.fillStyle=INK;
   ctx.beginPath(); ctx.moveTo(w,h/2); ctx.lineTo(w-8,h/2-4); ctx.lineTo(w-8,h/2+4); ctx.closePath(); ctx.fill();
   ctx.beginPath(); ctx.moveTo(w/2,0); ctx.lineTo(w/2-4,8); ctx.lineTo(w/2+4,8); ctx.closePath(); ctx.fill();
-  // Axis labels
   ctx.fillStyle='rgba(11,13,16,.60)'; ctx.font='bold 11px "Instrument Sans", sans-serif';
   ctx.textAlign='left'; ctx.textBaseline='bottom'; ctx.fillText('x',w-10,h/2-4);
   ctx.textAlign='center'; ctx.textBaseline='top'; ctx.fillText('y',w/2+5,4);
-  // Numeric labels — adaptive step
   const xmax=Math.floor(w/2/s), ymax=Math.floor(h/2/s);
   let labelStep=1;
-  if(xmax>40) labelStep=10;
-  else if(xmax>20) labelStep=5;
-  else if(xmax>10) labelStep=2;
+  if(xmax>40) labelStep=10; else if(xmax>20) labelStep=5; else if(xmax>10) labelStep=2;
   ctx.fillStyle='rgba(11,13,16,.55)'; ctx.font='10px "Instrument Sans", sans-serif';
   ctx.textAlign='center'; ctx.textBaseline='top';
   for(let i=-xmax; i<=xmax; i+=labelStep){ if(i!==0) ctx.fillText(String(i), w/2+i*s, h/2+4); }
@@ -1145,11 +1128,9 @@ function drawArrow(ctx,w,h,s,x,y,color,label,fromX,fromY,glowing){
   const ox=fromX!==undefined?w/2+fromX*s:w/2;
   const oy=fromY!==undefined?h/2-fromY*s:h/2;
   const qx=w/2+x*s, qy=h/2-y*s;
-  if(Math.hypot(qx-ox,qy-oy)<2) return; // too short
+  if(Math.hypot(qx-ox,qy-oy)<2) return;
   ctx.save();
-  if(glowing){
-    ctx.shadowColor=color; ctx.shadowBlur=8;
-  }
+  if(glowing){ ctx.shadowColor=color; ctx.shadowBlur=8; }
   ctx.strokeStyle=color; ctx.fillStyle=color; ctx.lineWidth=2.8;
   ctx.lineCap='round';
   ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(qx,qy); ctx.stroke();
@@ -1166,7 +1147,6 @@ function drawArrow(ctx,w,h,s,x,y,color,label,fromX,fromY,glowing){
     const midX=(ox+qx)/2, midY=(oy+qy)/2;
     const nx=-Math.sin(ang)*16, ny=Math.cos(ang)*16;
     const lx=midX+nx, ly=midY+ny;
-    // White halo for readability
     ctx.strokeStyle='rgba(255,255,255,.85)'; ctx.lineWidth=4; ctx.lineJoin='round';
     ctx.strokeText(label, Math.max(6,Math.min(w-6,lx)), Math.max(6,Math.min(h-6,ly)));
     ctx.fillStyle=color;
@@ -1175,7 +1155,6 @@ function drawArrow(ctx,w,h,s,x,y,color,label,fromX,fromY,glowing){
   ctx.restore();
 }
 function drawArrowTip(ctx,w,h,s,x,y,color){
-  // Draw a draggable endpoint indicator
   const qx=w/2+x*s, qy=h/2-y*s;
   ctx.save();
   ctx.beginPath(); ctx.arc(qx,qy,7,0,Math.PI*2);
@@ -1195,10 +1174,10 @@ function drawDash(ctx,w,h,s,pts,color,dash){
 }
 
 /* ============================================================
-   HERO — VECTORES INTERACTIVOS (DRAG)
+   HERO — VECTORES INTERACTIVOS (DRAG) — P4 CORREGIDO (retina)
 ============================================================ */
 let heroU=[6,2], heroV=[-2,6], heroOp='suma';
-let heroDrag=null; // null | 'u' | 'v'
+let heroDrag=null;
 const HERO_RANGE=10;
 
 function drawHero(){
@@ -1210,7 +1189,6 @@ function drawHero(){
   let r, rLabel, rColor;
   if(heroOp==='suma'){
     r=[u[0]+v[0], u[1]+v[1]]; rLabel='u+v'; rColor=AZUL;
-    // Parallelogram dashes
     drawDash(ctx,w,h,s,[u,r],'rgba(46,155,240,.50)',[4,4]);
     drawDash(ctx,w,h,s,[v,r],'rgba(22,112,200,.50)',[4,4]);
   } else if(heroOp==='resta'){
@@ -1224,7 +1202,6 @@ function drawHero(){
   drawArrow(ctx,w,h,s,v[0],v[1],INK,'v',undefined,undefined,heroDrag==='v');
   drawArrowTip(ctx,w,h,s,u[0],u[1],PINE);
   drawArrowTip(ctx,w,h,s,v[0],v[1],INK);
-  // Update badges
   const bu=$('#badgeU'), bv=$('#badgeV'), br=$('#badgeR'), bd=$('#badgeDot');
   if(bu) bu.innerHTML='<strong>u</strong> = ('+fmt(u[0])+', '+fmt(u[1])+')';
   if(bv) bv.innerHTML='<strong>v</strong> = ('+fmt(v[0])+', '+fmt(v[1])+')';
@@ -1242,13 +1219,11 @@ function drawHero(){
 
 function heroCanvasCoords(cv, e){
   const rect=cv.getBoundingClientRect();
-  const dpr=window.devicePixelRatio||1;
-  const cx=(e.clientX||e.touches[0].clientX)-rect.left;
-  const cy=(e.clientY||e.touches[0].clientY)-rect.top;
+  const cx=(e.clientX!==undefined)?e.clientX:e.touches[0].clientX;
+  const cy=(e.clientY!==undefined)?e.clientY:e.touches[0].clientY;
   const {w,h}=setupCanvas(cv);
-  const s=Math.min(w/dpr,h/dpr)/(2*HERO_RANGE);
-  const W=w/dpr, H=h/dpr;
-  return { mx:(cx-W/2)/s, my:-(cy-H/2)/s };
+  const s=Math.min(w,h)/(2*HERO_RANGE);
+  return { mx:(cx-rect.left-w/2)/s, my:-(cy-rect.top-h/2)/s };
 }
 
 function heroGetNearestTip(cv,e){
@@ -1273,11 +1248,10 @@ function initHeroDrag(){
     const {mx,my}=heroCanvasCoords(cv,e);
     const clamped=[Math.max(-HERO_RANGE+.5,Math.min(HERO_RANGE-.5,mx)),
                    Math.max(-HERO_RANGE+.5,Math.min(HERO_RANGE-.5,my))];
-    if(heroDrag==='u') heroU=clamped;
-    else heroV=clamped;
+    if(heroDrag==='u') heroU=clamped; else heroV=clamped;
     requestAnimationFrame(drawHero);
   });
-  window.addEventListener('mouseup',()=>{ heroDrag=null; if(cv) cv.style.cursor='grab'; });
+  window.addEventListener('mouseup',()=>{ heroDrag=null; cv.style.cursor='grab'; });
   cv.addEventListener('touchstart',e=>{
     const tip=heroGetNearestTip(cv,e);
     if(tip){ heroDrag=tip; e.preventDefault(); }
@@ -1287,13 +1261,11 @@ function initHeroDrag(){
     const {mx,my}=heroCanvasCoords(cv,e);
     const clamped=[Math.max(-HERO_RANGE+.5,Math.min(HERO_RANGE-.5,mx)),
                    Math.max(-HERO_RANGE+.5,Math.min(HERO_RANGE-.5,my))];
-    if(heroDrag==='u') heroU=clamped;
-    else heroV=clamped;
+    if(heroDrag==='u') heroU=clamped; else heroV=clamped;
     requestAnimationFrame(drawHero);
     e.preventDefault();
   },{passive:false});
   window.addEventListener('touchend',()=>{ heroDrag=null; });
-  // Op buttons
   $$('.hero-op-btn').forEach(btn=>btn.addEventListener('click',()=>{
     heroOp=btn.dataset.op;
     $$('.hero-op-btn').forEach(b=>b.classList.toggle('active',b===btn));
@@ -1373,14 +1345,14 @@ function runVectors(){
     cap='La distancia es la longitud del segmento que une las puntas de u y v.';
   }
   $('#vecResult').innerHTML = rows.map(r=>
-    '<div class="res-row"><span>'+r[0]+'</span><strong class="mono">'+r[1]+'</strong></div>').join('');
+    '<div class="res-row"><span>'+esc(r[0])+'</span><strong class="mono">'+esc(r[1])+'</strong></div>').join('');
   $('#graphCap').textContent = cap;
   lastVecDraw = draw;
   if(simMode==='vec') drawSim(draw);
 }
 
 /* ============================================================
-   SIMULADOR — REGIONES (parser real de condiciones)
+   SIMULADOR — REGIONES (parser limpio — P5)
 ============================================================ */
 const REGIONS={
   'disco':        {c:['x^2+y^2 < 4'],      d:'Disco abierto B(0,2): la frontera x²+y²=4 queda excluida.'},
@@ -1399,7 +1371,6 @@ function syncRegionForm(){
   $('#regionInputs').hidden = (val!=='custom');
 }
 
-/* Parser seguro: convierte "x^2+y^2 < 4" en una función evaluable */
 const HELPERS={sqrt:Math.sqrt, ln:Math.log, log:Math.log10, abs:Math.abs, exp:Math.exp,
   sin:Math.sin, cos:Math.cos, tan:Math.tan, asin:Math.asin, acos:Math.acos,
   atan:Math.atan, pi:Math.PI, e:Math.E};
@@ -1420,7 +1391,7 @@ function compileSide(raw){
     .replace(/([xy)])(?=[xy])/g,'$1*')
     .replace(/([xy)])(?=\u0001)/g,'$1*')
     .replace(/\^/g,'**');
-  let prev; /* menos unario → (0-1)* para que -x^2 funcione */
+  let prev;
   do{ prev=n;
     n=n.replace(/(\*\*|[(+*,\/]|^)-/g,(m,p1)=>(p1==='**')?'-':p1+'(0-1)*');
   }while(n!==prev);
@@ -1443,10 +1414,7 @@ function compileCondition(str){
   const parts=s.split(/(<=|>=|==|<|>)/), preds=[];
   if(parts.length===3){
     preds.push({op:parts[1], raw:parts[0]+' '+parts[1]+' '+parts[2],
-      f:(L=>((x,y)=>L(x,y)-parts[2]===undefined?0:0))(compileSide(parts[0]))});
-    /* (se reemplaza abajo) */
-    preds[0]={op:parts[1], raw:parts[0]+' '+parts[1]+' '+parts[2],
-      f:mkDiff(compileSide(parts[0]), compileSide(parts[2]))};
+      f:mkDiff(compileSide(parts[0]), compileSide(parts[2]))});
   } else if(parts.length===5){
     const a=parts[0], o1=parts[1], f=parts[2], o2=parts[3], b=parts[4];
     if(!(((o1==='<'||o1==='<=')&&(o2==='<'||o2==='<=')) && a && f && b))
@@ -1495,11 +1463,12 @@ function plotRegion(preds){
     if(!mem[i]) continue;
     const edge=(ix>0&&!mem[i-1])||(ix<nx-1&&!mem[i+1])||(iy>0&&!mem[i-nx])||(iy<ny-1&&!mem[i+nx]);
     if(!edge) continue;
-    if(open && ((ix+iy)&1)) continue; /* frontera punteada si es abierto */
+    if(open && ((ix+iy)&1)) continue;
     ctx.fillRect(ix*step, iy*step, step, step);
   }
-  drawAxes(ctx,w,h,s,RANGE);
-  const r2=Math.round(simRange*10)/10; $('#graphCap').textContent='Ventana [−'+r2+', '+r2+'] × [−'+r2+', '+r2+']. Frontera punteada = excluida (abierto); continua = incluida (cerrado). Zoom: '+Math.round(15/simRange*10)/10+'×';
+  drawAxes(ctx,w,h,s,simRange);   /* P3: era RANGE */
+  const r2=Math.round(simRange*10)/10;
+  $('#graphCap').textContent='Ventana [−'+r2+', '+r2+'] × [−'+r2+', '+r2+']. Frontera punteada = excluida (abierto); continua = incluida (cerrado). Zoom: '+Math.round(15/simRange*10)/10+'×';
 }
 function runRegion(){
   const out=$('#regionResult');
@@ -1538,7 +1507,7 @@ function renderSim(){
   else{
     const cv=$('#simCanvas'); if(!cv || cv.offsetParent===null) return;
     const {ctx,w,h}=setupCanvas(cv);
-    drawGrid(ctx,w,h,Math.min(w,h)/(2*RANGE),RANGE);
+    drawGrid(ctx,w,h,Math.min(w,h)/(2*simRange),simRange);   /* P3: era RANGE */
   }
 }
  $('#vecOp').addEventListener('change', syncVecForm);
@@ -1550,7 +1519,7 @@ function renderSim(){
 });
 
 /* ============================================================
-   QUIZ (corregido: String.raw preserva los backslashes de LaTeX)
+   QUIZ (String.raw preserva los backslashes de LaTeX)
 ============================================================ */
 const QUIZ=[
  {q:String.raw`¿Qué es \(\mathbb{R}^n\)?`,
@@ -1657,16 +1626,16 @@ const redTimers={};
 const MANUAL=[
   {code:'\\( … \\)', help:'Fórmula en línea', tex:'\\mathbf{x}\\in\\mathbb{R}^2', snip:String.raw`\(|\)`},
   {code:'x^2   x_i', help:'Potencias e índices', tex:'x^{2}\\;\\;x_{i}', snip:String.raw`x^{|}`},
-  {code:'\\frac{a}{b}', help:'Fracciones', tex:'\\frac{1}{2}', snip:String.raw`\frac{|}{}`},
-  {code:'\\sqrt{x}', help:'Raíces', tex:'\\sqrt{x^2+y^2}', snip:String.raw`\sqrt{|}`},
-  {code:'\\mathbf{x}', help:'Vectores en negrita', tex:'\\mathbf{u}\\cdot\\mathbf{v}', snip:String.raw`\mathbf{|}`},
-  {code:'\\mathbb{R}^n', help:'Espacio euclídeo', tex:'\\mathbb{R}^{2}', snip:String.raw`\mathbb{R}^{|}`},
-  {code:'\\|\\mathbf{x}\\|', help:'Norma', tex:'\\|\\mathbf{u}\\|', snip:String.raw`\|\mathbf{|}\|`},
-  {code:'\\subset \\subseteq', help:'Subconjuntos', tex:'A \\subset \\mathbb{R}^2', snip:String.raw`\subset`},
-  {code:'\\in', help:'Pertenece a', tex:'\\mathbf{x}\\in A', snip:String.raw`\in`},
-  {code:'\\forall \\exists', help:'Cuantificadores', tex:'\\forall x>0', snip:String.raw`\forall`},
-  {code:'\\text{…}', help:'Texto en fórmula', tex:'\\text{abierto}', snip:String.raw`\text{|}`},
-  {code:'\\boxed{…}', help:'Respuesta final', tex:'\\boxed{5}', snip:String.raw`\boxed{|}`}
+  {code:'\frac{a}{b}', help:'Fracciones', tex:'\frac{1}{2}', snip:String.raw`\frac{|}{}`},
+  {code:'\sqrt{x}', help:'Raíces', tex:'\sqrt{x^2+y^2}', snip:String.raw`\sqrt{|}`},
+  {code:'\mathbf{x}', help:'Vectores en negrita', tex:'\mathbf{u}\cdot\mathbf{v}', snip:String.raw`\mathbf{|}`},
+  {code:'\mathbb{R}^n', help:'Espacio euclídeo', tex:'\mathbb{R}^{2}', snip:String.raw`\mathbb{R}^{|}`},
+  {code:'\|\mathbf{x}\|', help:'Norma', tex:'\|\mathbf{u}\|', snip:String.raw`\|\mathbf{|}\|`},
+  {code:'\subset \subseteq', help:'Subconjuntos', tex:'A \subset \mathbb{R}^2', snip:String.raw`\subset`},
+  {code:'\in', help:'Pertenece a', tex:'\mathbf{x}\in A', snip:String.raw`\in`},
+  {code:'\forall \exists', help:'Cuantificadores', tex:'\forall x>0', snip:String.raw`\forall`},
+  {code:'\text{…}', help:'Texto en fórmula', tex:'\text{abierto}', snip:String.raw`\text{|}`},
+  {code:'\boxed{…}', help:'Respuesta final', tex:'\boxed{5}', snip:String.raw`\boxed{|}`}
 ];
 function buildEditors(){
   $$('.ed-box').forEach(box=>{
@@ -1882,7 +1851,7 @@ function setFormMode(edit){
   if(!b.classList.contains('confirm')){
     b.classList.add('confirm'); b.innerHTML='<i data-lucide="alert-triangle"></i><span>¿Borrar todo?</span>'; refreshIcons();
     setTimeout(()=>{ if(b.isConnected){ b.classList.remove('confirm');
-      b.innerHTML='<i data-lucide="trash-2"></i><span>Borrar registro</span>'; refreshIcons(); } },3000);
+      b.innerHTML='<i data-lucide="trash-2"></i><span>Borrar registro y avance</span>'; refreshIcons(); } },3000);
     return;
   }
   localStorage.removeItem(LS_EST); localStorage.removeItem(LS_ACT);
@@ -1902,30 +1871,6 @@ function setFormMode(edit){
   }).catch(()=>toast('No se pudo generar la imagen.','err'));
 });
 
-/* ============================================================
-   ARRANQUE
-============================================================ */
-window.addEventListener('resize', ()=>{
-  const v=document.getElementById('v-simulador');
-  if(v && !v.hidden) requestAnimationFrame(renderSim);
-  requestAnimationFrame(drawHero);
-});
-function init(){
-  refreshIcons();
-  buildEditors();
-  initRedacs();
-  renderTaskList();
-  syncEjChecks();
-  renderBoleta();
-  syncVecForm();
-  syncRegionForm();
-  renderQuiz();
-  drawHero();
-  if(typeof renderMathInElement==='function'){
-    renderMathInElement(document.body,{delimiters:[
-      {left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});
-  }
-}
 /* ============================================================
    ZOOM — Simulador
 ============================================================ */
@@ -1963,10 +1908,36 @@ function initZoom(){
   updateZoomIndicator();
 }
 
+/* ============================================================
+   ARRANQUE
+============================================================ */
+window.addEventListener('resize', ()=>{
+  const v=document.getElementById('v-simulador');
+  if(v && !v.hidden) requestAnimationFrame(renderSim);
+  requestAnimationFrame(drawHero);
+});
+function init(){
+  refreshIcons();
+  buildEditors();
+  initRedacs();
+  renderTaskList();
+  syncEjChecks();
+  renderBoleta();
+  syncVecForm();
+  syncRegionForm();
+  renderQuiz();
+  drawHero();
+  if(typeof renderMathInElement==='function'){
+    renderMathInElement(document.body,{delimiters:[
+      {left:'$$',right:'$$',display:true},{left:'\\(',right:'\\)',display:false}],throwOnError:false});
+  }
+}
+
 init();
 initHeroDrag();
 initZoom();
-
 </script>
 </body>
 </html>
+
+   
