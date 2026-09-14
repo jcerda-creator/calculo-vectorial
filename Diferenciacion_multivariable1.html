@@ -78,19 +78,18 @@ header.topbar{
   gap:16px;
 }
 .topbar-logo{
-  height:52px;
+  height:54px;
   width:auto;
   object-fit:contain;
   display:block;
-  background:#ffffff;
-  border-radius:8px;
-  padding:4px 8px;
-  box-shadow:0 2px 8px rgba(0,0,0,.25);
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)) brightness(1.05);
+  transition:transform .18s ease;
+}
+.topbar-logo:hover{
+  transform:scale(1.04);
 }
 @media (max-width:640px){
-  .topbar-logo{height:38px;padding:3px 6px;}
-  .topbar-right{gap:10px;}
-  .topbar-side{font-size:10px;}
+  .topbar-logo{height:38px;}
 }
 /* ====== FIN LOGO ====== */
 
