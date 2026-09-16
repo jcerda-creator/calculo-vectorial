@@ -946,7 +946,7 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
 
       <div class="panel">
         <div class="panel-head"><i data-lucide="box"></i>Visualización</div>
-        <div class="sim-3d-container" id="threeContainer" hidden></div>
+        <div class="sim-3d-container" id="threeContainer"></div>
         <div class="sim-2d-container" id="trayContainer" hidden><canvas id="trayCanvas"></canvas></div>
         <div class="sim-2d-container" id="divContainer" hidden><canvas id="divCanvas"></canvas></div>
         <div class="graph-cap" id="graphCap">Cargando motor 3D…</div>
@@ -1619,9 +1619,10 @@ function heroUpdate(){
 /* ---------- SIMULADOR 3D (módulo curvas) ---------- */
 let simGroup = null;
 const CVW = { showPoly:true, tFrac:0 };
+const SIMCUR = { tab:'curvas' };
 function initSim(){
-  sim = makeScene($('#threeContainer'), { cam:[5.6,4.2,6.2], target:[0,-0.2,0] });
-  simGroup = new THREE.Group();
+  if (!window.THREE) return;
+  sim = makeScene($('#threeContainer'), { cam:[5.6,4.2,6.2], target:[0,-0.2,0] });  simGroup = new THREE.Group();
   sim.scene.add(simGroup);
   rebuildSim();
 }
@@ -1883,7 +1884,6 @@ window.addEventListener('resize', () => { drawTray(); drawDiv(); });
   cap.textContent = CAPS[SIMCUR.tab];
   typeset(cap);
 }));
-const SIMCUR = { tab:'curvas' };
  $('#selCurva').addEventListener('change', rebuildSim);
  $('#tSlider').addEventListener('input', e => {
   CVW.tFrac = (+e.target.value)/1000;
