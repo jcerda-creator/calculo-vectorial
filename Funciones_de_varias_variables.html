@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El espacio euclídeo y funciones de varias variables · Cálculo Vectorial · UP</title>
+  <script>
+    MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$', '$$'], ['\\[', '\\]']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+  <style>
+    /* ============================================================
+       PALETA INSTITUCIONAL + VERDE METRÓPOLIS
+    ============================================================ */
+    :root {
+      --up-blue: #0A1C3A;
+      --up-gold: #C9A84C;
+      --up-gold-light: #E8D5A3;
+      --up-green: #007B5D;
+      --up-green-light: #D4EDDA;
+      --up-white: #FFFFFF;
+      --up-gray: #F5F5F5;
+      --up-gray-dark: #D0D0D0;
+      --up-text: #1E2A44;
+      --up-shadow: rgba(10, 28, 58, 0.15);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: var(--up-gray);
+      color: var(--up-text);
+      line-height: 1.65;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, rgba(10,28,58,.97) 0%, rgba(20,52,102,.97) 100%);
+      color: var(--up-white);
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 6px 20px var(--up-shadow);
+      border-bottom: 4px solid var(--up-gold);
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(10px);
+    }
+    .header-row {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: #fff;
+    }
+    .header-brand .brand-ico {
+      width: 34px;
+      height: 34px;
+      border: 1.5px solid var(--up-gold);
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      background: var(--up-gold);
+      color: var(--up-blue);
+      font-size: 17px;
+    }
+    .header-brand small {
+      display: block;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      font-weight: 600;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.6);
+    }
+    .topbar-logo {
+      height: 54px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,.55)) brightness(1.05);
+      transition: transform .18s ease;
+    }
+    .topbar-logo:hover { transform: scale(1.04); }
+    @media (max-width: 640px) {
+      .topbar-logo { height: 38px; }
+    }
+
+    /* ===== TABS ===== */
+    nav.tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      background: var(--up-blue);
+      padding: 0.5rem;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    nav.tabs button {
+      background: transparent;
+      color: #cbd5e1;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    nav.tabs button:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    nav.tabs button.active {
+      background: var(--up-gold);
+      color: var(--up-blue);
+    }
+
+    /* ===== MAIN ===== */
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    section {
+      display: none;
+      animation: fade 0.4s ease;
+    }
+    section.active { display: block; }
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    /* ===== CARDS ===== */
+    .card {
+      background: var(--up-white);
+      border-radius: 12px;
+      padding: 1.6rem 1.8rem;
+      margin-bottom: 1.2rem;
+      box-shadow: 0 4px 16px var(--up-shadow);
+      border-left: 6px solid var(--up-gold);
+    }
+    .card.accent { border-left-color: var(--up-blue); }
+    .card.warn { border-left-color: #b8860b; }
+    .card.success { border-left-color: var(--up-green); }
+    .card.green { border-left-color: var(--up-green); background: #f8fdfb; }
+
+    h2 { color: var(--up-blue); margin-top: 0; font-size: 1.6rem; }
+    h3 { color: var(--up-blue); margin-top: 1.2rem; }
+
+    .formula {
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      text-align: center;
+      border: 1px dashed var(--up-gold);
+      font-size: 1.1rem;
+      overflow-x: auto;
+    }
+
+    .def-box {
+      background: #f0f2f5;
+      border-radius: 8px;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      border-left: 4px solid var(--up-blue);
+    }
+    .def-box .def-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--up-blue);
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .glossary-term {
+      color: var(--up-blue);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 1px dashed var(--up-gold);
+    }
+    .glossary-term:hover { background: var(--up-gold-light); }
+
+    /* ===== ACORDEÓN ===== */
+    .accordion-toggle {
+      background: var(--up-blue);
+      color: var(--up-white);
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.5rem 0;
+      transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 100%;
+      text-align: left;
+    }
+    .accordion-toggle:hover { background: #143466; }
+    .accordion-toggle .arrow { transition: transform 0.3s; margin-left: auto; }
+    .accordion-toggle.open .arrow { transform: rotate(180deg); }
+    .accordion-content { display: none; padding-top: 0.8rem; }
+    .accordion-content.open { display: block; animation: fade 0.3s ease; }
+
+    /* ===== INPUTS ===== */
+    input.fill {
+      border: none;
+      border-bottom: 2px solid var(--up-blue);
+      background: transparent;
+      font-family: monospace;
+      font-size: 1rem;
+      padding: 2px 6px;
+      width: 140px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    input.fill:focus { border-color: var(--up-gold); background: #fff; }
+    input.fill.correct {
+      background: var(--up-green-light);
+      border-color: var(--up-green);
+      color: #0b4a2a;
+    }
+    input.fill.wrong {
+      background: #f8d7da;
+      border-color: #b02a37;
+      color: #7a1a1a;
+    }
+
+    .btn {
+      background: var(--up-blue);
+      color: var(--up-white);
+      border: none;
+      padding: 0.6rem 1.3rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin: 0.3rem 0.2rem;
+      transition: background 0.2s, transform 0.1s;
+      box-shadow: 0 3px 8px rgba(10, 28, 58, 0.3);
+    }
+    .btn:hover { background: #143466; transform: translateY(-2px); }
+    .btn.secondary { background: var(--up-gray-dark); color: var(--up-text); box-shadow: none; }
+    .btn.success { background: var(--up-green); }
+    .btn.success:hover { background: #005f47; }
+    .btn.gold { background: var(--up-gold); color: var(--up-blue); }
+    .btn.gold:hover { background: #b8983f; }
+
+    .feedback {
+      margin-top: 0.8rem;
+      padding: 0.8rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      display: none;
+    }
+    .feedback.ok { background: var(--up-green-light); color: #0b4a2a; display: block; }
+    .feedback.err { background: #f8d7da; color: #7a1a1a; display: block; }
+
+    /* ===== OPCIONES ===== */
+    .options label {
+      display: block;
+      padding: 0.6rem 1rem;
+      margin: 0.3rem 0;
+      background: #f8fafc;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .options label:hover { background: #ecf3fa; border-color: var(--up-gold-light); }
+    .options input { margin-right: 0.6rem; }
+    .options label.selected { background: var(--up-gold-light); border-color: var(--up-gold); }
+    .options label.correct { background: var(--up-green-light); border-color: var(--up-green); }
+    .options label.wrong { background: #f8d7da; border-color: #b02a37; }
+
+    /* ===== TEXTAREA ===== */
+    textarea.essay {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.8rem;
+      border: 2px solid var(--up-gray-dark);
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    textarea.essay:focus { border-color: var(--up-gold); outline: none; }
+
+    /* ===== MODAL ===== */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 28, 58, 0.7);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: #fff;
+      border-radius: 14px;
+      padding: 1.8rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      border-top: 6px solid var(--up-gold);
+    }
+    .modal-close {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.8rem;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--up-blue);
+    }
+
+    /* ===== TABLAS ===== */
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+    th, td { padding: 0.6rem 0.8rem; border: 1px solid var(--up-gray-dark); text-align: left; }
+    th { background: var(--up-blue); color: var(--up-white); }
+    tr:nth-child(even) { background: #f8fafc; }
+
+    .progress {
+      height: 8px;
+      background: var(--up-gray-dark);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 1rem 0;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--up-green), var(--up-gold));
+      width: 0;
+      transition: width 0.4s;
+    }
+
+    .case-box {
+      background: #fef9e7;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid var(--up-gold);
+    }
+    .example-box {
+      background: #eaf2fa;
+      border-radius: 10px;
+      padding: 1.2rem;
+      margin: 1rem 0;
+      border-left: 6px solid var(--up-blue);
+    }
+
+    footer {
+      background: var(--up-blue);
+      color: var(--up-gold-light);
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border-top: 4px solid var(--up-gold);
+    }
+
+    @media (max-width: 640px) {
+      .card { padding: 1.2rem; }
+      nav.tabs button { font-size: 0.8rem; padding: 0.4rem 0.7rem; }
+    }
+
+    .dialog-btn {
+      background: none;
+      border: none;
+      color: var(--up-green);
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: underline dotted;
+      padding: 0 0.2rem;
+      font-size: 0.95rem;
+    }
+    .dialog-btn:hover { color: var(--up-blue); }
+
+    /* ============================================================
+       SIMULADOR — LÍMITES POR TRAYECTORIAS
+    ============================================================ */
+    .sim-wrap {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 960px) {
+      .sim-wrap { grid-template-columns: 1fr; }
+    }
+    .sim-panel {
+      background: var(--up-white);
+      border-radius: 12px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 4px 16px var(--up-shadow);
+      border-left: 6px solid var(--up-blue);
+    }
+    .sim-panel h3 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sim-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 0.6rem;
+    }
+    .sim-controls label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--up-blue);
+    }
+    .sim-controls select,
+    .sim-controls input[type=range] {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid var(--up-gray-dark);
+      border-radius: 6px;
+      font: inherit;
+      font-size: 0.9rem;
+      background: var(--up-white);
+    }
+    .sim-controls input[type=range] {
+      border: none;
+      padding: 0;
+      accent-color: var(--up-green);
+      cursor: pointer;
+    }
+    .sim-controls .row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+    .sim-controls .row button {
+      flex: 1;
+      font-size: 0.82rem;
+      padding: 0.5rem 0.7rem;
+    }
+    .traj-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .traj-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.7rem;
+      border: 1px solid var(--up-gray-dark);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      background: #f8fafc;
+      transition: all 0.2s;
+    }
+    .traj-item .traj-color {
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      flex: none;
+    }
+    .traj-item .traj-name { flex: 1; font-weight: 600; }
+    .traj-item .traj-val {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--up-blue);
+    }
+    .traj-item.traj-active { border-color: var(--up-green); background: var(--up-green-light); }
+
+    .sim-canvas-wrap {
+      position: relative;
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid var(--up-gray-dark);
+      overflow: hidden;
+    }
+    .sim-canvas-wrap canvas { display: block; width: 100%; height: auto; }
+
+    .sim-verdict {
+      margin-top: 1rem;
+      padding: 0.9rem 1.1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: center;
+      border: 2px solid;
+    }
+    .sim-verdict.ok {
+      background: var(--up-green-light);
+      border-color: var(--up-green);
+      color: #0b4a2a;
+    }
+    .sim-verdict.err {
+      background: #f8d7da;
+      border-color: #b02a37;
+      color: #7a1a1a;
+    }
+    .sim-verdict.pending {
+      background: #fef9e7;
+      border-color: var(--up-gold);
+      color: #6b5418;
+    }
+    .sim-formula {
+      margin-top: 0.8rem;
+      padding: 0.7rem 1rem;
+      background: var(--up-white);
+      border-radius: 8px;
+      border: 1px dashed var(--up-gold);
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .sim-legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.78rem;
+      color: #64748b;
+      margin-top: 0.6rem;
+    }
+    .sim-legend .dot {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    /* Panel de continuidad */
+    .cont-info {
+      background: #eaf2fa;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--up-blue);
+      margin-top: 0.8rem;
+    }
+    .cont-info .lbl {
+      font-weight: 700;
+      color: var(--up-blue);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* Badge de estado */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .badge.green { background: var(--up-green-light); color: #0b4a2a; }
+    .badge.red { background: #f8d7da; color: #7a1a1a; }
+    .badge.gold { background: var(--up-gold-light); color: #6b5418; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-row">
+      <div class="header-brand">
+        <span class="brand-ico">∑</span>
+        <span>Cálculo Vectorial <small>Aula interactiva — Dr. Adrián Cerda</small></span>
+      </div>
+      <img src="logo-UP.png" alt="Logo Universidad Panamericana" class="topbar-logo">
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="active" data-tab="intro">🎯 Introducción</button>
+    <button data-tab="teo">📐 Teoría</button>
+    <button data-tab="ejemplos">💡 Ejemplos</button>
+    <button data-tab="sim">🔬 Simulador</button>
+    <button data-tab="fill">✏️ Completa</button>
+    <button data-tab="mc">✔️ Quiz</button>
+    <button data-tab="essay">📝 Ensayo</button>
+    <button data-tab="glossary">📖 Glosario</button>
+  </nav>
+
+  <main>
+
+    <!-- ============ INTRO ============ -->
+    <section id="intro" class="active">
+      <div class="card">
+        <h2>1. ¿Por qué estudiar el espacio euclídeo y las funciones de varias variables?</h2>
+        <p>El cálculo de una variable estudia funciones $f:\mathbb{R}\to\mathbb{R}$, cuya gráfica vive en el plano. Pero la mayoría de los fenómenos reales dependen de <b>varias variables a la vez</b>: la temperatura de una placa depende de $(x,y)$, la presión de un gas de $(P,V,T)$, el campo eléctrico de $(x,y,z,t)$.</p>
+        <p>Antes de derivar o integrar estas funciones necesitamos tres pilares:</p>
+        <ol>
+          <li><b>El espacio donde viven:</b> $\mathbb{R}^n$ con su producto punto, norma y distancia.</li>
+          <li><b>La topología de ese espacio:</b> qué significa «cerca de un punto», abierto, cerrado, frontera, punto límite.</li>
+          <li><b>Las funciones entre esos espacios:</b> dominio, rango, límites, continuidad y diferenciabilidad.</li>
+        </ol>
+        <button class="dialog-btn" data-dialog="intro-detail">↪ Ver más sobre la motivación</button>
+        <div id="intro-detail" style="display:none; margin-top:0.8rem; padding:0.8rem; background:#f0f2f5; border-radius:6px;">
+          <p>Históricamente, el cálculo multivariable nace de la física matemática del siglo XVIII–XIX (Euler, Lagrange, Cauchy, Riemann). La formalización topológica (abiertos, cerrados, frontera) vino después, con Fréchet y Hausdorff, para poder hablar de límites y continuidad sin ambigüedad. Hoy estos conceptos son la base del análisis funcional, la geometría diferencial, la optimización y el aprendizaje automático.</p>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <h2>2. Los tres conceptos clave de esta unidad</h2>
+        <p>Todo el material gira alrededor de tres ideas que conviene tener claras desde el inicio:</p>
+        <div class="formula">$$\textbf{Espacio} \;\longrightarrow\; \textbf{Topología} \;\longrightarrow\; \textbf{Funciones}$$</div>
+        <p>El <span class="glossary-term" data-term="espacio-euclideo">espacio euclídeo</span> $\mathbb{R}^n$ nos da los puntos y las operaciones. La <span class="glossary-term" data-term="topologia">topología</span> (abiertos, cerrados, frontera) nos dice qué conjuntos se comportan bien para tomar límites. Las <span class="glossary-term" data-term="funcion-varias-variables">funciones de varias variables</span> son las protagonistas: escalares y vectoriales, con sus dominios y sus límites.</p>
+      </div>
+
+      <div class="card success">
+        <h3>💡 Idea central</h3>
+        <p>En una variable, «acercarse a un punto» solo puede hacerse por <b>dos lados</b>. En $\mathbb{R}^n$, con $n\ge 2$, hay <b>infinitas trayectorias</b> para acercarse. Esa es la razón profunda por la que el límite multivariable es más sutil: no basta con dos límites laterales, hay que garantizar que <em>todas</em> las trayectorias coincidan.</p>
+      </div>
+    </section>
+
+    <!-- ============ TEORÍA ============ -->
+    <section id="teo">
+      <div class="card">
+        <h2>3. El espacio euclídeo $\mathbb{R}^n$</h2>
+        <div class="def-box">
+          <span class="def-tag">Definición · Espacio euclídeo</span>
+          <p>El <b>espacio euclídeo $n$-dimensional</b> es el conjunto</p>
+          <div class="formula">$$\mathbb{R}^n = \{(x_1,x_2,\ldots,x_n) : x_i \in \mathbb{R}\}$$</div>
+          <p>dotado de las operaciones de <b>suma</b> y <b>producto por escalar</b> componentes a componentes, y del <b>producto punto</b>.</p>
+        </div>
+        <p>Cada elemento $\vec{x}=(x_1,\ldots,x_n)$ es un <b>punto</b> o <b>vector</b>. El origen es $\vec{0}=(0,\ldots,0)$. Los casos que más usaremos:</p>
+        <table>
+          <tr><th>$n$</th><th>Espacio</th><th>Interpretación</th></tr>
+          <tr><td>1</td><td>$\mathbb{R}$</td><td>Recta real</td></tr>
+          <tr><td>2</td><td>$\mathbb{R}^2$</td><td>Plano cartesiano $(x,y)$</td></tr>
+          <tr><td>3</td><td>$\mathbb{R}^3$</td><td>Espacio físico $(x,y,z)$</td></tr>
+          <tr><td>$n$</td><td>$\mathbb{R}^n$</td><td>Espacio abstracto de $n$ coordenadas</td></tr>
+        </table>
+      </div>
+
+      <div class="card accent">
+        <h2>4. Operaciones con vectores</h2>
+        <div class="def-box">
+          <span class="def-tag">Suma y producto por escalar</span>
+          <p>Dados $\vec{u}=(u_1,\ldots,u_n)$, $\vec{v}=(v_1,\ldots,v_n)$ y $\alpha\in\mathbb{R}$:</p>
+          <div class="formula">$$\vec{u}+\vec{v} = (u_1+v_1,\; \ldots,\; u_n+v_n), \qquad \alpha\vec{u} = (\alpha u_1,\; \ldots,\; \alpha u_n)$$</div>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Producto punto (interno)</span>
+          <p>El <b>producto punto</b> de $\vec{u}$ y $\vec{v}$ es el escalar</p>
+          <div class="formula">$$\vec{u}\cdot\vec{v} = \sum_{i=1}^{n} u_i v_i = u_1 v_1 + u_2 v_2 + \cdots + u_n v_n$$</div>
+          <p>Es <b>simétrico</b>: $\vec{u}\cdot\vec{v}=\vec{v}\cdot\vec{u}$; <b>bilineal</b>: $(\alpha\vec{u}+\beta\vec{w})\cdot\vec{v}=\alpha(\vec{u}\cdot\vec{v})+\beta(\vec{w}\cdot\vec{v})$; y <b>positivo definido</b>: $\vec{u}\cdot\vec{u}\ge 0$ con igualdad si y solo si $\vec{u}=\vec{0}$.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Norma (magnitud)</span>
+          <p>La <b>norma euclídea</b> de $\vec{u}$ es</p>
+          <div class="formula">$$\|\vec{u}\| = \sqrt{\vec{u}\cdot\vec{u}} = \sqrt{u_1^2 + u_2^2 + \cdots + u_n^2}$$</div>
+          <p>Propiedades: $\|\vec{u}\|\ge 0$; $\|\alpha\vec{u}\|=|\alpha|\,\|\vec{u}\|$; y la <b>desigualdad triangular</b> $\|\vec{u}+\vec{v}\|\le\|\vec{u}\|+\|\vec{v}\|$.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Distancia</span>
+          <p>La <b>distancia</b> entre $\vec{u}$ y $\vec{v}$ es la norma de su diferencia:</p>
+          <div class="formula">$$d(\vec{u},\vec{v}) = \|\vec{u}-\vec{v}\| = \sqrt{\sum_{i=1}^{n}(u_i-v_i)^2}$$</div>
+          <p>Es una <b>métrica</b>: $d(\vec{u},\vec{v})\ge 0$; $d(\vec{u},\vec{v})=0 \Leftrightarrow \vec{u}=\vec{v}$; $d(\vec{u},\vec{v})=d(\vec{v},\vec{u})$; y satisface la desigualdad triangular.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Ángulo entre vectores</span>
+          <p>El <b>ángulo</b> $\theta\in[0,\pi]$ entre $\vec{u}$ y $\vec{v}$ (no nulos) se define por</p>
+          <div class="formula">$$\cos\theta = \frac{\vec{u}\cdot\vec{v}}{\|\vec{u}\|\,\|\vec{v}\|}$$</div>
+          <p>Se dice que $\vec{u}$ y $\vec{v}$ son <b>ortogonales</b> si $\vec{u}\cdot\vec{v}=0$ (equivalentemente $\theta=\pi/2$). La <b>desigualdad de Cauchy–Schwarz</b> $|\vec{u}\cdot\vec{v}|\le\|\vec{u}\|\|\vec{v}\|$ garantiza que el cociente está en $[-1,1]$.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>5. Conjuntos abiertos, cerrados, frontera y puntos límite</h2>
+        <div class="def-box">
+          <span class="def-tag">Bola abierta</span>
+          <p>La <b>bola abierta</b> de centro $\vec{a}$ y radio $r>0$ es</p>
+          <div class="formula">$$B(\vec{a},r) = \{\vec{x}\in\mathbb{R}^n : \|\vec{x}-\vec{a}\| < r\}$$</div>
+          <p>Es el análogo $n$-dimensional de un intervalo abierto.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Punto interior, exterior y frontera</span>
+          <p>Sea $A\subseteq\mathbb{R}^n$ y $\vec{a}\in\mathbb{R}^n$.</p>
+          <ul>
+            <li>$\vec{a}$ es <b>punto interior</b> de $A$ si existe $r>0$ con $B(\vec{a},r)\subseteq A$.</li>
+            <li>$\vec{a}$ es <b>punto exterior</b> de $A$ si existe $r>0$ con $B(\vec{a},r)\cap A=\varnothing$.</li>
+            <li>$\vec{a}$ es <b>punto frontera</b> de $A$ si toda bola $B(\vec{a},r)$ contiene puntos de $A$ y puntos fuera de $A$.</li>
+          </ul>
+          <p>El <b>interior</b> $\text{int}(A)$ es el conjunto de puntos interiores; la <b>frontera</b> $\partial A$ es el conjunto de puntos frontera.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Conjunto abierto y cerrado</span>
+          <p>$A$ es <b>abierto</b> si todos sus puntos son interiores: $A=\text{int}(A)$. Equivalentemente, $A\cap\partial A=\varnothing$.</p>
+          <p>$A$ es <b>cerrado</b> si su complemento $\mathbb{R}^n\setminus A$ es abierto. Equivalentemente, $A$ contiene a toda su frontera: $\partial A\subseteq A$.</p>
+          <p><b>Ojo:</b> «abierto» y «cerrado» no son excluyentes. $\varnothing$ y $\mathbb{R}^n$ son ambos. Y un conjunto puede no ser ni abierto ni cerrado (p. ej. $[0,1)$ en $\mathbb{R}$).</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Punto límite (o de acumulación)</span>
+          <p>$\vec{a}$ es <b>punto límite</b> de $A$ si toda bola $B(\vec{a},r)$ contiene algún punto de $A$ distinto de $\vec{a}$:</p>
+          <div class="formula">$$\forall r>0,\; B(\vec{a},r)\cap(A\setminus\{\vec{a}\}) \neq \varnothing$$</div>
+          <p>Equivalentemente, existe una sucesión $(\vec{x}_k)\subseteq A\setminus\{\vec{a}\}$ con $\vec{x}_k\to\vec{a}$.</p>
+        </div>
+        <div class="example-box">
+          <h4>Ejemplos en $\mathbb{R}^2$</h4>
+          <ul>
+            <li>El disco abierto $D=\{(x,y):x^2+y^2<1\}$ es <b>abierto</b>. Su frontera es la circunferencia $x^2+y^2=1$.</li>
+            <li>El disco cerrado $\bar{D}=\{(x,y):x^2+y^2\le 1\}$ es <b>cerrado</b>. Su frontera es la misma circunferencia.</li>
+            <li>El conjunto $A=\{(x,y):x^2+y^2<1\}\cup\{(1,0)\}$ <b>no es ni abierto ni cerrado</b>: el punto $(1,0)$ está en $A$ pero no es interior; y su complemento no es abierto porque cualquier bola alrededor de $(1,0)$ contiene puntos de $A$.</li>
+            <li>Todo punto de $\partial D$ es punto límite de $D$; también lo es cualquier punto interior de $D$.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <h2>6. Funciones de varias variables: escalares y vectoriales</h2>
+        <div class="def-box">
+          <span class="def-tag">Función escalar</span>
+          <p>Una <b>función escalar</b> de $n$ variables es una aplicación</p>
+          <div class="formula">$$f: D\subseteq\mathbb{R}^n \longrightarrow \mathbb{R}, \qquad (x_1,\ldots,x_n)\mapsto f(x_1,\ldots,x_n)$$</div>
+          <p>Su <b>gráfica</b> vive en $\mathbb{R}^{n+1}$: para $n=2$, es una <b>superficie</b> $z=f(x,y)$; para $n=3$, es un <b>volumen</b> en $\mathbb{R}^4$ (difícil de visualizar directamente).</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Función vectorial</span>
+          <p>Una <b>función vectorial</b> es una aplicación</p>
+          <div class="formula">$$\vec{F}: D\subseteq\mathbb{R}^n \longrightarrow \mathbb{R}^m, \qquad \vec{F}(x_1,\ldots,x_n) = (f_1(\vec{x}),\ldots,f_m(\vec{x}))$$</div>
+          <p>donde cada $f_i$ es una función escalar, llamada <b>componente</b> $i$-ésima. Casos típicos:</p>
+          <ul>
+            <li><b>Curva</b> en el plano o el espacio: $\vec{r}:\mathbb{R}\to\mathbb{R}^2$ o $\mathbb{R}^3$.</li>
+            <li><b>Campo vectorial</b>: $\vec{F}:\mathbb{R}^2\to\mathbb{R}^2$ (p. ej. velocidad del viento en cada punto).</li>
+            <li><b>Transformación</b>: $\vec{T}:\mathbb{R}^n\to\mathbb{R}^m$ (p. ej. cambio de coordenadas).</li>
+          </ul>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Dominio de definición</span>
+          <p>El <b>dominio</b> de $f$ es el conjunto de puntos donde la fórmula tiene sentido:</p>
+          <div class="formula">$$\text{Dom}(f) = \{\vec{x}\in\mathbb{R}^n : f(\vec{x})\text{ está bien definida}\}$$</div>
+          <p>Las restricciones típicas son: <b>denominadores no nulos</b>, <b>raíces de índice par con radicando $\ge 0$</b>, <b>logaritmos con argumento $>0$</b>, y <b>arcosenos/arcocosenos con argumento en $[-1,1]$</b>.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>7. Intersección y unión de dominios</h2>
+        <p>Cuando una función combina varias operaciones, el dominio es la <b>intersección</b> de los dominios de cada pieza; si hay casos, se toma la <b>unión</b>.</p>
+        <div class="def-box">
+          <span class="def-tag">Reglas prácticas</span>
+          <ul>
+            <li>Para una <b>suma o producto</b> $f+g$ o $fg$: $\text{Dom}(f+g)=\text{Dom}(f)\cap\text{Dom}(g)$.</li>
+            <li>Para un <b>cociente</b> $f/g$: $\text{Dom}(f/g)=\text{Dom}(f)\cap\text{Dom}(g)\cap\{g\neq 0\}$.</li>
+            <li>Para una <b>raíz par</b> $\sqrt{f}$: $\text{Dom}=\text{Dom}(f)\cap\{f\ge 0\}$.</li>
+            <li>Para un <b>logaritmo</b> $\ln(f)$: $\text{Dom}=\text{Dom}(f)\cap\{f>0\}$.</li>
+            <li>Para un <b>valor absoluto</b> $|f|$: $\text{Dom}=\text{Dom}(f)$.</li>
+          </ul>
+        </div>
+        <div class="example-box">
+          <h4>Ejemplo · dominio de $f(x,y)=\dfrac{\sqrt{x+y}}{x-y}$</h4>
+          <p>Restricciones:</p>
+          <ul>
+            <li>Raíz: $x+y\ge 0$.</li>
+            <li>Denominador: $x-y\neq 0$, i.e., $x\neq y$.</li>
+          </ul>
+          <p>El dominio es la <b>intersección</b>:</p>
+          <div class="formula">$$\text{Dom}(f) = \{(x,y) : x+y\ge 0\} \cap \{(x,y) : x\neq y\}$$</div>
+          <p>Es una región del plano limitada por la recta $x+y=0$, con la recta $y=x$ <em>agujereada</em>.</p>
+        </div>
+        <div class="example-box">
+          <h4>Ejemplo · dominio de $g(x,y)=\ln(x^2+y^2-1)+\arcsin(x)$</h4>
+          <p>Restricciones:</p>
+          <ul>
+            <li>Logaritmo: $x^2+y^2-1>0 \Leftrightarrow x^2+y^2>1$ (exterior del disco unitario).</li>
+            <li>Arcoseno: $-1\le x\le 1$.</li>
+          </ul>
+          <p>El dominio es la <b>intersección</b> de ambas regiones: exterior del disco unitario <em>con</em> $x\in[-1,1]$. La frontera del disco ($x^2+y^2=1$) no está incluida (logaritmo estricto), y la región no es conexa: son dos franjas laterales.</p>
+        </div>
+      </div>
+
+      <div class="card warn">
+        <h2>8. Casos de indeterminación</h2>
+        <p>En varias variables, las indeterminaciones del tipo $\frac{0}{0}$, $\frac{\infty}{\infty}$, $0\cdot\infty$, $\infty-\infty$, $1^\infty$, $0^0$, $\infty^0$ aparecen con la misma frecuencia que en una variable, pero su resolución es más delicada porque <b>depende de la trayectoria</b>.</p>
+        <div class="def-box">
+          <span class="def-tag">Ejemplos típicos</span>
+          <ul>
+            <li>$\displaystyle\lim_{(x,y)\to(0,0)}\frac{x^2-y^2}{x^2+y^2}$ — indeterminado $\frac{0}{0}$, pero el valor depende de $\theta$.</li>
+            <li>$\displaystyle\lim_{(x,y)\to(0,0)}\frac{xy}{x^2+y^2}$ — indeterminado $\frac{0}{0}$, valor depende de la trayectoria.</li>
+            <li>$\displaystyle\lim_{(x,y)\to(0,0)}\frac{x^2 y}{x^4+y^2}$ — indeterminado $\frac{0}{0}$, límite no existe (por parábolas $y=mx^2$).</li>
+            <li>$\displaystyle\lim_{(x,y)\to(0,0)}\frac{\sin(x^2+y^2)}{x^2+y^2}$ — indeterminado $\frac{0}{0}$, límite $=1$ (por polares).</li>
+          </ul>
+        </div>
+        <p>La estrategia general: <b>probar trayectorias</b> que den valores distintos para <em>demostrar que el límite no existe</em>, o <b>usar coordenadas polares, acotaciones o el teorema del sándwich</b> para <em>demostrar que sí existe</em>.</p>
+      </div>
+
+      <div class="card success">
+        <h2>9. Concepto de límite multivariable</h2>
+        <div class="def-box">
+          <span class="def-tag">Definición formal (ε–δ)</span>
+          <p>Sea $f:D\subseteq\mathbb{R}^n\to\mathbb{R}^m$ y $\vec{a}$ un punto límite de $D$. Se dice que</p>
+          <div class="formula">$$\lim_{\vec{x}\to\vec{a}} f(\vec{x}) = \vec{L}$$</div>
+          <p>si para todo $\varepsilon>0$ existe $\delta>0$ tal que</p>
+          <div class="formula">$$0 < \|\vec{x}-\vec{a}\| < \delta \;\Rightarrow\; \|f(\vec{x})-\vec{L}\| < \varepsilon$$</div>
+        </div>
+        <p>Tres observaciones cruciales:</p>
+        <ol>
+          <li><b>El punto $\vec{a}$ no necesita estar en el dominio</b>, solo ser punto límite. De ahí la necesidad de dominios «agujereados» para estudiar límites.</li>
+          <li>La condición $0<\|\vec{x}-\vec{a}\|$ excluye $\vec{x}=\vec{a}$: el valor $f(\vec{a})$ es irrelevante.</li>
+          <li>Si el límite existe, es <b>único</b>, y no depende de la trayectoria de aproximación.</li>
+        </ol>
+        <div class="def-box">
+          <span class="def-tag">Límites por trayectorias</span>
+          <p>Si $f(\vec{x})\to L_1$ a lo largo de una trayectoria $\gamma_1$ y $f(\vec{x})\to L_2$ a lo largo de otra trayectoria $\gamma_2$, con $L_1\neq L_2$, entonces <b>el límite no existe</b>.</p>
+          <p>Recíprocamente, si <em>todas</em> las trayectorias dan el mismo valor $L$, no basta para concluir que el límite existe (podría haber trayectorias patológicas). Para <b>probar</b> que existe hay que usar ε–δ, polares o sándwich.</p>
+        </div>
+      </div>
+
+      <div class="card accent">
+        <h2>10. Continuidad y diferenciabilidad multivariable</h2>
+        <div class="def-box">
+          <span class="def-tag">Continuidad</span>
+          <p>$f$ es <b>continua</b> en $\vec{a}\in\text{Dom}(f)$ si</p>
+          <div class="formula">$$\lim_{\vec{x}\to\vec{a}} f(\vec{x}) = f(\vec{a})$$</div>
+          <p>Es decir: (i) el límite existe, (ii) es finito, (iii) coincide con el valor de la función. Si falla cualquiera de las tres, $f$ es discontinua en $\vec{a}$.</p>
+          <p>Tipos de discontinuidad: <b>evitable</b> (el límite existe pero no coincide con $f(\vec{a})$, o $f(\vec{a})$ no está definida); <b>de salto</b> (límites laterales distintos, solo en $n=1$); <b>esencial</b> (el límite no existe).</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Diferenciabilidad</span>
+          <p>$f:D\subseteq\mathbb{R}^n\to\mathbb{R}^m$ es <b>diferenciable</b> en $\vec{a}\in\text{int}(D)$ si existe una transformación lineal $Df(\vec{a}):\mathbb{R}^n\to\mathbb{R}^m$ tal que</p>
+          <div class="formula">$$\lim_{\vec{h}\to\vec{0}} \frac{\|f(\vec{a}+\vec{h}) - f(\vec{a}) - Df(\vec{a})\vec{h}\|}{\|\vec{h}\|} = 0$$</div>
+          <p>La matriz asociada a $Df(\vec{a})$ es la <b>matriz jacobiana</b> de $f$ en $\vec{a}$.</p>
+        </div>
+        <div class="card warn" style="margin-top:1rem">
+          <h3>⚠️ Necesidad de dominios abiertos para la diferenciabilidad</h3>
+          <p>La definición de diferenciabilidad requiere que $\vec{a}$ sea <b>punto interior</b> del dominio, porque necesitamos que $\vec{a}+\vec{h}$ esté en el dominio para <em>todos</em> los $\vec{h}$ pequeños. Si $\vec{a}$ está en la frontera (p. ej. un extremo de un intervalo), solo podemos aproximarnos por un lado y la linealidad no puede definirse globalmente.</p>
+          <p>Por eso en cálculo de una variable se pide que $f$ esté definida en un <b>intervalo abierto</b> alrededor del punto; y en varias variables, en una <b>bola abierta</b>.</p>
+        </div>
+        <div class="card warn">
+          <h3>⚠️ Necesidad de dominios agujereados para los límites</h3>
+          <p>La definición de límite requiere $0<\|\vec{x}-\vec{a}\|$, es decir, excluye el punto $\vec{a}$. Si $\vec{a}$ no fuera punto límite del dominio (por ejemplo, si el dominio es $\{\vec{a}\}$), no habría puntos desde los cuales aproximarse. Por eso se exige que $\vec{a}$ sea punto límite del dominio, y se trabaja con el dominio «agujereado» $D\setminus\{\vec{a}\}$.</p>
+          <p>Este detalle es clave: <b>el límite se estudia en el dominio menos el punto</b>.</p>
+        </div>
+        <div class="def-box">
+          <span class="def-tag">Relación entre continuidad y diferenciabilidad</span>
+          <p>Las implicaciones son:</p>
+          <div class="formula">$$\text{Diferenciable en }\vec{a} \;\Longrightarrow\; \text{Continua en }\vec{a}$$</div>
+          <p>El recíproco es <b>falso</b>: una función puede ser continua pero no diferenciable (p. ej. $f(x,y)=|x|$ en $(0,0)$). Y la existencia de derivadas parciales <b>no implica</b> diferenciabilidad; se necesita la continuidad de las parciales (teorema de la condición suficiente).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ EJEMPLOS ============ -->
+    <section id="ejemplos">
+      <div class="card">
+        <h2>11. Ejemplos resueltos paso a paso</h2>
+        <p>Haz clic en cada ejemplo para desplegar el desarrollo completo.</p>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle open" data-target="ej1">▸ Ejemplo 1 · Norma, distancia y ángulo</button>
+        <div class="accordion-content open" id="ej1">
+          <p><b>Enunciado.</b> Dados $\vec{u}=(1,2,2)$ y $\vec{v}=(3,0,4)$, calcula $\|\vec{u}\|$, $\|\vec{v}\|$, $d(\vec{u},\vec{v})$ y el ángulo entre ellos.</p>
+          <p><b>Solución.</b></p>
+          <p>Normas:</p>
+          <div class="formula">$$\|\vec{u}\| = \sqrt{1^2+2^2+2^2} = \sqrt{9} = 3, \qquad \|\vec{v}\| = \sqrt{3^2+0^2+4^2} = \sqrt{25} = 5$$</div>
+          <p>Distancia:</p>
+          <div class="formula">$$d(\vec{u},\vec{v}) = \|\vec{u}-\vec{v}\| = \|(-2,2,-2)\| = \sqrt{4+4+4} = 2\sqrt{3}$$</div>
+          <p>Producto punto:</p>
+          <div class="formula">$$\vec{u}\cdot\vec{v} = 1\cdot 3 + 2\cdot 0 + 2\cdot 4 = 3+0+8 = 11$$</div>
+          <p>Ángulo:</p>
+          <div class="formula">$$\cos\theta = \frac{11}{3\cdot 5} = \frac{11}{15} \approx 0.733 \;\Rightarrow\; \theta \approx 0.747\text{ rad} \approx 42.8^\circ$$</div>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej2">▸ Ejemplo 2 · Dominio de una función escalar</button>
+        <div class="accordion-content" id="ej2">
+          <p><b>Enunciado.</b> Halla y describe el dominio de $f(x,y)=\dfrac{\sqrt{9-x^2-y^2}}{\ln(x+y)}$.</p>
+          <p><b>Solución.</b> Tres restricciones:</p>
+          <ul>
+            <li>Raíz: $9-x^2-y^2\ge 0 \Leftrightarrow x^2+y^2\le 9$ (disco cerrado de radio 3).</li>
+            <li>Logaritmo: $x+y>0$ (semiespacio por encima de la recta $y=-x$).</li>
+            <li>Denominador: $\ln(x+y)\neq 0 \Leftrightarrow x+y\neq 1$ (recta agujereada).</li>
+          </ul>
+          <p>El dominio es la <b>intersección</b>:</p>
+          <div class="formula">$$\text{Dom}(f) = \{(x,y) : x^2+y^2\le 9,\; x+y>0,\; x+y\neq 1\}$$</div>
+          <p>Geométricamente: porción del disco de radio 3 en el semiplano $x+y>0$, con la recta $x+y=1$ eliminada. Es un conjunto <b>no abierto</b> (por la frontera del disco) y <b>no cerrado</b> (por las rectas abiertas).</p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej3">▸ Ejemplo 3 · Límite que SÍ existe (polares + sándwich)</button>
+        <div class="accordion-content" id="ej3">
+          <p><b>Enunciado.</b> Calcula $\displaystyle\lim_{(x,y)\to(0,0)} \frac{x^2 y^2}{x^2+y^2}$.</p>
+          <p><b>Solución.</b> Pasamos a polares: $x=r\cos\theta$, $y=r\sin\theta$, con $r\to 0^+$.</p>
+          <div class="formula">$$\frac{x^2 y^2}{x^2+y^2} = \frac{r^4\cos^2\theta\sin^2\theta}{r^2} = r^2\cos^2\theta\sin^2\theta$$</div>
+          <p>Acotamos: $|\cos^2\theta\sin^2\theta|\le 1$, luego</p>
+          <div class="formula">$$0 \le \left|\frac{x^2 y^2}{x^2+y^2}\right| \le r^2 \xrightarrow{r\to 0} 0$$</div>
+          <p>Por el teorema del sándwich, el límite es <b>$0$</b>, independientemente de $\theta$. <span class="badge green">Límite existe</span></p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej4">▸ Ejemplo 4 · Límite que NO existe (trayectorias)</button>
+        <div class="accordion-content" id="ej4">
+          <p><b>Enunciado.</b> Estudia $\displaystyle\lim_{(x,y)\to(0,0)} \frac{xy}{x^2+y^2}$.</p>
+          <p><b>Solución.</b> Probamos trayectorias:</p>
+          <ul>
+            <li>Eje $x$: $y=0$, $f(x,0)=\dfrac{0}{x^2}=0 \Rightarrow$ límite $0$.</li>
+            <li>Eje $y$: $x=0$, $f(0,y)=\dfrac{0}{y^2}=0 \Rightarrow$ límite $0$.</li>
+            <li>Recta $y=x$: $f(x,x)=\dfrac{x^2}{2x^2}=\dfrac{1}{2} \Rightarrow$ límite $\dfrac{1}{2}$.</li>
+            <li>Recta $y=2x$: $f(x,2x)=\dfrac{2x^2}{5x^2}=\dfrac{2}{5} \Rightarrow$ límite $\dfrac{2}{5}$.</li>
+          </ul>
+          <p>Los valores dependen de la pendiente: a lo largo de $y=mx$,</p>
+          <div class="formula">$$f(x,mx) = \frac{mx^2}{x^2(1+m^2)} = \frac{m}{1+m^2}$$</div>
+          <p>que varía con $m$. Por lo tanto, <b>el límite no existe</b>. <span class="badge red">Límite no existe</span></p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej5">▸ Ejemplo 5 · Límite que NO existe (parábolas)</button>
+        <div class="accordion-content" id="ej5">
+          <p><b>Enunciado.</b> Estudia $\displaystyle\lim_{(x,y)\to(0,0)} \frac{x^2 y}{x^4+y^2}$.</p>
+          <p><b>Solución.</b> Probamos:</p>
+          <ul>
+            <li>Eje $x$ ($y=0$): $f=0 \Rightarrow$ límite $0$.</li>
+            <li>Recta $y=x$: $f(x,x)=\dfrac{x^3}{x^4+x^2}=\dfrac{x}{x^2+1}\to 0$.</li>
+            <li>Parábola $y=x^2$: $f(x,x^2)=\dfrac{x^4}{x^4+x^4}=\dfrac{1}{2}\to \dfrac{1}{2}$.</li>
+            <li>Parábola $y=2x^2$: $f(x,2x^2)=\dfrac{2x^4}{x^4+4x^4}=\dfrac{2}{5}\to \dfrac{2}{5}$.</li>
+          </ul>
+          <p>De nuevo el valor depende de la trayectoria. <b>El límite no existe</b>. <span class="badge red">Límite no existe</span></p>
+          <p>Este ejemplo es clásico: muestra que <em>no basta con probar rectas</em>, hay que probar curvas de orden superior.</p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej6">▸ Ejemplo 6 · Continuidad en un punto</button>
+        <div class="accordion-content" id="ej6">
+          <p><b>Enunciado.</b> Estudia la continuidad en $(0,0)$ de</p>
+          <div class="formula">$$f(x,y) = \begin{cases} \dfrac{x^2 y^2}{x^2+y^2} & (x,y)\neq(0,0) \\ 0 & (x,y)=(0,0)\end{cases}$$</div>
+          <p><b>Solución.</b> Por el Ejemplo 3, el límite es $0$. Además $f(0,0)=0$. Como</p>
+          <div class="formula">$$\lim_{(x,y)\to(0,0)} f(x,y) = 0 = f(0,0)$$</div>
+          <p>$f$ es <b>continua</b> en $(0,0)$. <span class="badge green">Continua</span></p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej7">▸ Ejemplo 7 · Discontinuidad inevitable</button>
+        <div class="accordion-content" id="ej7">
+          <p><b>Enunciado.</b> Estudia la continuidad en $(0,0)$ de</p>
+          <div class="formula">$$f(x,y) = \begin{cases} \dfrac{xy}{x^2+y^2} & (x,y)\neq(0,0) \\ 0 & (x,y)=(0,0)\end{cases}$$</div>
+          <p><b>Solución.</b> Por el Ejemplo 4, el límite no existe. Por tanto, no puede coincidir con $f(0,0)=0$. La discontinuidad es <b>esencial</b>: no es evitable porque el límite no existe. <span class="badge red">Discontinua</span></p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej8">▸ Ejemplo 8 · Función vectorial y su dominio</button>
+        <div class="accordion-content" id="ej8">
+          <p><b>Enunciado.</b> Halla el dominio de $\vec{F}(x,y,z) = \left(\sqrt{x^2+y^2-1},\; \ln(z),\; \frac{1}{x-y}\right)$.</p>
+          <p><b>Solución.</b> Cada componente impone restricciones:</p>
+          <ul>
+            <li>$f_1$: $x^2+y^2\ge 1$ (exterior del disco unitario, incluyendo la frontera).</li>
+            <li>$f_2$: $z>0$.</li>
+            <li>$f_3$: $x\neq y$.</li>
+          </ul>
+          <p>El dominio es la <b>intersección</b>:</p>
+          <div class="formula">$$\text{Dom}(\vec{F}) = \{(x,y,z) : x^2+y^2\ge 1,\; z>0,\; x\neq y\}$$</div>
+          <p>Es un conjunto en $\mathbb{R}^3$: cilindro exterior al de radio 1, por encima del plano $z=0$, con el plano $x=y$ eliminado.</p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej9">▸ Ejemplo 9 · Interior, frontera y clausura</button>
+        <div class="accordion-content" id="ej9">
+          <p><b>Enunciado.</b> Sea $A=\{(x,y)\in\mathbb{R}^2 : 1<x^2+y^2\le 4\}$. Describe $\text{int}(A)$, $\partial A$ y $\bar{A}$ (clausura).</p>
+          <p><b>Solución.</b></p>
+          <ul>
+            <li>$\text{int}(A) = \{(x,y) : 1<x^2+y^2<4\}$ — el anillo abierto.</li>
+            <li>$\partial A = \{(x,y) : x^2+y^2=1\}\cup\{(x,y) : x^2+y^2=4\}$ — las dos circunferencias.</li>
+            <li>$\bar{A} = \text{int}(A)\cup\partial A = \{(x,y) : 1\le x^2+y^2\le 4\}$ — el anillo cerrado.</li>
+          </ul>
+          <p>El conjunto $A$ <b>no es abierto</b> (contiene a la circunferencia exterior) ni <b>cerrado</b> (no contiene a la circunferencia interior).</p>
+        </div>
+      </div>
+
+      <div class="example-box">
+        <button class="accordion-toggle" data-target="ej10">▸ Ejemplo 10 · Diferencia entre continuidad y diferenciabilidad</button>
+        <div class="accordion-content" id="ej10">
+          <p><b>Enunciado.</b> Considera $f(x,y)=|x|$. ¿Es continua en $(0,0)$? ¿Es diferenciable en $(0,0)$?</p>
+          <p><b>Solución.</b></p>
+          <p><b>Continuidad:</b> $\displaystyle\lim_{(x,y)\to(0,0)}|x| = 0 = f(0,0)$. Sí es continua.</p>
+          <p><b>Diferenciabilidad:</b> Las derivadas parciales en $(0,0)$:</p>
+          <div class="formula">$$\frac{\partial f}{\partial x}(0,0) = \lim_{h\to 0}\frac{|h|-0}{h}$$</div>
+          <p>Este límite no existe (da $1$ por la derecha y $-1$ por la izquierda). Como las parciales no existen, $f$ no es diferenciable en $(0,0)$.</p>
+          <p>Conclusión: <b>continua pero no diferenciable</b>. <span class="badge gold">Continua, no diferenciable</span></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SIMULADOR ============ -->
+    <section id="sim">
+      <div class="card">
+        <h2>12. Simulador de límites por trayectorias</h2>
+        <p>Observa cómo una función $f(x,y)$ se aproxima a distintos valores según la trayectoria que sigas hacia el origen. Si todas las trayectorias coinciden, el límite existe; si difieren, el límite no existe. También puedes estudiar la <b>continuidad</b>: el límite existe <em>y</em> coincide con $f(0,0)$.</p>
+      </div>
+
+      <div class="sim-wrap">
+        <!-- Panel de control -->
+        <div class="sim-panel">
+          <h3>⚙️ Controles</h3>
+          <div class="sim-controls">
+            <div>
+              <label for="simFunc">Función $f(x,y)$</label>
+              <select id="simFunc">
+                <option value="xy" selected>f(x,y) = xy / (x²+y²) — NO existe</option>
+                <option value="x2y2">f(x,y) = x²y² / (x²+y²) — SÍ existe (0)</option>
+                <option value="parab">f(x,y) = x²y / (x⁴+y²) — NO existe</option>
+                <option value="sin">f(x,y) = sin(x²+y²) / (x²+y²) — SÍ existe (1)</option>
+                <option value="cont">f(x,y) = xy / √(x²+y²) — SÍ existe (0)</option>
+              </select>
+            </div>
+            <div>
+              <label for="simTraj">Trayectoria seleccionada</label>
+              <select id="simTraj">
+                <option value="x">Eje x (y = 0)</option>
+                <option value="y">Eje y (x = 0)</option>
+                <option value="yx">Recta y = x</option>
+                <option value="y2x">Recta y = 2x</option>
+                <option value="mx">Recta y = m·x (m ajustable)</option>
+                <option value="parab">Parábola y = x²</option>
+                <option value="parab2">Parábola y = 2x²</option>
+                <option value="polar">Trayectoria polar r → 0 con θ fijo</option>
+                <option value="custom">Personalizada: y = k·xⁿ</option>
+              </select>
+            </div>
+            <div id="simExtraControls">
+              <label for="simM">Parámetro m = <span id="simMval">1.00</span></label>
+              <input type="range" id="simM" min="-3" max="3" step="0.1" value="1">
+            </div>
+            <div class="row">
+              <button class="btn success" id="btnSimPlay">▶ Animar</button>
+              <button class="btn secondary" id="btnSimReset">↺ Reiniciar</button>
+            </div>
+          </div>
+
+          <div class="sim-formula" id="simFormula"></div>
+
+          <div class="sim-verdict pending" id="simVerdict">
+            Selecciona una trayectoria y presiona «Animar» para ver el límite a lo largo de ella.
+          </div>
+
+          <div class="traj-list" id="trajList"></div>
+
+          <div class="cont-info">
+            <span class="lbl">Continuidad en (0,0)</span>
+            <div id="contInfo" style="margin-top:0.3rem">—</div>
+          </div>
+
+          <div class="sim-legend">
+            <span><span class="dot" style="background:#C9A84C"></span>Superficie z = f(x,y)</span>
+            <span><span class="dot" style="background:#007B5D"></span>Trayectoria en el dominio</span>
+            <span><span class="dot" style="background:#0A1C3A"></span>Punto límite (origen)</span>
+          </div>
+        </div>
+
+        <!-- Panel de visualización -->
+        <div class="sim-panel" style="border-left-color:var(--up-green)">
+          <h3>📺 Visualización 3D</h3>
+          <div class="sim-canvas-wrap">
+            <canvas id="simCanvas" width="640" height="420"></canvas>
+          </div>
+          <div style="margin-top:0.8rem;font-size:0.85rem;color:#64748b">
+            <b>Interpretación:</b> la superficie es la gráfica de $f$. La curva verde es la imagen de la trayectoria sobre la superficie. El punto azul es el valor límite $L$ que se alcanzaría. Arrastra con el mouse para rotar la vista.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ COMPLETAR ============ -->
+    <section id="fill">
+      <div class="card">
+        <h2>13. Ejercicios de completar palabras clave</h2>
+        <p>Rellena cada espacio con el término correcto y pulsa <b>Verificar</b>.</p>
+
+        <div id="fill-container">
+          <div class="fill-item" data-answer="producto punto">
+            <p>1. La norma euclídea de un vector se define a partir del <input class="fill" type="text" placeholder="..." style="width:170px">.</p>
+          </div>
+          <div class="fill-item" data-answer="distancia">
+            <p>2. La <input class="fill" type="text" placeholder="..." style="width:130px"> entre dos vectores es la norma de su diferencia.</p>
+          </div>
+          <div class="fill-item" data-answer="ortogonales">
+            <p>3. Dos vectores son <input class="fill" type="text" placeholder="..." style="width:150px"> si su producto punto es cero.</p>
+          </div>
+          <div class="fill-item" data-answer="abierto">
+            <p>4. Un conjunto es <input class="fill" type="text" placeholder="..." style="width:130px"> si todos sus puntos son interiores.</p>
+          </div>
+          <div class="fill-item" data-answer="frontera">
+            <p>5. La <input class="fill" type="text" placeholder="..." style="width:130px"> de un conjunto son los puntos donde toda bola contiene puntos dentro y fuera del conjunto.</p>
+          </div>
+          <div class="fill-item" data-answer="punto límite">
+            <p>6. Un <input class="fill" type="text" placeholder="..." style="width:150px"> es un punto al que se puede aproximar con una sucesión de puntos del conjunto distintos de él.</p>
+          </div>
+          <div class="fill-item" data-answer="escalar">
+            <p>7. Una función $f:\mathbb{R}^n\to\mathbb{R}$ se llama función <input class="fill" type="text" placeholder="..." style="width:130px">.</p>
+          </div>
+          <div class="fill-item" data-answer="vectorial">
+            <p>8. Una función $\vec{F}:\mathbb{R}^n\to\mathbb{R}^m$ con $m\ge 2$ se llama función <input class="fill" type="text" placeholder="..." style="width:130px">.</p>
+          </div>
+          <div class="fill-item" data-answer="intersección">
+            <p>9. El dominio de una suma o producto de funciones es la <input class="fill" type="text" placeholder="..." style="width:160px"> de los dominios.</p>
+          </div>
+          <div class="fill-item" data-answer="trayectorias">
+            <p>10. Si dos <input class="fill" type="text" placeholder="..." style="width:140px"> dan límites distintos, el límite no existe.</p>
+          </div>
+          <div class="fill-item" data-answer="continua">
+            <p>11. $f$ es <input class="fill" type="text" placeholder="..." style="width:130px"> en $\vec{a}$ si $\lim_{\vec{x}\to\vec{a}} f(\vec{x}) = f(\vec{a})$.</p>
+          </div>
+          <div class="fill-item" data-answer="diferenciable">
+            <p>12. Si $f$ es <input class="fill" type="text" placeholder="..." style="width:150px"> en $\vec{a}$, entonces es continua en $\vec{a}$.</p>
+          </div>
+          <div class="fill-item" data-answer="interior">
+            <p>13. La diferenciabilidad requiere que $\vec{a}$ sea punto <input class="fill" type="text" placeholder="..." style="width:130px"> del dominio.</p>
+          </div>
+          <div class="fill-item" data-answer="agujereado">
+            <p>14. El límite se estudia en el dominio <input class="fill" type="text" placeholder="..." style="width:150px"> (sin el punto).</p>
+          </div>
+        </div>
+
+        <button class="btn" onclick="checkFill()">Verificar respuestas</button>
+        <button class="btn secondary" onclick="resetFill()">Reiniciar</button>
+        <div id="fill-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ QUIZ ============ -->
+    <section id="mc">
+      <div class="card">
+        <h2>14. Quiz de opción múltiple</h2>
+        <div class="progress"><div class="progress-bar" id="mc-progress"></div></div>
+        <div id="mc-container"></div>
+        <button class="btn" onclick="checkMC()">Calificar</button>
+        <button class="btn secondary" onclick="renderMC()">Reiniciar</button>
+        <div id="mc-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ ENSAYO ============ -->
+    <section id="essay">
+      <div class="card">
+        <h2>15. Ejercicios tipo ensayo</h2>
+        <p>Responde con tus propias palabras. Puedes usar notación matemática. Al finalizar puedes guardar tus respuestas.</p>
+
+        <h3>Pregunta 1</h3>
+        <p>Explica por qué en $\mathbb{R}^n$ con $n\ge 2$ el límite es más delicado que en $\mathbb{R}$. ¿Qué papel juegan las trayectorias?</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 2</h3>
+        <p>Da un ejemplo de un conjunto en $\mathbb{R}^2$ que no sea ni abierto ni cerrado, y justifica tu respuesta usando las definiciones de interior y frontera.</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 3</h3>
+        <p>¿Por qué la diferenciabilidad requiere que el punto sea interior al dominio, mientras que el límite solo requiere que sea punto límite? Explica la diferencia con un ejemplo.</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 4</h3>
+        <p>Estudia el límite $\displaystyle\lim_{(x,y)\to(0,0)} \frac{x^2 y}{x^4+y^2}$ probando al menos tres trayectorias distintas. ¿Qué concluyes?</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <h3>Pregunta 5</h3>
+        <p>Deduce el dominio de $f(x,y,z)=\sqrt{x^2+y^2-4}+\ln(z-x)$ y describe geométricamente la región.</p>
+        <textarea class="essay" placeholder="Escribe tu respuesta..."></textarea>
+
+        <button class="btn success" onclick="saveEssay()">💾 Guardar mis respuestas</button>
+        <div id="essay-feedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- ============ GLOSARIO ============ -->
+    <section id="glossary">
+      <div class="card">
+        <h2>16. Glosario de términos</h2>
+        <p>Haz clic en cualquier término para ver su definición ampliada.</p>
+        <div id="glossary-list"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">×</button>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Universidad Panamericana · Cálculo Vectorial · Unidad 1 · 2026</p>
+  </footer>
+
+  <script>
+    /* ===== NAVEGACIÓN ===== */
+    document.querySelectorAll('nav.tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('nav.tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+        if (btn.dataset.tab === 'sim') { initSim(); }
+      });
+    });
+
+    /* ===== ACORDEÓN ===== */
+    document.querySelectorAll('.accordion-toggle').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.dataset.target;
+        const content = document.getElementById(targetId);
+        if (content) {
+          content.classList.toggle('open');
+          this.classList.toggle('open');
+        }
+      });
+    });
+
+    /* ===== DIÁLOGOS ===== */
+    document.querySelectorAll('.dialog-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const targetId = this.dataset.dialog;
+        const detail = document.getElementById(targetId);
+        if (detail) {
+          if (detail.style.display === 'none' || detail.style.display === '') {
+            detail.style.display = 'block';
+            this.textContent = '↪ Ocultar detalle';
+          } else {
+            detail.style.display = 'none';
+            this.textContent = '↪ Ver más';
+          }
+        }
+      });
+    });
+
+    /* ===== GLOSARIO ===== */
+    const glossary = {
+      'espacio-euclideo': { t: 'Espacio euclídeo R^n', d: 'Conjunto de n-tuplas ordenadas de números reales, dotado del producto punto, la norma y la distancia euclídea. Es el escenario natural del cálculo multivariable.' },
+      'topologia': { t: 'Topología de R^n', d: 'Estudio de los conjuntos abiertos, cerrados, frontera, interior y puntos límite. Provee el lenguaje para definir límites y continuidad sin ambigüedad.' },
+      'funcion-varias-variables': { t: 'Función de varias variables', d: 'Aplicación f: D ⊆ R^n → R^m. Si m=1 es escalar; si m≥2 es vectorial. Su dominio es el conjunto de puntos donde la fórmula tiene sentido.' },
+      'producto-punto': { t: 'Producto punto', d: 'Operación entre vectores u·v = Σ u_i v_i. Es simétrico, bilineal y positivo definido. Con él se definen la norma, la distancia y el ángulo.' },
+      'norma': { t: 'Norma euclídea', d: '||u|| = √(u·u). Mide la longitud del vector. Cumple ||αu||=|α|·||u|| y la desigualdad triangular.' },
+      'bola-abierta': { t: 'Bola abierta', d: 'B(a,r) = {x : ||x-a|| < r}. Es el análogo n-dimensional del intervalo abierto. Base de la topología de R^n.' },
+      'abierto': { t: 'Conjunto abierto', d: 'A es abierto si para cada punto suyo existe una bola contenida en A. Equivalentemente, A ∩ ∂A = ∅.' },
+      'cerrado': { t: 'Conjunto cerrado', d: 'A es cerrado si su complemento es abierto. Equivalentemente, ∂A ⊆ A. No es lo contrario de abierto: un conjunto puede ser ambos o ninguno.' },
+      'frontera': { t: 'Frontera ∂A', d: 'Conjunto de puntos donde toda bola contiene puntos de A y puntos fuera de A. Es la "piel" del conjunto.' },
+      'punto-limite': { t: 'Punto límite', d: 'a es punto límite de A si toda bola B(a,r) contiene algún punto de A distinto de a. Es la condición que permite estudiar límites.' },
+      'limite': { t: 'Límite multivariable', d: 'lim_{x→a} f(x) = L si ∀ε>0 ∃δ>0: 0<||x-a||<δ ⇒ ||f(x)-L||<ε. No depende de la trayectoria.' },
+      'continuidad': { t: 'Continuidad', d: 'f es continua en a si lim_{x→a} f(x) = f(a). Requiere que el límite exista y coincida con el valor.' },
+      'diferenciabilidad': { t: 'Diferenciabilidad', d: 'f es diferenciable en a si existe una transformación lineal Df(a) que aproxima a f cerca de a. Requiere que a sea punto interior del dominio.' }
+    };
+
+    document.querySelectorAll('.glossary-term').forEach(el => {
+      el.addEventListener('click', () => {
+        const g = glossary[el.dataset.term];
+        if (!g) return;
+        document.getElementById('modal-body').innerHTML = `<h2>${g.t}</h2><p>${g.d}</p>`;
+        document.getElementById('modal').classList.add('show');
+        if (window.MathJax) MathJax.typesetPromise();
+      });
+    });
+
+    function closeModal() { document.getElementById('modal').classList.remove('show'); }
+    document.getElementById('modal').addEventListener('click', e => {
+      if (e.target.id === 'modal') closeModal();
+    });
+
+    const gl = document.getElementById('glossary-list');
+    Object.entries(glossary).forEach(([k, v]) => {
+      const d = document.createElement('div');
+      d.className = 'card accent';
+      d.style.cursor = 'pointer';
+      d.innerHTML = `<h3>${v.t}</h3><p>${v.d}</p>`;
+      d.addEventListener('click', () => {
+        document.getElementById('modal-body').innerHTML = `<h2>${v.t}</h2><p>${v.d}</p>`;
+        document.getElementById('modal').classList.add('show');
+        if (window.MathJax) MathJax.typesetPromise();
+      });
+      gl.appendChild(d);
+    });
+
+    /* ===== COMPLETAR ===== */
+    function normalize(s) {
+      return s.toLowerCase().trim()
+        .replace(/[áéíóú]/g, m => ({ á: 'a', é: 'e', í: 'i', ó: 'o', ú: 'u' }[m]))
+        .replace(/\s+/g, ' ');
+    }
+
+    function checkFill() {
+      let ok = 0, total = 0;
+      document.querySelectorAll('.fill-item').forEach(item => {
+        total++;
+        const input = item.querySelector('input');
+        const ans = normalize(item.dataset.answer);
+        const usr = normalize(input.value);
+        input.classList.remove('correct', 'wrong');
+        if (usr === ans) { input.classList.add('correct'); ok++; }
+        else { input.classList.add('wrong'); }
+      });
+      const fb = document.getElementById('fill-feedback');
+      fb.className = 'feedback ' + (ok === total ? 'ok' : 'err');
+      fb.textContent = `Obtuviste ${ok} de ${total} correctas.` + (ok === total ? ' ¡Excelente! 🎉' : ' Revisa las marcadas en rojo.');
+    }
+
+    function resetFill() {
+      document.querySelectorAll('#fill-container input').forEach(i => { i.value = ''; i.classList.remove('correct', 'wrong'); });
+      document.getElementById('fill-feedback').className = 'feedback';
+    }
+
+    /* ===== QUIZ ===== */
+    const mcQuestions = [
+      { q: '¿Cuál es el tamaño del producto punto de dos vectores en $\\mathbb{R}^n$?',
+        o: ['Un vector en $\\mathbb{R}^n$', 'Un escalar en $\\mathbb{R}$', 'Una matriz $n\\times n$', 'Un vector en $\\mathbb{R}^{2n}$'], c: 1 },
+      { q: 'Dos vectores son ortogonales si:',
+        o: ['Sus normas son iguales', 'Su producto punto es cero', 'Su suma es cero', 'Son paralelos'], c: 1 },
+      { q: 'Un conjunto $A$ es abierto si:',
+        o: ['Contiene a su frontera', 'Todos sus puntos son interiores', 'Es finito', 'Es convexo'], c: 1 },
+      { q: 'La frontera de un conjunto $A$ se define como:',
+        o: ['Los puntos interiores de $A$', 'Los puntos donde toda bola toca $A$ y su complemento', 'Los puntos aislados', 'El conjunto vacío'], c: 1 },
+      { q: 'El dominio de $f(x,y)=\\ln(x^2+y^2-1)$ es:',
+        o: ['El disco unitario', 'El exterior del disco unitario', 'La circunferencia unitaria', 'Todo $\\mathbb{R}^2$'], c: 1 },
+      { q: 'Para que exista $\\lim_{(x,y)\\to(0,0)} f(x,y)$, es necesario que:',
+        o: ['Todas las trayectorias den el mismo valor', 'Solo la trayectoria $y=0$ dé el valor correcto', 'La función esté definida en $(0,0)$', 'La función sea polinómica'], c: 0 },
+      { q: 'Si dos trayectorias dan límites distintos, entonces:',
+        o: ['El límite existe pero es doble', 'El límite no existe', 'La función es continua', 'Hay que probar más trayectorias'], c: 1 },
+      { q: 'La diferenciabilidad requiere que el punto sea:',
+        o: ['Punto frontera del dominio', 'Punto interior del dominio', 'Punto aislado', 'Cualquier punto del dominio'], c: 1 },
+      { q: 'Si $f$ es diferenciable en $\\vec{a}$, entonces:',
+        o: ['$f$ es continua en $\\vec{a}$', '$f$ es discontinua en $\\vec{a}$', '$f$ es constante', '$f$ tiene un máximo en $\\vec{a}$'], c: 0 },
+      { q: 'El recíproco de la pregunta anterior:',
+        o: ['Es verdadero', 'Es falso: continua no implica diferenciable', 'Solo vale en $\\mathbb{R}$', 'Nunca se cumple'], c: 1 }
+    ];
+
+    function renderMC() {
+      const c = document.getElementById('mc-container');
+      c.innerHTML = '';
+      mcQuestions.forEach((q, i) => {
+        const d = document.createElement('div');
+        d.style.marginBottom = '1.2rem';
+        d.innerHTML = `<p><b>${i + 1}.</b> ${q.q}</p><div class="options" data-correct="${q.c}">` +
+          q.o.map((op, j) => `<label><input type="radio" name="q${i}" value="${j}"> ${op}</label>`).join('') +
+          `</div><div class="fb-${i}"></div>`;
+        c.appendChild(d);
+      });
+      c.querySelectorAll('input[type=radio]').forEach(r => {
+        r.addEventListener('change', e => {
+          const opts = e.target.closest('.options');
+          opts.querySelectorAll('label').forEach(l => l.classList.remove('selected'));
+          e.target.closest('label').classList.add('selected');
+        });
+      });
+      document.getElementById('mc-feedback').className = 'feedback';
+      document.getElementById('mc-progress').style.width = '0%';
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    function checkMC() {
+      let ok = 0;
+      document.querySelectorAll('#mc-container .options').forEach((opts, i) => {
+        const correct = parseInt(opts.dataset.correct);
+        const sel = opts.querySelector('input:checked');
+        opts.querySelectorAll('label').forEach(l => l.classList.remove('correct', 'wrong'));
+        const fb = document.querySelector('.fb-' + i);
+        fb.innerHTML = '';
+        if (!sel) { fb.innerHTML = '<i style="color:#64748b">Sin responder</i>'; return; }
+        const v = parseInt(sel.value);
+        if (v === correct) {
+          sel.closest('label').classList.add('correct'); ok++;
+          fb.innerHTML = `<div class="feedback ok">✅ Correcto.</div>`;
+        } else {
+          sel.closest('label').classList.add('wrong');
+          opts.children[correct].classList.add('correct');
+          fb.innerHTML = `<div class="feedback err">❌ Incorrecto. La correcta está en verde.</div>`;
+        }
+      });
+      const total = mcQuestions.length;
+      const pct = Math.round(ok / total * 100);
+      document.getElementById('mc-progress').style.width = pct + '%';
+      const f = document.getElementById('mc-feedback');
+      f.className = 'feedback ' + (pct >= 70 ? 'ok' : 'err');
+      f.textContent = `Resultado: ${ok}/${total} (${pct}%).`;
+      if (window.MathJax) MathJax.typesetPromise();
+    }
+
+    /* ===== ENSAYO ===== */
+    function saveEssay() {
+      const areas = document.querySelectorAll('#essay textarea');
+      let txt = '=== Respuestas tipo ensayo — Unidad 1 ===\n\n';
+      areas.forEach((a, i) => { txt += `Pregunta ${i + 1}:\n${a.value}\n\n`; });
+      const blob = new Blob([txt], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'respuestas_unidad1.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+      const f = document.getElementById('essay-feedback');
+      f.className = 'feedback ok';
+      f.textContent = '✅ Respuestas guardadas.';
+    }
+
+    /* ============================================================
+       SIMULADOR 3D — LÍMITES POR TRAYECTORIAS
+    ============================================================ */
+    const SIM_FUNCS = {
+      xy: {
+        tex: 'f(x,y) = \\dfrac{xy}{x^2+y^2}',
+        f: (x,y) => (x*x+y*y < 1e-12) ? null : (x*y)/(x*x+y*y),
+        limitType: 'noexiste',
+        expected: null,
+        desc: 'Depende de la trayectoria: a lo largo de y=mx da m/(1+m²).'
+      },
+      x2y2: {
+        tex: 'f(x,y) = \\dfrac{x^2 y^2}{x^2+y^2}',
+        f: (x,y) => (x*x+y*y < 1e-12) ? null : (x*x*y*y)/(x*x+y*y),
+        limitType: 'existe',
+        expected: 0,
+        desc: 'En polares se reduce a r²cos²θsin²θ → 0. Límite = 0.'
+      },
+      parab: {
+        tex: 'f(x,y) = \\dfrac{x^2 y}{x^4+y^2}',
+        f: (x,y) => (Math.abs(x*x*x*x+y*y) < 1e-12) ? null : (x*x*y)/(x*x*x*x+y*y),
+        limitType: 'noexiste',
+        expected: null,
+        desc: 'Por la parábola y=x² da 1/2; por y=2x² da 2/5. No existe.'
+      },
+      sin: {
+        tex: 'f(x,y) = \\dfrac{\\sin(x^2+y^2)}{x^2+y^2}',
+        f: (x,y) => {
+          const r2 = x*x+y*y;
+          if (r2 < 1e-12) return 1;  // límite natural
+          return Math.sin(r2)/r2;
+        },
+        limitType: 'existe',
+        expected: 1,
+        desc: 'En polares es sin(r²)/r² → 1 cuando r→0. Límite = 1.'
+      },
+      cont: {
+        tex: 'f(x,y) = \\dfrac{xy}{\\sqrt{x^2+y^2}}',
+        f: (x,y) => {
+          const r = Math.sqrt(x*x+y*y);
+          if (r < 1e-12) return 0;
+          return (x*y)/r;
+        },
+        limitType: 'existe',
+        expected: 0,
+        desc: 'Acotado por r/2 → 0. Límite = 0.'
+      }
+    };
+
+    /* Trayectorias: cada una define puntos t ∈ [0,1] con t=0 en el punto final (origen) */
+    const SIM_TRAJS = {
+      x:       { name: 'Eje x (y=0)',              color: '#007B5D', eval: (t, m) => ({ x: t, y: 0 }),  param: 0 },
+      y:       { name: 'Eje y (x=0)',              color: '#0A1C3A', eval: (t, m) => ({ x: 0, y: t }),  param: 0 },
+      yx:      { name: 'Recta y = x',              color: '#C9A84C', eval: (t, m) => ({ x: t, y: t }),  param: 0 },
+      y2x:     { name: 'Recta y = 2x',             color: '#b8860b', eval: (t, m) => ({ x: t, y: 2*t }), param: 0 },
+      mx:      { name: 'Recta y = m·x',            color: '#143466', eval: (t, m) => ({ x: t, y: m*t }), param: 'm' },
+      parab:   { name: 'Parábola y = x²',          color: '#8e44ad', eval: (t, m) => ({ x: t, y: t*t }),  param: 0 },
+      parab2:  { name: 'Parábola y = 2x²',         color: '#c0392b', eval: (t, m) => ({ x: t, y: 2*t*t }), param: 0 },
+      polar:   { name: 'Polar r→0, θ fijo',        color: '#16a085', eval: (t, m) => ({ x: t*Math.cos(m), y: t*Math.sin(m) }), param: 'm' },
+      custom:  { name: 'Personalizada y = k·xⁿ',    color: '#d35400', eval: (t, m) => ({ x: t, y: m*t*t }), param: 'm' }
+    };
+
+    let SIM = {
+      funcKey: 'xy',
+      trajKey: 'yx',
+      m: 1,
+      t: 0,
+      playing: false,
+      timer: null,
+      results: {},   // resultados por trayectoria explorada
+      rotY: 0.6,
+      rotX: 0.35,
+      dragging: false,
+      lastX: 0,
+      lastY: 0,
+      initialized: false
+    };
+
+    function initSim() {
+      if (SIM.initialized) return;
+      SIM.initialized = true;
+      const canvas = document.getElementById('simCanvas');
+      // Controles
+      document.getElementById('simFunc').addEventListener('change', e => {
+        SIM.funcKey = e.target.value;
+        SIM.results = {};
+        SIM.t = 0;
+        updateSimFormula();
+        renderTrajList();
+        drawSim();
+        updateVerdict();
+      });
+      document.getElementById('simTraj').addEventListener('change', e => {
+        SIM.trajKey = e.target.value;
+        SIM.t = 0;
+        updateExtraControls();
+        drawSim();
+        updateVerdict();
+      });
+      document.getElementById('simM').addEventListener('input', e => {
+        SIM.m = parseFloat(e.target.value);
+        document.getElementById('simMval').textContent = SIM.m.toFixed(2);
+        drawSim();
+        updateVerdict();
+      });
+      document.getElementById('btnSimPlay').addEventListener('click', togglePlay);
+      document.getElementById('btnSimReset').addEventListener('click', () => {
+        SIM.t = 0;
+        SIM.playing = false;
+        if (SIM.timer) { clearInterval(SIM.timer); SIM.timer = null; }
+        document.getElementById('btnSimPlay').textContent = '▶ Animar';
+        drawSim();
+        updateVerdict();
+      });
+      // Rotación
+      canvas.addEventListener('mousedown', e => { SIM.dragging = true; SIM.lastX = e.clientX; SIM.lastY = e.clientY; });
+      window.addEventListener('mouseup', () => { SIM.dragging = false; });
+      window.addEventListener('mousemove', e => {
+        if (!SIM.dragging) return;
+        const dx = e.clientX - SIM.lastX;
+        const dy = e.clientY - SIM.lastY;
+        SIM.rotY += dx * 0.01;
+        SIM.rotX += dy * 0.01;
+        SIM.rotX = Math.max(-1.4, Math.min(1.4, SIM.rotX));
+        SIM.lastX = e.clientX;
+        SIM.lastY = e.clientY;
+        drawSim();
+      });
+      updateSimFormula();
+      updateExtraControls();
+      renderTrajList();
+      drawSim();
+      updateVerdict();
+    }
+
+    function updateSimFormula() {
+      const F = SIM_FUNCS[SIM.funcKey];
+      const el = document.getElementById('simFormula');
+      el.innerHTML = `$$${F.tex}$$`;
+      if (window.MathJax) MathJax.typesetPromise([el]);
+    }
+    function updateExtraControls() {
+      const t = SIM_TRAJS[SIM.trajKey];
+      const extra = document.getElementById('simExtraControls');
+      extra.style.display = t.param === 'm' ? 'block' : 'none';
+    }
+
+    function togglePlay() {
+      const btn = document.getElementById('btnSimPlay');
+      if (SIM.playing) {
+        SIM.playing = false;
+        if (SIM.timer) { clearInterval(SIM.timer); SIM.timer = null; }
+        btn.textContent = '▶ Animar';
+      } else {
+        SIM.playing = true;
+        SIM.t = 0;
+        btn.textContent = '⏸ Pausar';
+        SIM.timer = setInterval(() => {
+          SIM.t += 0.02;
+          if (SIM.t >= 1) {
+            SIM.t = 1;
+            SIM.playing = false;
+            clearInterval(SIM.timer); SIM.timer = null;
+            btn.textContent = '▶ Animar';
+            // Registrar resultado final
+            const val = evalTrajAtEnd();
+            if (val !== null) SIM.results[SIM.trajKey] = val;
+            renderTrajList();
+            updateVerdict();
+          }
+          drawSim();
+        }, 30);
+      }
+    }
+
+    function evalTrajAtEnd() {
+      const F = SIM_FUNCS[SIM.funcKey];
+      const traj = SIM_TRAJS[SIM.trajKey];
+      // Evaluamos en un t muy pequeño (0.001) para aproximar el límite
+      const pt = traj.eval(0.001, SIM.m);
+      const v = F.f(pt.x, pt.y);
+      return v;
+    }
+
+    function renderTrajList() {
+      const list = document.getElementById('trajList');
+      list.innerHTML = '';
+      const F = SIM_FUNCS[SIM.funcKey];
+      Object.entries(SIM.results).forEach(([key, val]) => {
+        const item = document.createElement('div');
+        item.className = 'traj-item' + (key === SIM.trajKey ? ' traj-active' : '');
+        const traj = SIM_TRAJS[key];
+        const valStr = val === null ? '—' : (isFinite(val) ? val.toFixed(4) : '∄');
+        item.innerHTML = `<span class="traj-color" style="background:${traj.color}"></span><span class="traj-name">${traj.name}</span><span class="traj-val">${valStr}</span>`;
+        list.appendChild(item);
+      });
+      if (Object.keys(SIM.results).length === 0) {
+        list.innerHTML = '<div style="color:#94a3b8;font-size:0.85rem;padding:0.4rem">Aún no has explorado ninguna trayectoria. Presiona «Animar».</div>';
+      }
+    }
+
+    function updateVerdict() {
+      const F = SIM_FUNCS[SIM.funcKey];
+      const v = document.getElementById('simVerdict');
+      const keys = Object.keys(SIM.results);
+      if (keys.length === 0) {
+        v.className = 'sim-verdict pending';
+        v.innerHTML = 'Selecciona una trayectoria y presiona «Animar» para ver el límite a lo largo de ella.';
+        updateContInfo();
+        return;
+      }
+      const vals = keys.map(k => SIM.results[k]).filter(x => x !== null && isFinite(x));
+      const rounded = vals.map(x => Math.round(x * 1e4) / 1e4);
+      const unique = [...new Set(rounded)];
+      if (unique.length <= 1 && keys.length >= 2) {
+        // Si todos coinciden, y el ejemplo es "existe"
+        if (F.limitType === 'existe') {
+          v.className = 'sim-verdict ok';
+          v.innerHTML = `✅ Todas las trayectorias exploradas dan el mismo valor (${unique[0]}), consistente con que el <b>límite existe</b> y vale ${F.expected}.`;
+        } else {
+          // No debería pasar si el ejemplo es "no existe", pero avisamos
+          v.className = 'sim-verdict pending';
+          v.innerHTML = `Todas las trayectorias exploradas coinciden en ${unique[0]}. Prueba otra trayectoria (p. ej. una parábola) para ver si el límite se rompe.`;
+        }
+      } else if (unique.length > 1) {
+        v.className = 'sim-verdict err';
+        v.innerHTML = `❌ Las trayectorias dan valores distintos: {${unique.join(', ')}}. El <b>límite no existe</b>.`;
+      } else {
+        v.className = 'sim-verdict pending';
+        v.innerHTML = 'Explora más trayectorias para decidir si el límite existe.';
+      }
+      updateContInfo();
+    }
+
+    function updateContInfo() {
+      const F = SIM_FUNCS[SIM.funcKey];
+      const el = document.getElementById('contInfo');
+      // Para el ejemplo "sin", f(0,0)=1; para "x2y2", f(0,0)=0 (si se define); para "cont", f(0,0)=0
+      let f00 = null;
+      if (SIM.funcKey === 'sin') f00 = 1;
+      else if (SIM.funcKey === 'x2y2' || SIM.funcKey === 'cont') f00 = 0;
+      if (F.limitType === 'existe' && f00 !== null) {
+        el.innerHTML = `<span class="badge green">Continua</span> El límite existe (${F.expected}) y coincide con f(0,0)=${f00}.`;
+      } else if (F.limitType === 'noexiste') {
+        el.innerHTML = `<span class="badge red">Discontinua</span> El límite no existe, por lo que no puede coincidir con f(0,0).`;
+      } else {
+        el.innerHTML = `El límite existe pero no se ha definido f(0,0).`;
+      }
+    }
+
+    /* ---------- Dibujo 3D ---------- */
+    function drawSim() {
+      const canvas = document.getElementById('simCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      // Fondo
+      ctx.fillStyle = '#f8fafc'; ctx.fillRect(0, 0, W, H);
+      // Ejes
+      const cx = W / 2, cy = H / 2 + 30;
+      const scale = Math.min(W, H) * 0.28;
+
+      // Proyección 3D simple
+      function proj(x, y, z) {
+        // Rotación alrededor de Y (rotY) y luego X (rotX)
+        const cosY = Math.cos(SIM.rotY), sinY = Math.sin(SIM.rotY);
+        const cosX = Math.cos(SIM.rotX), sinX = Math.sin(SIM.rotX);
+        // Y-rot
+        let x1 = x * cosY - z * sinY;
+        let z1 = x * sinY + z * cosY;
+        let y1 = y;
+        // X-rot
+        let y2 = y1 * cosX - z1 * sinX;
+        let z2 = y1 * sinX + z1 * cosX;
+        // Proyección perspectiva simple
+        const d = 4;
+        const f = d / (d + z2 + 2);
+        return {
+          x: cx + x1 * scale * f,
+          y: cy - y2 * scale * f,
+          depth: z2
+        };
+      }
+
+      // Rango de la superficie
+      const R = 1.2;
+      const F = SIM_FUNCS[SIM.funcKey];
+
+      // Dibujar la superficie como una malla de puntos
+      const N = 28;
+      const pts = [];
+      for (let i = 0; i <= N; i++) {
+        const row = [];
+        for (let j = 0; j <= N; j++) {
+          const x = -R + 2*R*i/N;
+          const y = -R + 2*R*j/N;
+          let z = F.f(x, y);
+          if (z === null || !isFinite(z)) z = 0;
+          // Suavizar valores extremos
+          z = Math.max(-1.5, Math.min(1.5, z));
+          row.push(proj(x, z, y));
+        }
+        pts.push(row);
+      }
+      // Pintar la superficie con colores según altura
+      for (let i = 0; i < N; i++) {
+        for (let j = 0; j < N; j++) {
+          const p1 = pts[i][j], p2 = pts[i+1][j], p3 = pts[i+1][j+1], p4 = pts[i][j+1];
+          const zAvg = (p1.depth + p2.depth + p3.depth + p4.depth) / 4;
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.lineTo(p3.x, p3.y);
+          ctx.lineTo(p4.x, p4.y);
+          ctx.closePath();
+          // Color según altura
+          const h = Math.max(0, Math.min(1, (zAvg + 1.5) / 3));
+          const r = Math.round(20 + 200 * h);
+          const g = Math.round(80 + 100 * h);
+          const b = Math.round(160 - 60 * h);
+          ctx.fillStyle = `rgba(${r},${g},${b},0.55)`;
+          ctx.fill();
+        }
+      }
+
+      // Ejes coordenados
+      ctx.strokeStyle = 'rgba(10,28,58,0.5)';
+      ctx.lineWidth = 1.2;
+      const O = proj(0, 0, 0);
+      const X = proj(R, 0, 0);
+      const Y = proj(0, 0, R);
+      const Z = proj(0, 1.5, 0);
+      ctx.beginPath(); ctx.moveTo(O.x, O.y); ctx.lineTo(X.x, X.y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(O.x, O.y); ctx.lineTo(Y.x, Y.y); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(O.x, O.y); ctx.lineTo(Z.x, Z.y); ctx.stroke();
+      // Etiquetas
+      ctx.fillStyle = '#0A1C3A'; ctx.font = 'bold 12px Segoe UI';
+      ctx.fillText('x', X.x + 4, X.y + 4);
+      ctx.fillText('y', Y.x + 4, Y.y + 4);
+      ctx.fillText('z', Z.x + 4, Z.y + 4);
+
+      // Trayectoria actual
+      const traj = SIM_TRAJS[SIM.trajKey];
+      const trajPts = [];
+      const steps = 80;
+      for (let k = 0; k <= steps; k++) {
+        const t = (k / steps) * SIM.t;
+        const pt = traj.eval(t, SIM.m);
+        let z = F.f(pt.x, pt.y);
+        if (z === null || !isFinite(z)) z = 0;
+        z = Math.max(-1.5, Math.min(1.5, z));
+        trajPts.push(proj(pt.x, z, pt.y));
+      }
+      ctx.strokeStyle = traj.color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      trajPts.forEach((p, i) => {
+        if (i === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.stroke();
+
+      // Punto actual sobre la trayectoria
+      if (SIM.t > 0) {
+        const pt = traj.eval(SIM.t, SIM.m);
+        let z = F.f(pt.x, pt.y);
+        if (z === null || !isFinite(z)) z = 0;
+        z = Math.max(-1.5, Math.min(1.5, z));
+        const p = proj(pt.x, z, pt.y);
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 7, 0, Math.PI * 2);
+        ctx.fillStyle = traj.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+      }
+
+      // Origen (punto límite)
+      const O2 = proj(0, 0, 0);
+      ctx.beginPath();
+      ctx.arc(O2.x, O2.y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#0A1C3A';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Indicador de t
+      ctx.fillStyle = 'rgba(10,28,58,0.8)';
+      ctx.font = 'bold 13px Segoe UI';
+      ctx.fillText(`t = ${SIM.t.toFixed(2)}  →  r = ${(SIM.t * 1.2).toFixed(2)}`, 12, 22);
+
+      // Valor actual
+      if (SIM.t > 0) {
+        const pt = traj.eval(SIM.t, SIM.m);
+        const z = F.f(pt.x, pt.y);
+        if (z !== null && isFinite(z)) {
+          ctx.fillStyle = traj.color;
+          ctx.fillText(`f(${pt.x.toFixed(2)}, ${pt.y.toFixed(2)}) = ${z.toFixed(4)}`, 12, 42);
+        }
+      }
+    }
+
+    /* Inicializar quiz y simulador al cargar */
+    renderMC();
+    // No inicializamos el simulador hasta que se abra la pestaña (ahorra recursos)
+    // Pero sí dejamos el canvas limpio
+    window.addEventListener('load', () => {
+      if (window.MathJax) MathJax.typesetPromise();
+    });
+  </script>
+</body>
+</html>
