@@ -70,6 +70,29 @@ header.topbar{
 .brand .brand-ico svg{width:17px;height:17px}
 .brand small{display:block;font-family:'Instrument Sans';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
 .topbar-side{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--terra-soft);text-align:right}
+
+/* ====== LOGO SUPERIOR DERECHO ====== */
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+.topbar-logo{
+  height:54px;
+  width:auto;
+  object-fit:contain;
+  display:block;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)) brightness(1.05);
+  transition:transform .18s ease;
+}
+.topbar-logo:hover{
+  transform:scale(1.04);
+}
+@media (max-width:640px){
+  .topbar-logo{height:38px;}
+}
+/* ====== FIN LOGO ====== */
+
 nav.tabs{display:flex;gap:6px;border-top:1px solid rgba(255,255,255,.18);padding:10px 0;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
 .nav-btn{
@@ -392,7 +415,9 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
       <span class="brand-ico"><i data-lucide="sigma"></i></span>
       <span>Cálculo Vectorial <small>Aula interactiva — Dr. Adrián Cerda</small></span>
     </div>
-    <div class="topbar-side">9 sep 2026</div>
+    <div class="topbar-right">
+      <img src="logo-UP.png" alt="Logo Universidad Panamericana" class="topbar-logo">
+    </div>
   </div>
   <div class="wrap">
     <nav class="tabs" id="mainNav">
@@ -405,7 +430,6 @@ footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38p
     </nav>
   </div>
 </header>
-
 <main>
 
 <!-- ==================== INICIO ==================== -->
