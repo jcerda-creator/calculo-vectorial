@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teoremas fundamentales del cálculo vectorial — Cálculo Vectorial · Unidad 6</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+<style>
+/* ============================================================
+   VARIABLES Y BASE — paleta institucional UP + verde Metrópolis
+============================================================ */
+:root{
+  --paper:#f5f5f5;
+  --card:#ffffff;
+  --ink:#0A1C3A;          /* azul marino */
+  --blue-light:#143466;
+  --pine:#007B5D;         /* verde Metrópolis */
+  --pine-soft:#005F47;
+  --pine-light:#D4EDDA;
+  --terra:#9a7d2e;        /* dorado oscuro (texto) */
+  --terra-soft:#E8D5A3;   /* dorado claro */
+  --gold:#C9A84C;         /* dorado pleno */
+  --err:#b02a37;
+  --err-bg:#f8d7da;
+  --line:rgba(10,28,58,.16);
+  --line-strong:rgba(10,28,58,.4);
+  --muted:rgba(30,42,68,.62);
+  --ok-bg:#D4EDDA;
+  --shadow:rgba(10,28,58,.15);
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:170px}
+[hidden]{display:none!important}
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--paper);
+  color:#1E2A44;
+  line-height:1.6;
+  background-image:radial-gradient(rgba(10,28,58,.07) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.wrap{max-width:1150px;margin:0 auto;padding:0 24px}
+h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--ink)}
+.overline{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.mono{font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--pine)}
+svg.lucide{width:16px;height:16px;stroke-width:2}
+
+/* ============================================================
+   HEADER / NAV
+============================================================ */
+header.topbar{
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(135deg,rgba(10,28,58,.97) 0%,rgba(20,52,102,.97) 100%);
+  backdrop-filter:blur(10px);
+  border-bottom:4px solid var(--gold);
+  box-shadow:0 6px 20px var(--shadow);
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;color:#fff}
+.brand .brand-ico{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:9px;display:grid;place-items:center;background:var(--gold);color:var(--ink)}
+.brand .brand-ico svg{width:17px;height:17px}
+.brand small{display:block;font-family:'Instrument Sans';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-logo{
+  height:54px;width:auto;object-fit:contain;display:block;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)) brightness(1.05);
+  transition:transform .18s ease;
+}
+.topbar-logo:hover{transform:scale(1.04)}
+@media (max-width:640px){ .topbar-logo{height:38px;} }
+
+nav.tabs{display:flex;gap:6px;border-top:1px solid rgba(255,255,255,.18);padding:10px 0;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  border:1px solid transparent;background:transparent;color:#cbd5e1;
+  font-weight:600;font-size:13.5px;padding:8px 14px;border-radius:999px;
+  transition:all .18s ease;
+}
+.nav-btn svg{width:15px;height:15px}
+.nav-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.active{background:var(--gold);color:var(--ink)}
+
+/* ============================================================
+   VISTAS
+============================================================ */
+.view{padding:0 0 80px}
+.view-head{border-bottom:2px solid var(--ink);padding:52px 0 26px;margin-bottom:36px}
+.view-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin:8px 0 10px}
+.view-head p.sub{max-width:680px;color:var(--muted)}
+
+/* ============================================================
+   BOTONES / FORMULARIOS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:#fff;
+  border:1px solid var(--ink);border-radius:10px;
+  padding:11px 18px;font-weight:600;font-size:14px;
+  transition:all .18s ease;box-shadow:0 3px 8px var(--shadow);
+}
+.btn:hover{background:var(--blue-light);border-color:var(--blue-light);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.ghost:hover{background:rgba(10,28,58,.06);transform:translateY(-1px)}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{
+  font:inherit;font-size:14px;color:#1E2A44;
+  background:var(--card);border:1px solid var(--line-strong);
+  border-radius:8px;padding:10px 12px;width:100%;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.field input[type=range]{border:none;background:transparent;padding:0;box-shadow:none;height:28px;accent-color:var(--pine);cursor:pointer}
+.hint{font-size:12px;color:var(--muted)}
+
+/* ============================================================
+   INICIO / HERO
+============================================================ */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:64px 0 56px}
+.hero h1{font-size:clamp(2.3rem,4.6vw,3.7rem);margin:14px 0 18px}
+.hero h1 em{font-style:italic;color:var(--terra)}
+.hero .lead{font-size:1.05rem;color:var(--muted);max-width:520px}
+.hero-actions{display:flex;gap:12px;margin:26px 0 30px;flex-wrap:wrap}
+.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line-strong);max-width:520px}
+.meta-grid>div{padding:12px 14px 12px 0;border-bottom:1px solid var(--line)}
+.meta-grid dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.meta-grid dd{font-weight:600;font-size:14.5px}
+.hero-fig{border:1.5px solid var(--ink);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:6px 6px 0 var(--shadow)}
+.hero-fig canvas{display:block;width:100%;height:320px}
+.hero-fig figcaption{padding:12px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.home-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:44px;border-top:1.5px solid var(--ink);padding-top:38px}
+.route-item{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-top:1px solid var(--line);padding:22px 4px;cursor:pointer;transition:background .15s}
+.route-item:first-child{border-top:none}
+.route-item:hover{background:rgba(10,28,58,.045)}
+.route-no{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:400;color:rgba(0,123,93,.28)}
+.route-item h3{font-size:1.2rem;margin-bottom:4px}
+.route-item p{font-size:13.5px;color:var(--muted)}
+.route-go{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--ink);transition:all .18s}
+.route-item:hover .route-go{background:var(--ink);color:#fff}
+.side-stats{display:flex;flex-direction:column;gap:12px}
+.stat{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);padding:14px 18px;box-shadow:0 2px 8px var(--shadow)}
+.stat .num{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:600;line-height:1;color:var(--ink)}
+.stat .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ============================================================
+   TEORÍA
+============================================================ */
+.theory{display:grid;grid-template-columns:250px 1fr;gap:52px;align-items:start}
+.toc{position:sticky;top:170px;border-left:1.5px solid var(--ink);display:flex;flex-direction:column}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 0 10px 16px}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);padding:9px 16px;font-size:13.5px;font-weight:500;border-left:3px solid transparent;margin-left:-1.5px;transition:all .15s}
+.toc a span{font-family:'Fraunces',serif;color:var(--terra);font-weight:600;min-width:30px}
+.toc a:hover{border-left-color:var(--pine);background:rgba(0,123,93,.06)}
+.sec{border-top:1px solid var(--line);padding:44px 0}
+.sec:first-child{border-top:none;padding-top:0}
+.sec-no{font-family:'Fraunces',serif;font-size:3rem;font-weight:400;color:rgba(0,123,93,.22);line-height:1}
+.sec h3{font-size:1.55rem;margin:6px 0 16px}
+.prose p{margin:0 0 14px;max-width:70ch}
+.prose ul,.prose ol{margin:0 0 14px 22px;max-width:70ch}
+.prose li{margin-bottom:6px}
+.def{background:rgba(0,123,93,.07);border:1px solid rgba(0,123,93,.28);border-radius:0 10px 10px 0;border-left:4px solid var(--pine);padding:18px 22px;margin:20px 0}
+.def .def-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--pine)}
+.def p{margin:6px 0 0}
+.ex{background:#fef9e7;border:1px solid rgba(201,168,76,.45);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:18px 22px;margin:20px 0}
+.ex .ex-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9a7d2e}
+.ex p{margin:6px 0 0}
+.formula-hero{display:flex;justify-content:center;padding:16px 0;font-size:1.15rem}
+.tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+.tbl th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line)}
+.tbl tbody tr:hover{background:rgba(10,28,58,.04)}
+.tbl td.center,.tbl th.center{text-align:center}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid}
+.tag.d{color:var(--pine);border-color:rgba(0,123,93,.45);background:var(--pine-light)}
+.tag.c{color:var(--terra);border-color:rgba(154,125,46,.45);background:var(--terra-soft)}
+
+/* ============================================================
+   APLICACIONES
+============================================================ */
+.app-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.app-card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:12px;box-shadow:0 4px 16px var(--shadow);padding:24px 26px}
+.app-card.green{border-left-color:var(--pine)}
+.app-card.blue{border-left-color:var(--ink)}
+.app-card h3{font-size:1.25rem;margin:12px 0 10px}
+.app-card p{font-size:14.5px;color:rgba(30,42,68,.85);margin-bottom:10px}
+.app-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pine);background:rgba(0,123,93,.1);padding:4px 10px;border-radius:999px}
+.app-card.blue .app-badge{color:var(--blue-light);background:#eaf2fa}
+.app-card.gold .app-badge{color:var(--terra);background:var(--terra-soft)}
+.formula-mini{background:#f0f2f5;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:12px 0;text-align:center;font-size:1.02rem;overflow-x:auto}
+.app-link{font-size:12px;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:10px;margin-top:8px}
+.app-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);padding:20px 24px;margin-top:22px;box-shadow:0 4px 16px var(--shadow)}
+.app-cta p{margin:0;color:var(--muted);max-width:64ch}
+
+/* ============================================================
+   SIMULADOR
+============================================================ */
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.panel-body{padding:20px 18px}
+.lab-grid{display:grid;grid-template-columns:430px 1fr;gap:24px;align-items:start}
+.sim-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap}
+.sim-tab{background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13px;color:var(--muted);transition:all .15s}
+.sim-tab:hover{border-color:var(--line-strong)}
+.sim-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-panel{display:none}
+.sim-panel.active{display:block}
+.sim-3d-container{width:100%;height:420px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);background:#f6f7f9;position:relative}
+.sim-3d-container canvas{display:block;width:100%!important;height:100%!important}
+.sim-2d-container{width:100%;height:420px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);background:#f6f7f9;position:relative}
+.sim-2d-container canvas{display:block;width:100%;height:100%;touch-action:none}
+.graph-cap{font-size:12.5px;color:var(--muted);padding:10px 16px 0}
+.sim-controls-3d{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.sim-controls-3d .field{margin-bottom:0}
+.sim-presets{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.sim-presets button{font-size:11px;padding:6px 12px}
+.legend-3d{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.legend-3d .dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.note{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line-strong);margin-top:18px;padding-top:12px}
+.info-box{background:#eaf2fa;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:14px;border-left:4px solid var(--ink)}
+.info-box .valor{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--pine);font-weight:600}
+.info-box .label{font-weight:600;color:var(--muted)}
+#equationDisplay{padding:10px 16px;background:#eaf2fa;border-top:1px solid var(--line);font-family:'Fraunces',serif;font-size:1.1rem;text-align:center;color:var(--ink);min-height:40px;overflow-x:auto}
+
+/* ============================================================
+   ACTIVIDADES
+============================================================ */
+.act-block{margin-bottom:52px}
+.act-block>h3{font-size:1.45rem;margin:8px 0 6px}
+.act-block>.act-desc{color:var(--muted);max-width:70ch;margin-bottom:20px}
+.rub-row{display:grid;grid-template-columns:280px 1fr 60px;gap:16px;align-items:center;border-top:1px solid var(--line);padding:14px 4px}
+.rub-row:last-child{border-bottom:1px solid var(--line)}
+.rub-row .rub-name{font-weight:600;font-size:14.5px}
+.rub-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+.rub-bar>div{height:100%;background:var(--pine)}
+.rub-pct{text-align:right;font-family:'Fraunces',serif;font-weight:600}
+details.sol{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px var(--shadow)}
+details.sol summary{list-style:none;display:flex;align-items:flex-start;gap:12px;padding:16px 18px;cursor:pointer;font-weight:600;transition:background .15s}
+details.sol summary::-webkit-details-marker{display:none}
+details.sol summary:hover{background:rgba(10,28,58,.04)}
+.sol-marker{flex:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;transition:transform .2s;margin-top:1px}
+details[open].sol .sol-marker{transform:rotate(45deg);background:var(--ink);color:#fff}
+.sol-body{border-top:1px dashed var(--line-strong);padding:16px 20px;font-size:14.5px}
+.sol-body p{margin-bottom:10px;max-width:75ch}
+.prob-tag{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:4px}
+.chk{display:flex;align-items:center;gap:11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--card);padding:10px 14px;margin-bottom:9px;cursor:pointer;transition:all .15s;font-size:14.5px}
+.chk:hover{border-color:var(--pine)}
+.chk input{width:16px;height:16px;accent-color:var(--pine)}
+.chk.done{background:var(--ok-bg);border-color:var(--pine)}
+
+/* ============================================================
+   EDITOR DE REDACCIÓN
+============================================================ */
+.ed-box{border:1.5px solid var(--ink);border-radius:10px;margin-top:18px;overflow:hidden;background:var(--card)}
+.ed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);background:#eaf2fa;flex-wrap:wrap}
+.ed-title{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--pine)}
+.ed-title svg{width:13px;height:13px}
+.ed-status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+.ed-status .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ed-status.saved{color:var(--pine);font-weight:600}
+.ed-status.saved .dot{background:#2f855a}
+.ed-grid{display:grid;grid-template-columns:1fr 330px}
+.ed-main{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ed-ta{width:100%;min-height:200px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.6;padding:12px 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:#1E2A44}
+.ed-ta:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.ed-preview-wrap{border:1px dashed var(--line-strong);border-radius:8px;overflow:hidden;background:var(--paper)}
+.ed-preview-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 12px;background:rgba(10,28,58,.04);border-bottom:1px dashed var(--line)}
+.ed-preview{padding:12px 14px;font-size:14.5px;min-height:56px;overflow-x:auto;white-space:pre-wrap}
+.ed-preview .katex-display{margin:6px 0}
+.ed-ph{color:var(--muted);font-size:13px}
+.ed-manual{border-left:1px solid var(--line);padding:12px 14px;background:rgba(10,28,58,.03);max-height:460px;overflow:auto}
+.ed-note{font-size:12px;color:var(--muted);margin-bottom:10px}
+.ed-note code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px}
+.ed-cmd-title{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);margin:12px 0 4px}
+.cmd-row{display:grid;grid-template-columns:minmax(0,1fr) auto 26px;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.cmd-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#1E2A44;overflow-x:auto;white-space:nowrap;display:block}
+.cmd-view{font-size:13px;text-align:right;max-width:130px;overflow-x:auto;padding:2px 0}
+.cmd-add{width:26px;height:26px;border:1px solid var(--line-strong);border-radius:6px;background:var(--card);display:grid;place-items:center;font-weight:700;color:var(--pine);transition:all .15s;font-size:14px;flex:none}
+.cmd-add:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+.ed-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-top:1px dashed var(--line-strong);flex-wrap:wrap}
+.ed-count{font-size:12px;color:var(--muted)}
+details.mini-check{border:1px dashed var(--line-strong);border-radius:8px;background:var(--terra-soft);margin-top:14px}
+details.mini-check summary{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;list-style:none}
+details.mini-check summary::-webkit-details-marker{display:none}
+details.mini-check summary:hover{color:var(--terra)}
+details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-top:8px;font-size:13.5px}
+
+/* ============================================================
+   QUIZ
+============================================================ */
+.quiz-q{border-top:1px solid var(--line);padding:24px 4px}
+.quiz-q header{display:flex;gap:14px;margin-bottom:14px}
+.qnum{flex:none;font-family:'Fraunces',serif;font-weight:700;color:var(--terra);border:1.5px solid var(--terra);border-radius:8px;padding:2px 9px;height:fit-content}
+.quiz-q .q-text{font-weight:600;font-size:15.5px;padding-top:4px}
+.opts{display:grid;gap:9px;margin-left:56px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line-strong);border-radius:10px;padding:11px 14px;cursor:pointer;background:var(--card);transition:all .15s;font-size:14.5px}
+.opt:hover{border-color:var(--pine)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt-key{flex:none;width:26px;height:26px;border:1.5px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;transition:all .15s}
+.opt.is-correct{border-color:var(--pine);background:var(--ok-bg)}
+.opt.is-correct .opt-key{background:var(--pine);border-color:var(--pine);color:#fff}
+.opt.is-wrong{border-color:var(--err);background:var(--err-bg)}
+.opt.is-wrong .opt-key{background:var(--err);border-color:var(--err);color:#fff}
+.opt.locked{cursor:default}
+.explain{margin:12px 0 0 56px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:8px 14px;background:var(--card)}
+.quiz-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;border-top:1.5px solid var(--ink);padding-top:20px}
+.quiz-result{font-size:15px}
+.quiz-result strong{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--pine);margin-right:8px}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;color:#fff}
+.del-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;transition:all .15s}
+.del-btn:hover{border-color:var(--err);color:var(--err)}
+.del-btn.confirm{background:var(--err);border-color:var(--err);color:#fff}
+.boleta-card{position:relative;max-width:700px;background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 var(--shadow);overflow:hidden}
+.b-head{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1.5px solid var(--ink)}
+.b-head .avatar{width:52px;height:52px;font-size:17px;border:1.5px solid var(--ink)}
+.b-head>div{flex:1;min-width:0}
+.b-title{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--terra);margin-bottom:3px}
+.b-name{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;line-height:1.15;color:var(--ink)}
+.b-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.b-seal{flex:none;width:82px;height:82px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--terra);transform:rotate(-8deg);opacity:.9;line-height:1.25}
+.b-seal span{font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.b-seal strong{font-family:'Fraunces',serif;font-size:1.25rem}
+.b-body{padding:8px 24px 18px}
+.b-row{display:grid;grid-template-columns:1fr 150px 92px;gap:14px;align-items:center;border-top:1px solid var(--line);padding:13px 0}
+.b-row:first-child{border-top:none}
+.b-rubname{font-weight:600;font-size:14.5px}
+.b-rubdet{font-size:12px;color:var(--muted);margin-top:1px}
+.b-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper)}
+.b-bar>div{height:100%;background:var(--pine);transition:width .4s ease}
+.b-pts{text-align:right;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem}
+.b-pts small{font-weight:400;color:var(--muted);font-size:.75em}
+.b-total{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:2px solid var(--ink);background:#eaf2fa;padding:16px 24px}
+.b-total-lbl{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink)}
+.b-total-det{font-size:11.5px;color:var(--muted);margin-top:2px}
+.b-score{display:flex;align-items:baseline;gap:6px}
+.b-score .big{font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--pine);line-height:1}
+.b-score .den{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--muted)}
+.b-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line-strong);padding:11px 24px;font-size:11.5px;color:var(--muted)}
+.boleta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;max-width:700px}
+
+/* ============================================================
+   TOASTS / FOOTER
+============================================================ */
+#toasts{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(10,28,58,.3);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
+.toast svg{flex:none;width:17px;height:17px}
+.toast.ok svg{color:#8fd0a5}
+.toast.err svg{color:#f0a284}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
+footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38px;margin-top:20px}
+.foot-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.72)}
+.foot-row strong{color:#fff}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .home-grid{grid-template-columns:1fr}
+  .theory{grid-template-columns:1fr}
+  .toc{position:static;flex-direction:row;overflow-x:auto;border-left:none;border-bottom:1.5px solid var(--ink);gap:2px}
+  .toc-title{display:none}
+  .toc a{white-space:nowrap;border-left:none;border-bottom:3px solid transparent}
+  .toc a:hover{border-bottom-color:var(--pine)}
+  .lab-grid,.task-panel,.app-grid{grid-template-columns:1fr}
+  .ed-grid{grid-template-columns:1fr}
+  .ed-manual{border-left:none;border-top:1px solid var(--line);max-height:none}
+  .sim-controls-3d{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .b-row{grid-template-columns:1fr 86px}
+  .b-bar{display:none}
+  .b-seal{display:none}
+  .b-total{flex-direction:column;align-items:flex-start;gap:6px}
+  .opts,.explain{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div class="brand">
+      <span class="brand-ico"><i data-lucide="sigma"></i></span>
+      <span>Cálculo Vectorial <small>Aula interactiva — Dr. Adrián Cerda</small></span>
+    </div>
+    <div class="topbar-right">
+      <img src="logo-UP.png" alt="Logo Universidad Panamericana" class="topbar-logo">
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="tabs" id="mainNav">
+      <button class="nav-btn active" data-view="inicio"><i data-lucide="home"></i>Inicio</button>
+      <button class="nav-btn" data-view="teoria"><i data-lucide="book-open"></i>Teoría</button>
+      <button class="nav-btn" data-view="simulador"><i data-lucide="layout-dashboard"></i>Simulador</button>
+      <button class="nav-btn" data-view="aplicaciones"><i data-lucide="rocket"></i>Aplicaciones</button>
+      <button class="nav-btn" data-view="actividades"><i data-lucide="clipboard-list"></i>Actividades</button>
+      <button class="nav-btn" data-view="boleta"><i data-lucide="badge-check"></i>Mi registro y notas</button>
+    </nav>
+  </div>
+</header>
+<main>
+
+<!-- ==================== INICIO ==================== -->
+<section class="view" id="v-inicio">
+  <div class="wrap hero">
+    <div>
+      <p class="overline">Cálculo Vectorial · Universidad Panamericana</p>
+      <h1>Teoremas fundamentales: del trabajo al <em>flujo</em></h1>
+      <p class="lead">Curvas y parametrizaciones, longitud de arco, integrales de línea y campos conservativos, Green, integrales de superficie, rotacional y divergencia — Stokes, Gauss y las ecuaciones de Maxwell como gran síntesis.</p>
+      <div class="hero-actions">
+        <button class="btn" data-view="teoria"><i data-lucide="book-open"></i>Entrar a la teoría</button>
+        <button class="btn ghost" data-view="simulador"><i data-lucide="layout-dashboard"></i>Explorar el simulador</button>
+      </div>
+      <dl class="meta-grid">
+        <div><dt>Unidad</dt><dd>VI — Teoremas integrales</dd></div>
+        <div><dt>Sesiones</dt><dd>3 de 2 horas cada una</dd></div>
+        <div><dt>Evaluación</dt><dd>Quiz + tareas + laboratorio</dd></div>
+        <div><dt>Texto</dt><dd>Marsden &amp; Tromba — Caps. 7–8</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-fig">
+      <canvas id="heroCanvas"></canvas>
+      <figcaption><strong>Una hélice en el espacio.</strong> El punto dorado recorre la curva con su vector tangente: su rapidez \(\|r'(t)\|\) integrada da la longitud de arco — el primer paso hacia Green, Gauss y Stokes.</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap home-grid">
+    <div>
+      <p class="overline" style="margin-bottom:14px">Ruta de la unidad</p>
+      <div class="route-item" data-view="teoria">
+        <span class="route-no">01</span>
+        <div><h3>Desarrollo de la teoría</h3><p>Curvas y parametrizaciones, longitud e invariancia, campos vectoriales, integrales de línea, conservativos, Green, superficies, Stokes, Gauss y Maxwell.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="simulador">
+        <span class="route-no">02</span>
+        <div><h3>Laboratorio de integración</h3><p>Curvas en el espacio con longitud de arco, trayectorias que miden el trabajo de un campo, y círculos que detectan divergencia y rotacional.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="aplicaciones">
+        <span class="route-no">03</span>
+        <div><h3>Aplicaciones</h3><p>Ecuaciones de Maxwell, flujo de fluidos, energía potencial, electrostática, vorticidad atmosférica e ingeniería de cables.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="actividades">
+        <span class="route-no">04</span>
+        <div><h3>Evaluación y tareas</h3><p>Ejercicios guiados paso a paso, redacción en LaTeX, quiz y problemas del Marsden-Tromba.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="boleta">
+        <span class="route-no">05</span>
+        <div><h3>Mi boleta</h3><p>Regístrate y sigue tu avance: tu progreso y calificación final.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+    </div>
+    <aside>
+      <p class="overline" style="margin-bottom:14px">En un vistazo</p>
+      <div class="side-stats">
+        <div class="stat"><div class="num" id="statNota">—</div><div class="lbl">Tu nota (sobre 10)</div></div>
+        <div class="stat"><div class="num">8</div><div class="lbl">Secciones teóricas</div></div>
+        <div class="stat"><div class="num">6</div><div class="lbl">Preguntas del quiz</div></div>
+        <div class="stat"><div class="num">18</div><div class="lbl">Ejercicios y problemas</div></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ==================== TEORÍA ==================== -->
+<section class="view" id="v-teoria" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Desarrollo de la teoría</p>
+      <h2>Curvas, campos, integrales de línea y superficie, y los grandes teoremas</h2>
+      <p class="sub">Síntesis de los Capítulos 7 y 8 de Marsden &amp; Tromba, <em>Cálculo Vectorial</em>: del trabajo sobre una curva al flujo a través de superficies, unificados por Green, Stokes y Gauss.</p>
+    </div>
+
+    <div class="theory">
+      <aside class="toc">
+        <p class="toc-title">Contenido</p>
+        <a href="#t61"><span>6.1</span>Curvas y longitud de arco</a>
+        <a href="#t62"><span>6.2</span>Campos vectoriales</a>
+        <a href="#t63"><span>6.3</span>Integrales de línea</a>
+        <a href="#t64"><span>6.4</span>Conservativos y trayectorias</a>
+        <a href="#t65"><span>6.5</span>Teorema de Green</a>
+        <a href="#t66"><span>6.6</span>Integrales de superficie</a>
+        <a href="#t67"><span>6.7</span>Stokes y Gauss</a>
+        <a href="#t68"><span>6.8</span>Maxwell y la síntesis</a>
+      </aside>
+
+      <div class="prose">
+
+        <!-- 6.1 -->
+        <article class="sec" id="t61">
+          <div class="sec-no">6.1</div>
+          <h3>Curvas en el espacio, parametrizaciones y longitud de arco</h3>
+          <div class="def">
+            <span class="def-tag">Definición · Curva parametrizada</span>
+            <p>Una <strong>curva</strong> en el espacio es una función continua \( \mathbf r:[a,b]\to\mathbb R^3 \), \( \mathbf r(t)=(x(t),\,y(t),\,z(t)) \). Es <strong>regular</strong> si \( \mathbf r'(t)\neq \mathbf 0 \) en \((a,b)\); entonces \( \mathbf T=\mathbf r'/\|\mathbf r'\| \) es el <strong>vector tangente unitario</strong> y \( \|\mathbf r'(t)\| \) es la <strong>rapidez</strong>.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplos canónicos</span>
+            <p><strong>Segmento</strong> de \( \mathbf r_0 \) a \( \mathbf r_1 \): \( \mathbf r(t)=\mathbf r_0+t(\mathbf r_1-\mathbf r_0),\; 0\le t\le 1 \).</p>
+            <p><strong>Circunferencia</strong> de radio \(a\): \( (a\cos t,\,a\sin t) \), orientada en contra de las manecillas.</p>
+            <p><strong>Hélice</strong>: \( \mathbf r(t)=(a\cos t,\,a\sin t,\,ct) \): sube girando — la curva de las escaleras de caracol y del ADN.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Longitud de arco</span>
+            <p>Si \( \mathbf r' \) es continua, la longitud de la curva es el límite de las longitudes de las poligonales inscritas:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle L=\int_a^b \|\mathbf r'(t)\|\,dt=\int_a^b\sqrt{x'(t)^2+y'(t)^2+z'(t)^2}\;dt \)</p>
+            <p>Cada cuerda \( \|\mathbf r(t_{i+1})-\mathbf r(t_i)\| \approx \|\mathbf r'(t_i^*)\|\Delta t \) por el teorema del valor medio — la suma de Pitágoras se vuelve integral.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso · hélice</span>
+            <p>Con \( \mathbf r(t)=(a\cos t,\,a\sin t,\,ct) \): \( \mathbf r'(t)=(-a\sin t,\,a\cos t,\,ct')\Rightarrow \|\mathbf r'\|=\sqrt{a^2\sin^2t+a^2\cos^2t+c^2}=\sqrt{a^2+c^2} \), constante.</p>
+            <p>\( L=\int_a^b\sqrt{a^2+c^2}\,dt=(b-a)\sqrt{a^2+c^2}. \)</p>
+            <p>Por ejemplo, \( (1.2\cos t,\;1.2\sin t,\;0.35t) \) en \( [0,4\pi] \): \( L=4\pi\sqrt{1.44+0.1225}=4\pi(1.25)=5\pi\approx15.71 \). Compruébalo en el simulador, pestaña «Curvas y longitud».</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Invariancia</span>
+            <p>La longitud <em>no depende de la parametrización</em>: si \( t=\varphi(s) \) es un cambio de parámetro monotónico creciente, entonces \( \|\tfrac{d\mathbf r}{ds}\|=\|\mathbf r'(t)\|\,\varphi'(s) \) y el cambio de variable en la integral da la misma \(L\). Lo mismo vale para la integral de línea de un campo <em>escalar</em>; la de un campo <em>vectorial</em> cambia de signo si se invierte la orientación de la curva.</p>
+          </div>
+        </article>
+
+        <!-- 6.2 -->
+        <article class="sec" id="t62">
+          <div class="sec-no">6.2</div>
+          <h3>Campos vectoriales</h3>
+          <div class="def">
+            <span class="def-tag">Definición</span>
+            <p>Un <strong>campo vectorial</strong> asigna a cada punto de una región un vector: \( \mathbf F(x,y,z)=(P,\,Q,\,R) \). Se visualiza dibujando en cada punto una flecha \( \mathbf F \): el campo <em>es</em> el mapa de flechas.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplos fundamentales</span>
+            <p><strong>Radial</strong> \( \mathbf F=(x,y,z) \): flechas que se alejan del origen — una <em>fuente</em>.</p>
+            <p><strong>Giratorio</strong> \( \mathbf F=(-y,x,0) \): flechas que giran alrededor del eje \(z\) — un <em>vórtice</em>.</p>
+            <p><strong>Gradiente</strong>: todo escalar \(f\) genera \( \mathbf F=\nabla f \), cuyas flechas cruzan perpendicularmente las superficies de nivel de \(f\) (Unidad 4).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Divergencia y rotacional</span>
+            <p>De un campo \( \mathbf F=(P,Q,R) \) nacen dos operadores que miden su estructura local:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \nabla\cdot\mathbf F=\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z} \qquad\qquad \nabla\times\mathbf F=\begin{vmatrix}\mathbf i & \mathbf j & \mathbf k\\ \partial_x & \partial_y & \partial_z\\ P & Q & R\end{vmatrix} \)</p>
+            <p>\( \nabla\cdot\mathbf F \) mide cuánto «se expande» el campo (fuentes si es positivo, sumideros si negativo); \( \nabla\times\mathbf F \) mide cuánto «gira» alrededor de cada punto. Verás que son exactamente lo que miden Gauss y Stokes.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Para \( \mathbf F=(x,\,-y,\,z) \): \( \nabla\cdot\mathbf F=1-1+1=1 \). Para \( \mathbf F=(-y,\,x,\,0) \): \( \nabla\times\mathbf F=(0,\,0,\,1-(-1))=(0,0,2) \) — giro uniforme con «vorticidad» 2 en \(z\).</p>
+          </div>
+        </article>
+
+        <!-- 6.3 -->
+        <article class="sec" id="t63">
+          <div class="sec-no">6.3</div>
+          <h3>Integrales de línea</h3>
+          <div class="def">
+            <span class="def-tag">De campo escalar</span>
+            <p>\( \displaystyle \int_C f\,ds=\int_a^b f(\mathbf r(t))\,\|\mathbf r'(t)\|\,dt \)</p>
+            <p>Invariante ante reparametrizaciones: mide el <em>acumulado de \(f\) a lo largo del alambre</em>. Con \(f=\rho\) densidad lineal: \( m=\int_C\rho\,ds \) es la <strong>masa del alambre</strong>.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">De campo vectorial · trabajo</span>
+            <p>\( \displaystyle W=\int_C \mathbf F\cdot d\mathbf r=\int_a^b \mathbf F(\mathbf r(t))\cdot\mathbf r'(t)\,dt=\int_C P\,dx+Q\,dy+R\,dz \)</p>
+            <p>Es el <strong>trabajo</strong> que hace la fuerza \( \mathbf F \) al mover una partícula por \(C\). A diferencia del escalar, <strong>cambia de signo</strong> al invertir el recorrido: \( \int_{-C}\mathbf F\cdot d\mathbf r=-\int_C\mathbf F\cdot d\mathbf r \).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso</span>
+            <p>Trabajo de \( \mathbf F=(y,\,x) \) sobre la parábola \( y=x^2 \) de \( (-1,1) \) a \( (1,1) \): parametrizo \( \mathbf r(t)=(t,t^2) \), \( t\in[-1,1] \).</p>
+            <p>\( \mathbf F(\mathbf r(t))=(t^2,\,t) \), \( \mathbf r'(t)=(1,\,2t) \), \( \mathbf F\cdot\mathbf r'=t^2+2t^2=3t^2 \).</p>
+            <p>\( W=\int_{-1}^{1}3t^2\,dt=2. \)</p>
+          </div>
+          <p><strong>Propiedades:</strong> linealidad en \( \mathbf F \), aditividad al partir la curva, y si \(C\) se recorre al revés el trabajo cambia de signo. En el simulador, pestaña «Trabajo y campos», se calculan los tres numéricamente.</p>
+        </article>
+
+        <!-- 6.4 -->
+        <article class="sec" id="t64">
+          <div class="sec-no">6.4</div>
+          <h3>Campos conservativos e independencia de trayectorias</h3>
+          <div class="def">
+            <span class="def-tag">Teorema fundamental para integrales de línea</span>
+            <p>Si \( \mathbf F=\nabla f \) es <strong>conservativo</strong> (con potencial \(f\)), el trabajo solo depende de los extremos:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \int_C \mathbf F\cdot d\mathbf r=f(B)-f(A) \)</p>
+            <p>La integral es <strong>independiente de la trayectoria</strong> y toda circulación sobre curvas cerradas es cero.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Criterios de conservatividad</span>
+            <p>En una región <strong>abierta y simplemente conexa</strong> son equivalentes:</p>
+            <ul style="margin:8px 0 0 22px">
+              <li>\( \mathbf F \) es conservativo;</li>
+              <li>\( \oint_C \mathbf F\cdot d\mathbf r=0 \) para toda curva cerrada;</li>
+              <li>\( \nabla\times\mathbf F=\mathbf 0 \) (en 2D: \( \partial Q/\partial x=\partial P/\partial y \));</li>
+              <li>la integral no depende de la trayectoria.</li>
+            </ul>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso · hallar el potencial</span>
+            <p>¿Es \( \mathbf F=(2xy,\;x^2) \) conservativo? \( \partial Q/\partial x=2x=\partial P/\partial y \) ✓. Busco \(f\) con \( f_x=2xy \): integro en \(x\): \( f=x^2y+g(y) \). Derivo en \(y\): \( f_y=x^2+g'(y)=Q=x^2\Rightarrow g'=0 \). Entonces \( f=x^2y+\text{cte} \).</p>
+            <p>Trabajo de \( (0,0) \) a \( (1,2) \): \( W=f(1,2)-f(0,0)=2 \). Sin integrar a lo largo de nada: esa es la potencia del potencial.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Cuidado · la región importa</span>
+            <p>\( \mathbf F=\Big(\tfrac{-y}{x^2+y^2},\,\tfrac{x}{x^2+y^2}\Big) \) tiene rotacional nulo en \( \mathbb R^2\setminus\{0\} \), pero sobre el círculo unitario su circulación es \( \int_0^{2\pi}1\,dt=2\pi\neq0 \). No hay contradicción: la región <em>no es simplemente conexa</em> (el origen es un «agujero»). La hipótesis topológica no es decorativa.</p>
+          </div>
+        </article>
+
+        <!-- 6.5 -->
+        <article class="sec" id="t65">
+          <div class="sec-no">6.5</div>
+          <h3>Teorema de Green</h3>
+          <div class="def">
+            <span class="def-tag">Forma de circulación</span>
+            <p>Si \(C=\partial D\) es la frontera de una región plana \(D\), recorrida en sentido positivo (región a la izquierda):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \oint_C P\,dx+Q\,dy=\iint_D\Big(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Big)\,dA=\iint_D(\nabla\times\mathbf F)\cdot\mathbf k\;dA \)</p>
+            <p>La circulación sobre la frontera es la integral del rotacional sobre la región: Green es el caso plano de Stokes.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Forma de flujo</span>
+            <p>Con la normal exterior \( \mathbf n \) y \( \mathbf F=(P,Q) \):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \oint_C \mathbf F\cdot\mathbf n\;ds=\iint_D \nabla\cdot\mathbf F\;dA \)</p>
+            <p>El <em>flujo neto saliente</em> por la frontera es la integral de la divergencia — Gauss en dos dimensiones.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Área por Green</span>
+            <p>Con \( P=-y/2,\ Q=x/2 \) (o \( P=-y,\ Q=0 \), etc.):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle A=\iint_D dA=\tfrac12\oint_C x\,dy-y\,dx \)</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso · área de la elipse</span>
+            <p>\( \mathbf r(t)=(a\cos t,\,b\sin t) \): \( x\,dy-y\,dx=(a\cos t)(b\cos t\,dt)-(b\sin t)(-a\sin t\,dt)=ab\,dt \).</p>
+            <p>\( A=\tfrac12\int_0^{2\pi}ab\,dt=\pi ab \) — la fórmula clásica, ahora como teorema.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · circulación y flujo</span>
+            <p>\( \mathbf F=(x-y,\,x+y) \) sobre el círculo de radio \(R\): \( Q_x-P_y=1-(-1)=2 \), así que la circulación es \( 2\,\text{área}=2\pi R^2 \); y \( \nabla\cdot\mathbf F=1+1=2 \) da flujo \( 2\pi R^2 \) también. Ambos lecturas del mismo campo con Green.</p>
+          </div>
+        </article>
+
+        <!-- 6.6 -->
+        <article class="sec" id="t66">
+          <div class="sec-no">6.6</div>
+          <h3>Integrales de superficie</h3>
+          <div class="def">
+            <span class="def-tag">Superficie parametrizada</span>
+            <p>\( \boldsymbol\Phi(u,v)=(x(u,v),y(u,v),z(u,v)) \) sobre \(S\subset\mathbb R^2\). Los vectores \( \boldsymbol\Phi_u,\ \boldsymbol\Phi_v \) generan el plano tangente y</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \mathbf n=\frac{\boldsymbol\Phi_u\times\boldsymbol\Phi_v}{\|\boldsymbol\Phi_u\times\boldsymbol\Phi_v\|},\qquad dS=\|\boldsymbol\Phi_u\times\boldsymbol\Phi_v\|\,du\,dv \)</p>
+            <p>Para un <strong>grafo</strong> \( z=g(x,y) \): \( dS=\sqrt{1+g_x^2+g_y^2}\,dx\,dy \) y \( \mathbf n\propto(-g_x,-g_y,1) \).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Flujo</span>
+            <p>\( \displaystyle \iint_S \mathbf F\cdot\mathbf n\,dS \)</p>
+            <p>Cuenta cuánto del campo <em>atraviesa</em> la superficie por unidad de área: caudal de un fluido, flujo eléctrico, intensidad de radiación.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · esfera</span>
+            <p>Con la parametrización esférica, la normal exterior de \( x^2+y^2+z^2=R^2 \) es \( \mathbf n=\tfrac1R(x,y,z) \). Para \( \mathbf F=(0,0,z) \): \( \mathbf F\cdot\mathbf n=z^2/R \) y por simetría \( \iint z^2\,dS=\tfrac13\iint(x^2+y^2+z^2)dS=\tfrac{R^2}{3}\cdot4\pi R^2 \). Así el flujo vale \( \tfrac{4\pi R^3}{3} \) — y Gauss lo dará en una línea (§6.7).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · grafo</span>
+            <p>Flujo de \( \mathbf F=(0,0,1) \) a través de \( z=x^2+y^2 \) con \( z\le1 \), normal hacia arriba: \( \mathbf n\,dS=(-2x,-2y,1)\,dx\,dy \Rightarrow \mathbf F\cdot\mathbf n\,dS=dx\,dy \). El flujo es el área del disco unidad: \( \pi \). La proyección simplifica el cómputo.</p>
+          </div>
+        </article>
+
+        <!-- 6.7 -->
+        <article class="sec" id="t67">
+          <div class="sec-no">6.7</div>
+          <h3>Rotacional y divergencia: teoremas de Stokes y de Gauss</h3>
+          <div class="def">
+            <span class="def-tag">Rotacional como circulación por unidad de área</span>
+            <p>\( (\nabla\times\mathbf F)\cdot\mathbf n=\displaystyle\lim_{r\to0}\frac{1}{\text{área}}\oint_{C_r}\mathbf F\cdot d\mathbf r \): la circulación alrededor de un lazo pequeño dividida por su área. El módulo 3 del simulador muestra este límite en acción.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Divergencia como flujo por unidad de volumen</span>
+            <p>\( \nabla\cdot\mathbf F=\displaystyle\lim_{V\to0}\frac{1}{V}\iint_{\partial V}\mathbf F\cdot\mathbf n\,dS \): el flujo neto saliente por unidad de volumen.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Teorema de Stokes</span>
+            <p>Para una superficie \(S\) orientada con frontera \( \partial S \) compatible:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \oint_{\partial S}\mathbf F\cdot d\mathbf r=\iint_S(\nabla\times\mathbf F)\cdot\mathbf n\;dS \)</p>
+            <p>La circulación del borde es el flujo del rotacional. Consecuencia notable: la circulación <em>no depende de la superficie</em> elegida con esa misma frontera.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Teorema de Gauss (divergencia)</span>
+            <p>Para un sólido \(E\) con frontera cerrada orientada hacia afuera:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_{\partial E}\mathbf F\cdot\mathbf n\;dS=\iiint_E \nabla\cdot\mathbf F\;dV \)</p>
+            <p>Lo que sale por la frontera se genera adentro: fuentes menos sumideros.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso · Stokes</span>
+            <p>\( \mathbf F=(-y,x,z) \), frontera: círculo unitario en \(z=0\), contra las manecillas vistas desde arriba. \( \nabla\times\mathbf F=(0,0,2) \), normal del disco \( (0,0,1) \):</p>
+            <p>\( \oint_C\mathbf F\cdot d\mathbf r=\iint_D 2\,dA=2\pi. \)</p>
+            <p>Directo: \( \mathbf r=(\cos t,\sin t,0) \), \( \mathbf F\cdot\mathbf r'=\sin^2t+\cos^2t=1 \Rightarrow 2\pi \) ✓. Cualquier otra superficie con ese borde daría lo mismo.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo paso a paso · Gauss</span>
+            <p>\( \mathbf F=(x,y,z) \), esfera de radio \(R\): \( \nabla\cdot\mathbf F=3 \), así que</p>
+            <p>\( \iint_{\partial E}\mathbf F\cdot\mathbf n\,dS=\iiint_E 3\,dV=3\cdot\tfrac43\pi R^3=4\pi R^3. \)</p>
+            <p>Lo que por superficie directa requería parametrizar y simetría, aquí son dos renglones.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Nota cultural · Stokes generalizado</span>
+            <p>En el lenguaje de formas diferenciales, Green, Stokes y Gauss son <em>un solo teorema</em>: \( \int_{\partial M}\omega=\int_M d\omega \) — la integral de algo sobre la frontera es la integral de su derivada sobre el interior. Es el teorema fundamental del cálculo \( \int_a^b f'\,dx=f(b)-f(a) \), promovido a cualquier dimensión. Green = caso plano; Stokes = curvas y superficies; Gauss = superficies y sólidos.</p>
+          </div>
+        </article>
+
+        <!-- 6.8 -->
+        <article class="sec" id="t68">
+          <div class="sec-no">6.8</div>
+          <h3>Las ecuaciones de Maxwell y la síntesis</h3>
+          <p>Todo el electromagnetismo clásico cabe en cuatro ecuaciones — y las cuatro <em>son</em> la unidad: cada una relaciona divergencia o rotacional con sus formas integrales vía Gauss y Stokes.</p>
+          <table class="tbl">
+            <thead><tr><th>Ecuación (diferencial)</th><th>Forma integral (vía Gauss/Stokes)</th><th>Lectura física</th></tr></thead>
+            <tbody>
+              <tr><td>\( \nabla\cdot\mathbf E=\rho/\varepsilon_0 \)</td><td>\( \iint \mathbf E\cdot\mathbf n\,dS=Q_{\text{enc}}/\varepsilon_0 \)</td><td>Las cargas son fuentes de campo eléctrico (ley de Gauss).</td></tr>
+              <tr><td>\( \nabla\cdot\mathbf B=0 \)</td><td>\( \iint \mathbf B\cdot\mathbf n\,dS=0 \)</td><td>No existen monopolos magnéticos: el flujo neto de \( \mathbf B \) es siempre cero.</td></tr>
+              <tr><td>\( \nabla\times\mathbf E=-\partial\mathbf B/\partial t \)</td><td>\( \oint \mathbf E\cdot d\mathbf r=-\tfrac{d\Phi_B}{dt} \)</td><td>Un campo magnético variable induce circulación eléctrica (Faraday).</td></tr>
+              <tr><td>\( \nabla\times\mathbf B=\mu_0\mathbf J+\mu_0\varepsilon_0\,\partial\mathbf E/\partial t \)</td><td>\( \oint \mathbf B\cdot d\mathbf r=\mu_0 I+\mu_0\varepsilon_0\tfrac{d\Phi_E}{dt} \)</td><td>Corrientes y campos eléctricos variables generan campo magnético (Ampère–Maxwell).</td></tr>
+            </tbody>
+          </table>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · ley de Gauss eléctrica</span>
+            <p>Una carga \(q\) en el origen: \( \mathbf E=\tfrac{q}{4\pi\varepsilon_0}\tfrac{\mathbf r}{r^3} \). Sobre la esfera de radio \(r\): \( \mathbf E\cdot\mathbf n=\tfrac{q}{4\pi\varepsilon_0 r^2} \), y con \(dS=r^2\sin\varphi\,d\varphi d\theta \): flujo \( =\tfrac{q}{\varepsilon_0} \) — <em>independiente de \(r\)</em>, exactamente lo que dicta \( \nabla\cdot\mathbf E=\rho/\varepsilon_0 \) cuando \( \nabla\cdot\mathbf E=0 \) fuera de la carga.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">La gran síntesis de la unidad</span>
+            <p style="display:flex;justify-content:center;padding:10px 0">\( \displaystyle \underbrace{\int_a^b f'=f(b)-f(a)}_{\text{TFC}}\qquad \underbrace{\oint_{\partial D}\!=\!\iint_D}_{\text{Green}}\qquad \underbrace{\oint_{\partial S}\!=\!\iint_S}_{\text{Stokes}}\qquad \underbrace{\iint_{\partial E}\!=\!\iiint_E}_{\text{Gauss}} \)</p>
+            <p>En todos los casos: <em>integral sobre la frontera = integral de una derivada sobre el interior</em>. La frontera «ve» el total de lo que el interior genera.</p>
+          </div>
+          <div class="info-box" style="margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <span>¿Dónde se usa todo esto fuera del aula? Visita la sección de aplicaciones.</span>
+            <button class="btn sm" data-view="aplicaciones"><i data-lucide="rocket"></i>Ver aplicaciones</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== APLICACIONES ==================== -->
+<section class="view" id="v-aplicaciones" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Sección de aplicaciones</p>
+      <h2>Los teoremas integrales en el mundo real</h2>
+      <p class="sub">Del motor eléctrico al pronóstico del tiempo: Green, Gauss y Stokes trabajando en silencio dentro de la tecnología.</p>
+    </div>
+
+    <div class="app-grid">
+      <article class="app-card gold">
+        <span class="app-badge">Electromagnetismo · Maxwell</span>
+        <h3>Las ecuaciones que unifican luz y electricidad</h3>
+        <p>Las cuatro ecuaciones de Maxwell se escriben con \( \nabla\cdot \) y \( \nabla\times \); sus formas integrales —leyes de Gauss, Faraday y Ampère— son literalmente los teoremas de esta unidad. Que \( \nabla\times\nabla\times \mathbf E \) produzca una onda fue el descubrimiento de que la <em>luz es electromagnetismo</em>.</p>
+        <div class="formula-mini">\( \nabla\times\mathbf E=-\tfrac{\partial\mathbf B}{\partial t}\;\xrightarrow{\ \text{Stokes}\ }\;\oint\mathbf E\cdot d\mathbf r=-\tfrac{d\Phi_B}{dt} \)</div>
+        <p class="app-link">Conexión: teoría §6.8 · generadores, transformadores e inducción.</p>
+      </article>
+
+      <article class="app-card green">
+        <span class="app-badge">Mecánica de fluidos</span>
+        <h3>Continuidad y conservación de la masa</h3>
+        <p>Que la masa no se crea ni se destruye se escribe \( \partial\rho/\partial t+\nabla\cdot(\rho\mathbf v)=0 \). Integrando con Gauss: lo que sale de una región menos lo que entra es exactamente lo que deja de estar adentro. Fluidos incompresibles: \( \nabla\cdot\mathbf v=0 \).</p>
+        <div class="formula-mini">\( \tfrac{d}{dt}\iiint_E \rho\,dV=-\iint_{\partial E}\rho\,\mathbf v\cdot\mathbf n\,dS \)</div>
+        <p class="app-link">Conexión: teoría §6.7 (Gauss) · el módulo «Divergencia y rotacional».</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Física · Energía</span>
+        <h3>Campos conservativos y energía potencial</h3>
+        <p>La gravedad y el resorte ideal son conservativos: \( \mathbf F=\nabla f \) define la <em>energía potencial</em> \( -f \), y el teorema fundamental para integrales de línea es la conservación de la energía mecánica. Por eso una montaña rusa devuelve en la bajada lo que tomó en la subida.</p>
+        <div class="formula-mini">\( W=\int_A^B \mathbf F\cdot d\mathbf r=f(B)-f(A)\quad(\text{sin importar la ruta}) \)</div>
+        <p class="app-link">Conexión: teoría §6.4 · simulador «Trabajo y campos conservativos».</p>
+      </article>
+
+      <article class="app-card green">
+        <span class="app-badge">Electrostática · Blindaje</span>
+        <h3>Jaula de Faraday y ley de Gauss</h3>
+        <p>Conductor en equilibrio ⇒ \( \mathbf E=\mathbf 0 \) adentro ⇒ flujo nulo por cualquier superficie interna ⇒ carga nula interna. El campo solo vive afuera: así se blindan equipos electrónicos y autos durante tormentas. Todo se deduce de \( \nabla\cdot\mathbf E=\rho/\varepsilon_0 \) leído con Gauss.</p>
+        <div class="formula-mini">\( \iint_{\text{int}} \mathbf E\cdot\mathbf n\,dS=\tfrac{Q_{\text{int}}}{\varepsilon_0}=0 \)</div>
+        <p class="app-link">Conexión: teoría §6.8 · ejemplo de ley de Gauss.</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Meteorología · Oceanografía</span>
+        <h3>Vorticidad y rotacional</h3>
+        <p>El giro local del viento es la vorticidad \( \boldsymbol\omega=\nabla\times\mathbf v \). Los huracanes son regiones de vorticidad intensa; el teorema de Stokes dice que la circulación del viento sobre un lazo grande es el flujo de vorticidad a través de él, y la conservación de esa circulación explica por qué las tormentas giran.</p>
+        <div class="formula-mini">\( \oint_C \mathbf v\cdot d\mathbf r=\iint_S(\nabla\times\mathbf v)\cdot\mathbf n\,dS \)</div>
+        <p class="app-link">Conexión: teoría §6.7 (Stokes) · módulo «Divergencia y rotacional».</p>
+      </article>
+
+      <article class="app-card gold">
+        <span class="app-badge">Ingeniería · Manufactura</span>
+        <h3>Longitud de arco: cables, resortes y rutas CNC</h3>
+        <p>Cuánto cable hace falta entre dos torres, cuánto alambre para un resorte helicoidal, la longitud real del recorrido de un brazo robótico: todo es \( L=\int\|\mathbf r'\|dt \). Con densidad \( \rho \), además, \( m=\int_C\rho\,ds \) da la masa del elemento sin pesar nada.</p>
+        <div class="formula-mini">\( L=\int_a^b\|\mathbf r'(t)\|\,dt,\qquad m=\int_C \rho\,ds \)</div>
+        <p class="app-link">Conexión: teoría §6.1 y §6.3 · simulador «Curvas y longitud».</p>
+      </article>
+    </div>
+
+    <div class="app-cta">
+      <p>Compruébalo en vivo: elige tres rutas distintas de \(A\) a \(B\) y observa cuándo el trabajo coincide — esa es la firma de un campo conservativo.</p>
+      <button class="btn" data-goto-sim="trabajo"><i data-lucide="layout-dashboard"></i>Abrir el simulador</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SIMULADOR ==================== -->
+<section class="view" id="v-simulador" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Laboratorio de simulación · Actividad práctica</p>
+      <h2>Curvas, trabajo conservativo, y divergencia/rotacional en acción</h2>
+      <p class="sub">Tres módulos: la longitud de arco como límite de cuerdas sobre curvas en el espacio, la independencia de trayectorias de los campos conservativos, y un círculo que mide flujo y circulación hasta converger a la divergencia y el rotacional.</p>
+    </div>
+
+    <div class="lab-grid">
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="sliders-horizontal"></i>Controles</div>
+        <div class="panel-body">
+          <div class="sim-tabs">
+            <button class="sim-tab active" data-stab="curvas">Curvas y longitud</button>
+            <button class="sim-tab" data-stab="trabajo">Trabajo y conservativos</button>
+            <button class="sim-tab" data-stab="divrot">Divergencia y rotacional</button>
+          </div>
+
+          <!-- Pestaña: Curvas -->
+          <div class="sim-panel active" id="st-curvas">
+            <div class="field" style="margin-bottom:12px">
+              <label for="selCurva">Curva \( \mathbf r(t) \)</label>
+              <select id="selCurva">
+                <option value="helix" selected>Hélice (1.2, c = 0.35) · L = 5π exacta</option>
+                <option value="circ">Circunferencia r = 2 · L = 4π</option>
+                <option value="onda">Elipse ondulada 3D · L numérica</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label for="tSlider">Parámetro t = <span id="tVal" class="mono">0.00</span></label>
+              <input type="range" id="tSlider" min="0" max="1000" step="1" value="0">
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label for="nSlider">Segmentos de la poligonal: n = <span id="nVal" class="mono">12</span></label>
+              <input type="range" id="nSlider" min="4" max="60" step="1" value="12">
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" id="btnPoly">Mostrar / ocultar poligonal</button>
+            </div>
+            <button class="btn" id="btnCurva"><i data-lucide="refresh-cw"></i>Actualizar curva</button>
+
+            <div class="info-box" id="infoCurva">
+              <div><span class="label">Longitud de la poligonal (n cuerdas):</span> <span id="cvPoly" class="valor">—</span></div>
+              <div><span class="label">Longitud de referencia \( \int\|\mathbf r'\|dt \):</span> <span id="cvRef" class="valor">—</span></div>
+              <div><span class="label">Error:</span> <span id="cvErr" class="valor">—</span></div>
+              <div><span class="label">Rapidez \( \|\mathbf r'(t)\| \) actual:</span> <span id="cvSpeed" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="cvNote">Mueve t para recorrer la curva; sube n y mira las cuerdas ajustarse a la curva.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#143466;"></span>Curva \( \mathbf r(t) \)</span>
+              <span><span class="dot" style="background:#B8860B;"></span>Poligonal (n cuerdas)</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Punto \( \mathbf r(t) \)</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Tangente \( \mathbf T \)</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Trabajo -->
+          <div class="sim-panel" id="st-trabajo">
+            <div class="field" style="margin-bottom:12px">
+              <label for="selCampoT">Campo \( \mathbf F(x,y) \)</label>
+              <select id="selCampoT">
+                <option value="radial" selected>\( F=(x,\;y) \) — conservativo, \( f=\tfrac{x^2+y^2}{2} \)</option>
+                <option value="mixto">\( F=(2xy,\;x^2+2y) \) — conservativo, \( f=x^2y+y^2 \)</option>
+                <option value="rot">\( F=(-y,\;x) \) — NO conservativo (rotación)</option>
+              </select>
+            </div>
+            <p class="hint" style="margin-bottom:8px">Trayectorias de \( A=(-1,0) \) a \( B=(1,0) \):</p>
+            <div class="sim-presets">
+              <button class="btn sm ghost" data-tray="recta" style="border-bottom:3px solid #8f9aa8">Recta</button>
+              <button class="btn sm ghost" data-tray="semi" style="border-bottom:3px solid #143466">Semicírculo sup.</button>
+              <button class="btn sm ghost" data-tray="poli" style="border-bottom:3px solid #C9A84C">Poligonal por (0, 1.4)</button>
+            </div>
+            <button class="btn" id="btnTrabajo"><i data-lucide="refresh-cw"></i>Calcular los tres trabajos</button>
+
+            <div class="info-box" id="infoTrabajo">
+              <div id="tablaTrabajo" style="font-size:13.5px">—</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="twNote">Si el campo es conservativo, las tres cantidades coinciden con \( f(B)-f(A) \).</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#8f9aa8;"></span>Recta</span>
+              <span><span class="dot" style="background:#143466;"></span>Semicírculo</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Poligonal</span>
+              <span><span class="dot" style="background:#007B5D;"></span>A y B</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Div/rot -->
+          <div class="sim-panel" id="st-divrot">
+            <div class="field" style="margin-bottom:12px">
+              <label for="selCampoD">Campo \( \mathbf F(x,y) \)</label>
+              <select id="selCampoD">
+                <option value="radial" selected>\( F=(x,\;y) \) — fuente (div = 2, rot = 0)</option>
+                <option value="giratorio">\( F=(-y,\;x) \) — vórtice (div = 0, rot = 2)</option>
+                <option value="espiral">\( F=(x-y,\;x+y) \) — espiral (div = 2, rot = 2)</option>
+                <option value="variable">\( F=(x^2,\;y^2) \) — div y rot variables</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label for="rSlider">Radio del círculo de prueba: r = <span id="rVal" class="mono">0.8</span></label>
+              <input type="range" id="rSlider" min="0.25" max="1.6" step="0.05" value="0.8">
+            </div>
+            <button class="btn" id="btnDivrot"><i data-lucide="refresh-cw"></i>Medir flujo y circulación</button>
+
+            <div class="info-box" id="infoDivrot">
+              <div><span class="label">Flujo saliente \( \oint \mathbf F\cdot\mathbf n\,ds \):</span> <span id="dvFlujo" class="valor">—</span></div>
+              <div><span class="label">Circulación \( \oint \mathbf F\cdot d\mathbf r \):</span> <span id="dvCirc" class="valor">—</span></div>
+              <div><span class="label">Flujo / área:</span> <span id="dvFA" class="valor">—</span></div>
+              <div><span class="label">Circulación / área:</span> <span id="dvCA" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="dvNote">Arrastra el centro del círculo. Hazlo pequeño: flujo/área → div y circulación/área → rot en ese punto.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#007B5D;"></span>Ticks: \( \mathbf F\cdot\mathbf n \) (flujo)</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Ticks: \( \mathbf F\cdot\mathbf T \) (circulación)</span>
+              <span><span class="dot" style="background:#B8860B;border-radius:0;"></span>Círculo de prueba (arrastrable)</span>
+            </div>
+          </div>
+
+          <p class="note">En el módulo 3D arrastra para rotar y usa la rueda para acercar. En los módulos 2D, arrastra según se indique. Los cálculos numéricos usan 400–800 subdivisiones: son la integral, hecha a mano por la máquina.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="box"></i>Visualización</div>
+        <div class="sim-3d-container" id="threeContainer" hidden></div>
+        <div class="sim-2d-container" id="trayContainer" hidden><canvas id="trayCanvas"></canvas></div>
+        <div class="sim-2d-container" id="divContainer" hidden><canvas id="divCanvas"></canvas></div>
+        <div class="graph-cap" id="graphCap">Cargando motor 3D…</div>
+        <div id="equationDisplay"><span id="eqText">\(L=\displaystyle\int_a^b \|\mathbf r'(t)\|\,dt\)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ACTIVIDADES ==================== -->
+<section class="view" id="v-actividades" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Zona de evaluación</p>
+      <h2>Actividades de la Unidad 6</h2>
+      <p class="sub">Ejercicios guiados, redacción con LaTeX, quiz y problemas del Marsden-Tromba.</p>
+    </div>
+
+    <!-- Rúbrica -->
+    <div class="act-block">
+      <h3>Rúbrica de evaluación</h3>
+      <p class="act-desc">Ponderación de cada instrumento sobre la calificación de la unidad (nota final sobre 10).</p>
+      <div class="rub-row"><span class="rub-name">Prácticas en el simulador (3 módulos)</span><div class="rub-bar"><div style="width:15%"></div></div><span class="rub-pct">15%</span></div>
+      <div class="rub-row"><span class="rub-name">Ejercicios guiados (solución detallada)</span><div class="rub-bar"><div style="width:25%"></div></div><span class="rub-pct">25%</span></div>
+      <div class="rub-row"><span class="rub-name">Quiz de autoevaluación</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+      <div class="rub-row"><span class="rub-name">Tarea: problemas del Marsden-Tromba</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+    </div>
+
+    <!-- Ejercicios guiados -->
+    <div class="act-block" id="ejBlock">
+      <h3>Ejercicios guiados con solución</h3>
+      <p class="act-desc">Intenta resolverlos por escrito antes de desplegar la solución paso a paso.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 1 · Parametrizar un segmento</span>Parametriza el segmento que va de \( A=(1,2,3) \) a \( B=(4,0,-1) \) y da su longitud.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \mathbf r(t)=A+t(B-A)=(1+3t,\;2-2t,\;3-4t),\quad 0\le t\le 1. \)</p>
+          <p>\( \mathbf r'=(3,-2,-4) \) constante, \( \|\mathbf r'\|=\sqrt{9+4+16}=\sqrt{29} \).</p>
+          <p>\( L=\int_0^1\sqrt{29}\,dt=\sqrt{29}\approx5.39 \) — la distancia euclidiana, como debe ser.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e1"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 2 · Longitud de una hélice</span>Calcula la longitud de \( \mathbf r(t)=(2\cos t,\;3t,\;2\sin t) \) para \( 0\le t\le 2\pi \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \mathbf r'(t)=(-2\sin t,\;3,\;2\cos t) \Rightarrow \|\mathbf r'\|=\sqrt{4\sin^2t+9+4\cos^2t}=\sqrt{13}. \)</p>
+          <p>\( L=2\pi\sqrt{13}\approx22.65. \)</p>
+          <p>La rapidez constante es la firma de hélices y círculos: la integral se vuelve multiplicación.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e2"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 3 · Longitud de una parábola</span>Calcula la longitud de \( y=x^2 \) entre \( x=0 \) y \( x=1 \), parametrizando como \( \mathbf r(t)=(t,t^2) \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \mathbf r'=(1,2t),\;\|\mathbf r'\|=\sqrt{1+4t^2} \Rightarrow L=\int_0^1\sqrt{1+4t^2}\,dt. \)</p>
+          <p>Antiderivada (con \(u=2t\)): \( \displaystyle\int\sqrt{1+4t^2}\,dt=\tfrac{t}{2}\sqrt{1+4t^2}+\tfrac14\operatorname{asinh}(2t) \).</p>
+          <p>\( L=\tfrac{\sqrt5}{2}+\tfrac14\operatorname{asinh}(2)\approx1.118+0.361=1.479. \)</p>
+          <p>Verifica la aproximación por cuerdas en el simulador (módulo «Curvas», con la elipse ondulada cambia de curva; aquí confía en el método).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e3"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 4 · Trabajo sobre una parábola</span>Calcula el trabajo de \( \mathbf F=(y,\,x) \) sobre \( y=x^2 \) de \( (-1,1) \) a \( (1,1) \), y verifícalo con un potencial.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \mathbf r(t)=(t,t^2),\;\mathbf r'=(1,2t) \): \( \mathbf F\cdot\mathbf r'=t^2+2t^2=3t^2 \Rightarrow W=\int_{-1}^{1}3t^2dt=2. \)</p>
+          <p>Verificación: \( \partial Q/\partial x=1=\partial P/\partial y \) ⇒ conservativo con \( f=xy \): \( W=f(1,1)-f(-1,1)=1-(-1)=2 \) ✓.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e4"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 5 · Potencial y trabajo</span>Muestra que \( \mathbf F=(2xy,\;x^2) \) es conservativo, halla su potencial y calcula el trabajo de \( (0,0) \) a \( (1,2) \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \partial Q/\partial x=2x=\partial P/\partial y \) ✓.</p>
+          <p>\( f_x=2xy \Rightarrow f=x^2y+g(y) \); \( f_y=x^2+g'(y)=x^2 \Rightarrow g'=0 \): \( f=x^2y+C \).</p>
+          <p>\( W=f(1,2)-f(0,0)=2. \)</p>
+          <p>El trabajo por <em>cualquier</em> trayectoria es 2 — pruébalo en el simulador con el campo \( F=(2xy, x^2+2y) \) (variante con el mismo concepto).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e5"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 6 · Área de la elipse con Green</span>Usa \( A=\tfrac12\oint(x\,dy-y\,dx) \) para hallar el área de la elipse \( x=a\cos t,\;y=b\sin t \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( x\,dy-y\,dx=(a\cos t)(b\cos t)dt-(b\sin t)(-a\sin t)dt=ab\,dt. \)</p>
+          <p>\( A=\tfrac12\int_0^{2\pi}ab\,dt=\pi ab. \)</p>
+          <p>Un teorema de frontera que recupera una fórmula de geometría:Green en acción.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e6"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Flujo con Gauss</span>Usa el teorema de Gauss para calcular el flujo de \( \mathbf F=(x,y,z) \) a través de la esfera de radio \(R\) (normal exterior).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \nabla\cdot\mathbf F=1+1+1=3 \Rightarrow \iint \mathbf F\cdot\mathbf n\,dS=\iiint_E 3\,dV=3\cdot\tfrac43\pi R^3=4\pi R^3. \)</p>
+          <p>La integral de superficie directa requeriría parametrizar; Gauss la reduce al volumen.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e7"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 8 · Flujo por un hemisferio</span>Calcula el flujo de \( \mathbf F=(0,0,z) \) a través del hemisferio superior \( x^2+y^2+z^2=R^2,\ z\ge0 \), con normal exterior.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Cierro el hemisferio con el disco base (normal exterior \( (0,0,-1) \)): ahí \( \mathbf F=(0,0,0) \), así que su flujo es 0.</p>
+          <p>Por Gauss sobre la media bola: \( \nabla\cdot\mathbf F=1 \), volumen \( \tfrac23\pi R^3 \).</p>
+          <p>\( \iint_{\text{hemisferio}}\mathbf F\cdot\mathbf n\,dS=\tfrac23\pi R^3-0=\tfrac23\pi R^3. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e8"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 9 · Circulación con Stokes</span>Usa Stokes para calcular la circulación de \( \mathbf F=(-y,x,z) \) sobre el círculo unitario en el plano \( z=0 \), recorriéndolo en contra de las manecillas (visto desde arriba).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \nabla\times\mathbf F=(0-0,\;0-0,\;1-(-1))=(0,0,2) \).</p>
+          <p>Superficie: el disco unitario, normal \( (0,0,1) \): \( (\nabla\times\mathbf F)\cdot\mathbf n=2 \).</p>
+          <p>\( \oint_C\mathbf F\cdot d\mathbf r=\iint_D 2\,dA=2\pi. \)</p>
+          <p>Directo: \( \mathbf r=(\cos t,\sin t,0) \), \( \mathbf F\cdot\mathbf r'=\sin^2t+\cos^2t=1\Rightarrow2\pi \) ✓.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e9"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 10 · Independencia de trayectoria</span>Verifica que \( \mathbf F=(2xy^3,\;3x^2y^2) \) es conservativo y calcula \( \int_C \mathbf F\cdot d\mathbf r \) de \( (0,0) \) a \( (1,1) \) por cualquier trayectoria.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( \partial Q/\partial x=6xy^2=\partial P/\partial y \) ✓ (región: todo el plano, simplemente conexa).</p>
+          <p>\( f_x=2xy^3\Rightarrow f=x^2y^3+g(y) \); \( f_y=3x^2y^2+g'=3x^2y^2\Rightarrow g'=0 \): \( f=x^2y^3 \).</p>
+          <p>\( W=f(1,1)-f(0,0)=1. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e10"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Refuerzo con redacción -->
+    <div class="act-block" id="redBlock">
+      <h3>Refuerzo: redacta tu solución</h3>
+      <p class="act-desc">Cuatro problemas adicionales sin solución visible. Redacta con LaTeX en el editor; puedes guardar tus borradores.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 11 · La región importa</span>Para \( \mathbf F=\big(\tfrac{-y}{x^2+y^2},\,\tfrac{x}{x^2+y^2}\big) \) verifica que \( \nabla\times\mathbf F=\mathbf 0 \) fuera del origen, pero que \( \oint \mathbf F\cdot d\mathbf r=2\pi \) sobre el círculo unitario. Explica por qué esto no contradice el criterio de conservatividad.</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e11"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>Rot nulo fuera del origen ✓, pero \( \mathbf r=(\cos t,\sin t) \) da \( \mathbf F\cdot\mathbf r'=1 \Rightarrow \oint=2\pi \).</p>
+              <p>La región \( \mathbb R^2\setminus\{0\} \) <strong>no es simplemente conexa</strong>: el teorema exige esa hipótesis. En el campo \( F=(-y,x) \) del simulador sí la hay y todo cuadra.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 12 · Flujo de una fuente</span>Un fluido tiene velocidad \( \mathbf v=k\,\mathbf r/r^3 \) (fuente puntual). Calcula el flujo a través de cualquier esfera centrada en la fuente y comenta el resultado con la divergencia fuera del origen.</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e12"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( \mathbf v\cdot\mathbf n=k/R^2 \) en la esfera de radio \(R\): flujo \( =4\pi k \), independiente de \(R\).</p>
+              <p>Fuera del origen \( \nabla\cdot\mathbf v=0 \): lo que entra por una esfera sale por la mayor. Toda la «fuente» vive en el origen — la misma estructura de la ley de Gauss.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 13 · Stokes con dos superficies</span>Para \( \mathbf F=(y^2,\,x,\;z^2) \) calcula la circulación sobre el triángulo de vértices \( (0,0,0),\ (1,0,0),\ (0,1,0) \) usando (a) el triángulo como superficie y (b) directamente parametrizando sus lados. Compara.</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e13"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( \nabla\times\mathbf F=(0,\,0,\,1-2y) \); sobre el triángulo con normal \( (0,0,1) \): \( \iint(1-2y)\,dA=\tfrac12-\tfrac13=\tfrac16 \).</p>
+              <p>Ambas rutas dan \( \oint=\tfrac16 \): la circulación no depende de la superficie elegida con esa frontera.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 14 · Faraday</span>Un campo magnético uniforme \( \mathbf B=B_0\cos(\omega t)\,\mathbf k \) atraviesa un lazo circular de radio \(a\) en el plano \(xy\). Usa la forma integral de Faraday para hallar la fem inducida \( \oint\mathbf E\cdot d\mathbf r \).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e14"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( \Phi_B=B_0\cos(\omega t)\cdot\pi a^2 \Rightarrow \text{fem}=-\tfrac{d\Phi_B}{dt}=B_0\,\omega\,\pi a^2\sin(\omega t). \)</p>
+              <p>Es el principio de operación de generadores e inducciones: Stokes convierte el rotacional de Maxwell en el voltaje del lazo.</p>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <!-- Tarea -->
+    <div class="act-block" id="tareaBlock">
+      <h3>Tarea · Marsden &amp; Tromba, Caps. 7–8</h3>
+      <p class="act-desc">Cuatro problemas para entregar por escrito en la próxima sesión (30% de la nota). Marca cada uno al terminarlo.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 1 · Curva de intersección y longitud</span>Parametriza la curva de intersección del cilindro \( x^2+y^2=1 \) con el plano \( z=y \) y plantea su longitud (puedes dejar la integral; evalúala numéricamente).</span></summary>
+        <div class="sol-body">
+          <p>\( \mathbf r(t)=(\cos t,\;\sin t,\;\sin t),\; 0\le t\le2\pi \) (cumple ambas ecuaciones ✓).</p>
+          <p>\( \mathbf r'=(-\sin t,\;\cos t,\;\cos t),\;\|\mathbf r'\|=\sqrt{\sin^2t+\cos^2t+\cos^2t}=\sqrt{1+\cos^2t}. \)</p>
+          <p>\( L=\int_0^{2\pi}\sqrt{1+\cos^2t}\,dt\approx7.640 \) (elipse espacial; sin antiderivada elemental — el valor se obtiene numéricamente).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t1"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 2 · Potencial con exponencial</span>Verifica que \( \mathbf F=(2x+e^y,\;xe^y+2y) \) es conservativo, halla \(f\) y calcula el trabajo de \( (0,0) \) a \( (1,1) \).</span></summary>
+        <div class="sol-body">
+          <p>\( \partial Q/\partial x=e^y=\partial P/\partial y \) ✓. \( f=x^2+xe^y+y^2+C \) (deriva y verifica ambas componentes).</p>
+          <p>\( W=f(1,1)-f(0,0)=(1+e+1)-0=e+2. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t2"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 3 · Green con rotacional variable</span>Calcula \( \oint_C \mathbf F\cdot d\mathbf r \) para \( \mathbf F=(-y^3,\;x^3) \) sobre el círculo unitario, usando Green, y verifica el sentido del resultado.</span></summary>
+        <div class="sol-body">
+          <p>\( Q_x-P_y=3x^2-(-3y^2)=3(x^2+y^2) \Rightarrow \oint=\iint 3(x^2+y^2)\,dA. \)</p>
+          <p>En polares: \( 3\int_0^{2\pi}\!\!\int_0^1 r^2\cdot r\,dr\,d\theta=3\cdot2\pi\cdot\tfrac14=\tfrac{3\pi}{2}. \)</p>
+          <p>Positivo: el campo gira en el mismo sentido que la orientación de \(C\).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t3"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 4 · Gauss en una caja</span>Calcula el flujo de \( \mathbf F=(x^2,\;y^2,\;z^2) \) a través de la frontera del cubo \( [0,1]^3 \) usando el teorema de Gauss.</span></summary>
+        <div class="sol-body">
+          <p>\( \nabla\cdot\mathbf F=2x+2y+2z \Rightarrow \iint=\iiint(2x+2y+2z)\,dV=2(\tfrac12+\tfrac12+\tfrac12)=3. \)</p>
+          <p>Son 6 caras que habrían exigido 6 integrales: Gauss las colapsa en una triple.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t4"><span>Problema entregado</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Quiz -->
+    <div class="act-block" id="quizBlock">
+      <h3>Quiz de autoevaluación</h3>
+      <p class="act-desc">Seis preguntas de opción múltiple sobre toda la unidad. Selecciona una opción y se verificará al instante.</p>
+
+      <div class="quiz-q" data-qid="q1" data-correct="b">
+        <header><span class="qnum">1</span><p class="q-text">La longitud de \( \mathbf r(t)=(2\cos t,\;3t,\;2\sin t) \), \( 0\le t\le 2\pi \), es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q1" value="a"><span class="opt-key">A</span><span>\(2\pi\cdot3\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="b"><span class="opt-key">B</span><span>\(2\pi\sqrt{13}\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="c"><span class="opt-key">C</span><span>\(4\pi\sqrt{13}\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="d"><span class="opt-key">D</span><span>\(13\pi\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\|\mathbf r'\|=\sqrt{4\sin^2t+9+4\cos^2t}=\sqrt{13}\) constante: \(L=2\pi\sqrt{13}\). Es la firma de hélices y círculos.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q2" data-correct="c">
+        <header><span class="qnum">2</span><p class="q-text">Si \( \mathbf F=\nabla f \), el trabajo de \(A\) a \(B\) vale:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q2" value="a"><span class="opt-key">A</span><span>\(f(A)-f(B)\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="b"><span class="opt-key">B</span><span>depende de la trayectoria elegida</span></label>
+          <label class="opt"><input type="radio" name="q2" value="c"><span class="opt-key">C</span><span>\(f(B)-f(A)\), sin importar la trayectoria</span></label>
+          <label class="opt"><input type="radio" name="q2" value="d"><span class="opt-key">D</span><span>\(\|\mathbf F\|\cdot|AB|\)</span></label>
+        </div>
+        <div class="explain" hidden>Es el teorema fundamental para integrales de línea: \(W=f(B)-f(A)\). La integral es independiente de la trayectoria y toda circulación cerrada es cero.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q3" data-correct="b">
+        <header><span class="qnum">3</span><p class="q-text">El teorema de Green afirma que \( \oint_{\partial D} P\,dx+Q\,dy=\):</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q3" value="a"><span class="opt-key">A</span><span>\(\iint_D \left(\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}\right)dA\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="b"><span class="opt-key">B</span><span>\(\iint_D \left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)dA\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="c"><span class="opt-key">C</span><span>\(\iint_D (P_x-P_y)\,dA\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="d"><span class="opt-key">D</span><span>\(\iint_D (\nabla\cdot\mathbf F)\,dA\) con cualquier \(\mathbf F\)</span></label>
+        </div>
+        <div class="explain" hidden>La forma de circulación de Green usa el rotacional plano: \(\partial Q/\partial x-\partial P/\partial y\). (La opción A es la divergencia: corresponde a la forma de flujo con \(P,Q\) intercambiados.)</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q4" data-correct="c">
+        <header><span class="qnum">4</span><p class="q-text">La divergencia de \( \mathbf F=(x,\;2y,\;3z) \) es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q4" value="a"><span class="opt-key">A</span><span>\(1\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="b"><span class="opt-key">B</span><span>\(3\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="c"><span class="opt-key">C</span><span>\(6\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="d"><span class="opt-key">D</span><span>\(0\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\nabla\cdot\mathbf F=1+2+3=6\): el flujo neto por la esfera de radio \(R\) sería \(6\cdot\tfrac43\pi R^3=8\pi R^3\), por Gauss.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q5" data-correct="a">
+        <header><span class="qnum">5</span><p class="q-text">El teorema de Stokes relaciona la circulación sobre \( \partial S \) con:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q5" value="a"><span class="opt-key">A</span><span>el flujo de \( \nabla\times\mathbf F \) a través de \(S\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="b"><span class="opt-key">B</span><span>la divergencia integrada sobre \(S\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="c"><span class="opt-key">C</span><span>el potencial evaluado en los extremos</span></label>
+          <label class="opt"><input type="radio" name="q5" value="d"><span class="opt-key">D</span><span>el área de \(S\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\oint_{\partial S}\mathbf F\cdot d\mathbf r=\iint_S(\nabla\times\mathbf F)\cdot\mathbf n\,dS\). Consecuencia: superficies distintas con la misma frontera dan la misma circulación.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q6" data-correct="b">
+        <header><span class="qnum">6</span><p class="q-text">El flujo de \( \mathbf F=(x,y,z) \) a través de la esfera de radio \(R\) (normal exterior) es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q6" value="a"><span class="opt-key">A</span><span>\(3\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="b"><span class="opt-key">B</span><span>\(4\pi R^3\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="c"><span class="opt-key">C</span><span>\(\tfrac43\pi R^3\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="d"><span class="opt-key">D</span><span>\(4\pi R^2\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\nabla\cdot\mathbf F=3\) y \(V=\tfrac43\pi R^3\): por Gauss, el flujo es \(3V=4\pi R^3\). El flujo crece como el volumen: ¡la fuente llena el interior!</div>
+      </div>
+
+      <div class="quiz-foot">
+        <div class="quiz-result" id="quizResult"><strong>0</strong> de 6 aciertos</div>
+        <button class="btn ghost sm" id="btnQuizReset"><i data-lucide="rotate-ccw"></i>Reiniciar quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BOLETA ==================== -->
+<section class="view" id="v-boleta" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Seguimiento personal</p>
+      <h2>Mi boleta de la Unidad 6</h2>
+      <p class="sub">Regístrate para activar tu boleta. El progreso (simulador, ejercicios, quiz y tarea) se acumula automáticamente y se guarda solo en tu navegador.</p>
+    </div>
+
+    <div class="panel" id="boletaForm" style="max-width:700px">
+      <div class="panel-head"><i data-lucide="user-plus"></i>Registro del estudiante</div>
+      <div class="panel-body">
+        <div class="field" style="max-width:420px">
+          <label for="studentName">Tu nombre</label>
+          <input id="studentName" placeholder="Nombre y apellido" autocomplete="name">
+        </div>
+        <button class="btn" id="btnRegister" style="margin-top:14px"><i data-lucide="badge-check"></i>Registrarme</button>
+        <p class="hint" style="margin-top:10px">No se envía nada a un servidor: todo vive en el <em>localStorage</em> de este navegador.</p>
+      </div>
+    </div>
+
+    <div class="boleta-card" id="boletaCard" hidden>
+      <div class="b-head">
+        <div class="avatar" id="bAvatar">—</div>
+        <div>
+          <div class="b-title">Cálculo Vectorial · Unidad 6</div>
+          <div class="b-name" id="bName">—</div>
+          <div class="b-meta" id="bMeta">0 de 23 evidencias registradas</div>
+        </div>
+        <div class="b-seal"><span>Unidad 6</span><strong id="bSeal">0.0</strong><span>nota / 10</span></div>
+      </div>
+      <div class="b-body">
+        <div class="b-row">
+          <div><div class="b-rubname">Prácticas en el simulador</div><div class="b-rubdet" id="bdSim">0 de 3 módulos explorados</div></div>
+          <div class="b-bar"><div id="barSim" style="width:0%"></div></div>
+          <div class="b-pts" id="ptSim">0.0 <small>/ 1.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Ejercicios guiados</div><div class="b-rubdet" id="bdEj">0 de 10 ejercicios resueltos</div></div>
+          <div class="b-bar"><div id="barEj" style="width:0%"></div></div>
+          <div class="b-pts" id="ptEj">0.0 <small>/ 2.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Quiz de autoevaluación</div><div class="b-rubdet" id="bdQuiz">0 de 6 respondidas · 0 aciertos</div></div>
+          <div class="b-bar"><div id="barQuiz" style="width:0%"></div></div>
+          <div class="b-pts" id="ptQuiz">0.0 <small>/ 3.0</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Tarea Marsden-Tromba</div><div class="b-rubdet" id="bdTar">0 de 4 problemas entregados</div></div>
+          <div class="b-bar"><div id="barTar" style="width:0%"></div></div>
+          <div class="b-pts" id="ptTar">0.0 <small>/ 3.0</small></div>
+        </div>
+      </div>
+      <div class="b-total">
+        <div>
+          <div class="b-total-lbl">Calificación final de la unidad</div>
+          <div class="b-total-det">Simulador 15% · Ejercicios 25% · Quiz 30% · Tarea 30%</div>
+        </div>
+        <div class="b-score"><span class="big" id="bTotal">0.0</span><span class="den">/ 10</span></div>
+      </div>
+      <div class="b-foot"><span id="bFootDate">—</span><span>Dr. Adrián Cerda · Cálculo Vectorial · Unidad 6</span></div>
+    </div>
+
+    <div class="boleta-actions" id="boletaActions" hidden>
+      <button class="del-btn" id="btnDelete"><i data-lucide="trash-2"></i>Eliminar registro</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="toasts"></div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span><strong>Cálculo Vectorial</strong> — Teoremas fundamentales del cálculo vectorial</span>
+    <span>Dr. Adrián Cerda · Marsden &amp; Tromba, Caps. 7–8 · 2026</span>
+  </div>
+</footer>
+
+<!-- ==================== LIBRERÍAS ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+/* ============================================================
+   UTILIDADES Y ESTADO
+============================================================ */
+console.log('%c✔ Cálculo Vectorial · U6 (Teoremas fundamentales) cargada','color:#0A1C3A;font-weight:bold');
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const f2 = n => (+n).toFixed(2);
+const f3 = n => (+n).toFixed(3);
+const f4 = n => (+n).toFixed(4);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res;
+    s.onerror = () => { s.remove(); rej(new Error('fallo: ' + src)); };
+    document.head.appendChild(s);
+  });
+}
+
+const KEY = 'calc2-u6-state';
+const freshState = () => ({ name:'', ej:{}, tar:{}, quiz:{answers:{}}, sim:{}, ed:{} });
+let state = freshState();
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') state = Object.assign(freshState(), s); } catch(e){}
+state.quiz = state.quiz || {answers:{}};
+state.sim = state.sim || {}; state.ej = state.ej || {}; state.tar = state.tar || {}; state.ed = state.ed || {};
+
+function persist(){ localStorage.setItem(KEY, JSON.stringify(state)); updateBoleta(); }
+
+function typeset(el){
+  if (window.renderMathInElement) renderMathInElement(el || document.body, {
+    delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}],
+    throwOnError:false
+  });
+}
+function showToast(msg, ok=true){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.innerHTML = `<i data-lucide="${ok?'check-circle-2':'alert-circle'}"></i><span>${esc(msg)}</span>`;
+  $('#toasts').appendChild(t);
+  if (window.lucide) lucide.createIcons();
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 3200);
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+function showView(name){
+  $$('.view').forEach(v => v.hidden = (v.id !== 'v-' + name));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if (name === 'simulador') requestAnimationFrame(() => { drawTray(); drawDiv(); });
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-view]');
+  if (t) showView(t.dataset.view);
+});
+ $$('[data-goto-sim]').forEach(b => b.addEventListener('click', () => {
+  showView('simulador');
+  const tab = document.querySelector(`.sim-tab[data-stab="${b.dataset.gotoSim}"]`);
+  if (tab) tab.click();
+}));
+
+/* ============================================================
+   DATOS MATEMÁTICOS
+============================================================ */
+/* Curvas del módulo 1 */
+const CURV = {
+  helix:{ tex:'\\mathbf r(t)=(1.2\\cos t,\\;0.35t-2.2,\\;1.2\\sin t),\\; 0\\le t\\le 4\\pi',
+          t0:0, t1:4*Math.PI, refTxt:'5\\pi \\approx 15.708',
+          pos:t=>[1.2*Math.cos(t), 0.35*t-2.2, 1.2*Math.sin(t)] },
+  circ: { tex:'\\mathbf r(t)=(2\\cos t,\\;0,\\;2\\sin t),\\; 0\\le t\\le 2\\pi',
+          t0:0, t1:2*Math.PI, refTxt:'4\\pi \\approx 12.566',
+          pos:t=>[2*Math.cos(t), 0.01, 2*Math.sin(t)] },
+  onda: { tex:'\\mathbf r(t)=(2\\cos t,\\;1.5\\sin t,\\;0.8\\sin 2t),\\; 0\\le t\\le 2\\pi',
+          t0:0, t1:2*Math.PI, refTxt:null,
+          pos:t=>[2*Math.cos(t), 1.5*Math.sin(t), 0.8*Math.sin(2*t)] }
+};
+function dcurv(def, t){
+  const h = 1e-4, a = def.pos(t+h), b = def.pos(t-h);
+  return [(a[0]-b[0])/(2*h), (a[1]-b[1])/(2*h), (a[2]-b[2])/(2*h)];
+}
+function curvLen(def, N){
+  /* Simpson sobre ||r'|| */
+  const a = def.t0, b = def.t1, h = (b-a)/N;
+  let s = 0;
+  for (let i=0;i<=N;i++){
+    const d = Math.hypot(...dcurv(def, a+i*h));
+    let w = 1; if (i>0 && i<N) w = (i%2? 4:2);
+    s += w*d;
+  }
+  return s*h/3;
+}
+
+/* Campos del módulo de trabajo (conservativos y no) */
+const CFT = {
+  radial:{ tex:'\\mathbf F=(x,\\;y)', P:(x,y)=>x, Q:(x,y)=>y, cons:true, pot:'\\tfrac{x^2+y^2}{2}',
+           potNum:(x,y)=>(x*x+y*y)/2, note:'Conservativo con \\( f=\\tfrac{x^2+y^2}{2} \\): las tres trayectorias deben dar lo mismo.' },
+  mixto: { tex:'\\mathbf F=(2xy,\\;x^2+2y)', P:(x,y)=>2*x*y, Q:(x,y)=>x*x+2*y, cons:true, pot:'x^2y+y^2',
+           potNum:(x,y)=>x*x*y+y*y, note:'Conservativo con \\( f=x^2y+y^2 \\): verifica \\( \\partial Q/\\partial x=2x=\\partial P/\\partial y \\).' },
+  rot:   { tex:'\\mathbf F=(-y,\\;x)', P:(x,y)=>-y, Q:(x,y)=>x, cons:false, pot:null,
+           potNum:null, note:'No conservativo: \\( \\nabla\\times\\mathbf F=2\\mathbf k \\). El trabajo depende del camino — observa la diferencia entre rutas.' }
+};
+const TRAY = {
+  recta:{ name:'Recta \\(y=0\\)', col:'#8f9aa8', pt:u=>[-1+2*u, 0] },
+  semi: { name:'Semicírculo superior', col:'#143466', pt:u=>{ const th=Math.PI*(1-u); return [Math.cos(th), Math.sin(th)]; } },
+  poli: { name:'Poligonal por \\((0,1.4)\\)', col:'#C9A84C', pt:u=> u<0.5? [-1+2*u, 2.8*u] : [2*u-1, 2.8*(1-u)] }
+};
+function workAlong(fn, pt){
+  const N = 800, h = 1/N;
+  let w = 0;
+  for (let i=0;i<=N;i++){
+    const u = i*h;
+    const [x,y] = pt(u);
+    const [dx,dy] = [ (pt(Math.min(u+h,1))[0]-pt(Math.max(u-h,0))[0])/(Math.min(u+h,1)-Math.max(u-h,0)||h),
+                      (pt(Math.min(u+h,1))[1]-pt(Math.max(u-h,0))[1])/(Math.min(u+h,1)-Math.max(u-h,0)||h) ];
+    w += (fn.P(x,y)*dx + fn.Q(x,y)*dy) * (i===0||i===N? .5:1);
+  }
+  return w*h;
+}
+
+/* Campos del módulo div/rot */
+const CFD = {
+  radial:   { tex:'\\mathbf F=(x,\\;y)', P:(x,y)=>x, Q:(x,y)=>y, div:()=>2, rot:()=>0 },
+  giratorio:{ tex:'\\mathbf F=(-y,\\;x)', P:(x,y)=>-y, Q:(x,y)=>x, div:()=>0, rot:()=>2 },
+  espiral:  { tex:'\\mathbf F=(x-y,\\;x+y)', P:(x,y)=>x-y, Q:(x,y)=>x+y, div:()=>2, rot:()=>2 },
+  variable: { tex:'\\mathbf F=(x^2,\\;y^2)', P:(x,y)=>x*x, Q:(x,y)=>y*y, div:(x,y)=>2*x+2*y, rot:()=>0 }
+};
+
+/* ============================================================
+   THREE.JS — ESCENA
+============================================================ */
+const PAL = { ink:0x0A1C3A, blue:0x143466, pine:0x007B5D, gold:0xC9A84C, goldL:0xE8D5A3, goldD:0xB8860B, greenL:0xD4EDDA, gray:0x8f9aa8 };
+let hero = null, sim = null, heroDot = null, heroArrow = null;
+const HERO_HELIX = CURV.helix;
+
+function SimpleOrbit(camera, el, opts={}){
+  const tgt = new THREE.Vector3(...(opts.target || [0,0,0]));
+  const off = new THREE.Vector3(...(opts.cam || [5,4,7])).sub(tgt);
+  const r0 = off.length() || 1;
+  const st = { r: r0, theta: Math.atan2(off.x, off.z), phi: Math.acos(Math.max(-1, Math.min(1, off.y / r0))) };
+  const api = { autoRotate: !!opts.autoRotate };
+  function apply(){
+    const sp = Math.sin(st.phi);
+    camera.position.set(tgt.x + st.r*sp*Math.sin(st.theta), tgt.y + st.r*Math.cos(st.phi), tgt.z + st.r*sp*Math.cos(st.theta));
+    camera.lookAt(tgt);
+  }
+  let drag = false, px = 0, py = 0;
+  el.style.touchAction = 'none';
+  el.addEventListener('pointerdown', e => { drag = true; px = e.clientX; py = e.clientY; try { el.setPointerCapture(e.pointerId); } catch(_){} });
+  el.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - px, dy = e.clientY - py; px = e.clientX; py = e.clientY;
+    st.theta -= dx * .008;
+    st.phi = Math.max(.2, Math.min(Math.PI - .2, st.phi - dy * .008));
+    apply();
+  });
+  const stop = () => { drag = false; };
+  el.addEventListener('pointerup', stop); el.addEventListener('pointercancel', stop); el.addEventListener('lostpointercapture', stop);
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    st.r = Math.max(3, Math.min(45, st.r * (1 + Math.sign(e.deltaY) * .07)));
+    apply();
+  }, { passive:false });
+  api.update = () => { if (api.autoRotate){ st.theta += .0035; apply(); } };
+  apply();
+  return api;
+}
+function attachControls(camera, el, opts){
+  if (THREE.OrbitControls){
+    const c = new THREE.OrbitControls(camera, el);
+    c.enableDamping = true; c.dampingFactor = .08;
+    c.target.set(...(opts.target || [0,0,0]));
+    c.minDistance = 3; c.maxDistance = 45;
+    if (opts.autoRotate){ c.autoRotate = true; c.autoRotateSpeed = 1.1; }
+    c.update();
+    return c;
+  }
+  return SimpleOrbit(camera, el, opts);
+}
+function makeScene(el, opts={}){
+  let canvas, evEl;
+  if (el && el.tagName === 'CANVAS'){ canvas = el; evEl = el; }
+  else { canvas = document.createElement('canvas'); el.appendChild(canvas); evEl = el; }
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf6f7f9);
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300);
+  camera.position.set(...(opts.cam || [5,4,7]));
+  const controls = attachControls(camera, evEl, opts);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe4ea, .95));
+  const d1 = new THREE.DirectionalLight(0xffffff, .7); d1.position.set(6,10,5); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, .28); d2.position.set(-7,5,-6); scene.add(d2);
+  return { renderer, scene, camera, controls };
+}
+function lineFromPoints(pts, color, opacity){
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const mat = new THREE.LineBasicMaterial({ color, transparent:(opacity||1) < 1, opacity:opacity||1 });
+  return new THREE.Line(geo, mat);
+}
+function clearGroup(g){
+  [...g.children].forEach(c => {
+    g.remove(c);
+    c.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m => m.dispose && m.dispose());
+    });
+  });
+}
+function sizeCheck(o){
+  const c = o.renderer.domElement;
+  const w = c.clientWidth, h = c.clientHeight;
+  if (w < 4 || h < 4) return false;
+  const s = o.renderer.getSize(new THREE.Vector2());
+  if (s.x !== w || s.y !== h){ o.renderer.setSize(w, h, false); o.camera.aspect = w/h; o.camera.updateProjectionMatrix(); }
+  return true;
+}
+
+/* ---------- HERO: hélice con punto móvil ---------- */
+let heroT = 0;
+function initHero(){
+  hero = makeScene($('#heroCanvas'), { cam:[5.2,3.4,6.6], target:[0,-0.2,0], autoRotate:true });
+  class Helix extends THREE.Curve {
+    getPoint(t){
+      const u = HERO_HELIX.t0 + t*(HERO_HELIX.t1-HERO_HELIX.t0);
+      const p = HERO_HELIX.pos(u);
+      return new THREE.Vector3(p[0], p[1], p[2]);
+    }
+  }
+  const tube = new THREE.Mesh(
+    new THREE.TubeGeometry(new Helix(), 340, .055, 8, false),
+    new THREE.MeshLambertMaterial({ color:PAL.blue })
+  );
+  hero.scene.add(tube);
+  const grid = new THREE.GridHelper(7, 10, 0xaab4c0, 0xdadfe6);
+  grid.position.y = -3.2;
+  hero.scene.add(grid);
+  heroDot = new THREE.Mesh(new THREE.SphereGeometry(.13,18,14), new THREE.MeshBasicMaterial({ color:PAL.gold }));
+  heroArrow = new THREE.ArrowHelper(new THREE.Vector3(1,0,0), new THREE.Vector3(0,0,0), 1.1, PAL.pine, .3, .18);
+  hero.scene.add(heroDot, heroArrow);
+  heroUpdate();
+}
+function heroUpdate(){
+  if (!heroDot) return;
+  const p = HERO_HELIX.pos(heroT), d = dcurv(HERO_HELIX, heroT);
+  const m = Math.hypot(d[0],d[1],d[2]) || 1;
+  heroDot.position.set(p[0],p[1],p[2]);
+  heroArrow.position.set(p[0],p[1],p[2]);
+  heroArrow.setDirection(new THREE.Vector3(d[0]/m,d[1]/m,d[2]/m));
+}
+
+/* ---------- SIMULADOR 3D (módulo curvas) ---------- */
+let simGroup = null;
+const CVW = { showPoly:true, tFrac:0 };
+function initSim(){
+  sim = makeScene($('#threeContainer'), { cam:[5.6,4.2,6.2], target:[0,-0.2,0] });
+  simGroup = new THREE.Group();
+  sim.scene.add(simGroup);
+  rebuildSim();
+}
+function rebuildSim(){
+  if (!sim || !simGroup) return;
+  clearGroup(simGroup);
+  const def = CURV[$('#selCurva').value];
+  /* curva suave */
+  const pts = [];
+  for (let i=0;i<=400;i++){
+    const t = def.t0 + (def.t1-def.t0)*i/400;
+    const p = def.pos(t); pts.push(new THREE.Vector3(p[0],p[1],p[2]));
+  }
+  simGroup.add(lineFromPoints(pts, PAL.blue));
+  /* poligonal */
+  const n = +$('#nSlider').value;
+  const pp = [];
+  for (let i=0;i<=n;i++){
+    const t = def.t0 + (def.t1-def.t0)*i/n;
+    const p = def.pos(t); pp.push(new THREE.Vector3(p[0],p[1],p[2]));
+  }
+  if (CVW.showPoly){
+    simGroup.add(lineFromPoints(pp, PAL.goldD));
+    pp.forEach(v => {
+      const s = new THREE.Mesh(new THREE.SphereGeometry(.045,10,8), new THREE.MeshBasicMaterial({ color:PAL.gold }));
+      s.position.copy(v); simGroup.add(s);
+    });
+  }
+  /* punto móvil + tangente según slider */
+  const t = def.t0 + CVW.tFrac*(def.t1-def.t0);
+  const p = def.pos(t), d = dcurv(def, t);
+  const m = Math.hypot(d[0],d[1],d[2]) || 1;
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(.11,16,12), new THREE.MeshBasicMaterial({ color:PAL.gold }));
+  dot.position.set(p[0],p[1],p[2]);
+  simGroup.add(dot);
+  simGroup.add(new THREE.ArrowHelper(new THREE.Vector3(d[0]/m,d[1]/m,d[2]/m), new THREE.Vector3(p[0],p[1],p[2]), 1.1, PAL.pine, .3, .18));
+
+  /* números */
+  const Lpoly = pp.reduce((acc,v,i)=> i? acc+v.distanceTo(pp[i-1]) : 0, 0);
+  const Lref = curvLen(def, 2000);
+  $('#cvPoly').textContent = f3(Lpoly);
+  $('#cvRef').textContent = (def.refTxt? def.refTxt+'  = ' : '') + f3(Lref);
+  $('#cvErr').textContent = f4(Math.abs(Lpoly-Lref));
+  $('#cvSpeed').textContent = f3(m);
+
+  const eq = $('#eqText');
+  eq.innerHTML = `\\(L=\\int_a^b\\|\\mathbf r'(t)\\|\\,dt\\qquad ${def.tex}\\)`;
+  typeset(eq);
+}
+
+/* ============================================================
+   CANVAS 2D — TRABAJO Y DIV/ROT
+============================================================ */
+function setup2D(cv){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (w<4 || h<4) return null;
+  cv.width = w*dpr; cv.height = h*dpr;
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return { ctx, w, h };
+}
+function worldMapper(bbox, w, h){
+  const [x0,x1,y0,y1] = bbox;
+  const s = Math.min(w/(x1-x0), h/(y1-y0)) * 0.86;
+  const ox = w/2 - (x0+x1)/2*s, oy = h/2 + (y0+y1)/2*s;
+  return { s, ox, oy, X:x=>ox+x*s, Y:y=>oy-y*s, wx:mx=>(mx-ox)/s, wy:my=>(oy-my)/s };
+}
+let TRAYSEL = { active:null };
+function drawTray(){
+  const cv = $('#trayCanvas'); if (!cv) return;
+  const st = setup2D(cv); if (!st) return;
+  const { ctx, w, h } = st;
+  const fn = CFT[$('#selCampoT').value];
+  const S = worldMapper([-2.4,2.4,-1.9,1.9], w, h);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#f6f7f9'; ctx.fillRect(0,0,w,h);
+  /* ejes */
+  ctx.strokeStyle='rgba(10,28,58,.3)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(0,S.Y(0)); ctx.lineTo(w,S.Y(0)); ctx.moveTo(S.X(0),0); ctx.lineTo(S.X(0),h); ctx.stroke();
+  /* campo de flechas */
+  const NA=17, NB=13;
+  for (let i=0;i<NA;i++) for (let j=0;j<NB;j++){
+    const x=-2.2+4.4*i/(NA-1), y=-1.7+3.4*j/(NB-1);
+    const m=Math.hypot(fn.P(x,y),fn.Q(x,y)); if (m<1e-9) continue;
+    const L=Math.min(16, 7+9*Math.min(m,2.5)/2.5);
+    const ux=fn.P(x,y)/m, uy=fn.Q(x,y)/m;
+    const px=S.X(x), py=S.Y(y);
+    ctx.strokeStyle='rgba(10,28,58,.3)'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+ux*L, py-uy*L); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px+ux*L, py-uy*L);
+    ctx.lineTo(px+ux*L-ux*5-uy*3.2, py-uy*L+uy*5-ux*3.2);
+    ctx.lineTo(px+ux*L-ux*5+uy*3.2, py-uy*L+uy*5+ux*3.2);
+    ctx.closePath(); ctx.fillStyle='rgba(10,28,58,.3)'; ctx.fill();
+  }
+  /* trayectorias */
+  const keys=['recta','semi','poli'];
+  keys.forEach(k=>{
+    const T=TRAY[k];
+    ctx.strokeStyle=T.col; ctx.lineWidth = TRAYSEL.active===k? 4:2.2;
+    ctx.beginPath();
+    for(let i=0;i<=120;i++){ const [x,y]=T.pt(i/120); i? ctx.lineTo(S.X(x),S.Y(y)) : ctx.moveTo(S.X(x),S.Y(y)); }
+    ctx.stroke();
+  });
+  /* A y B */
+  [[-1,0,'#0A1C3A','A'],[1,0,'#007B5D','B']].forEach(([x,y,c,lb])=>{
+    ctx.beginPath(); ctx.arc(S.X(x),S.Y(y),7,0,Math.PI*2);
+    ctx.fillStyle=c; ctx.fill();
+    ctx.fillStyle=c; ctx.font='700 13px Instrument Sans';
+    ctx.fillText(lb, S.X(x)+10, S.Y(y)-8);
+  });
+}
+function updateTrayInfo(){
+  const key = $('#selCampoT').value, fn = CFT[key];
+  const rows = Object.keys(TRAY).map(k=>{
+    const wv = workAlong(fn, TRAY[k].pt);
+    return `<div style="display:flex;justify-content:space-between;border-bottom:1px dashed rgba(10,28,58,.15);padding:4px 0">
+      <span style="color:${TRAY[k].col};font-weight:700">■</span><span style="flex:1;margin-left:8px">${TRAY[k].name}</span>
+      <b class="mono">${f3(wv)}</b></div>`;
+  }).join('');
+  let extra='';
+  if (fn.cons && fn.potNum){
+    const d = fn.potNum(1,0)-fn.potNum(-1,0);
+    extra = `<div style="display:flex;justify-content:space-between;border-bottom:1px solid rgba(10,28,58,.3);padding:4px 0;margin-top:4px">
+      <span style="font-weight:700">\(f(B)-f(A)\)</span><b class="mono" style="color:var(--pine)">${f3(d)}</b></div>`;
+  }
+  $('#tablaTrabajo').innerHTML = rows + extra;
+  $('#twNote').innerHTML = fn.note;
+  typeset($('#tablaTrabajo')); typeset($('#twNote'));
+}
+
+/* ---------- div/rot ---------- */
+const DV = { cx:0, cy:0, dragging:false };
+function drawDiv(){
+  const cv = $('#divCanvas'); if (!cv) return;
+  const st = setup2D(cv); if (!st) return;
+  const { ctx, w, h } = st;
+  const fn = CFD[$('#selCampoD').value];
+  const r = +$('#rSlider').value;
+  const S = worldMapper([-2.6,2.6,-1.9,1.9], w, h);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#f6f7f9'; ctx.fillRect(0,0,w,h);
+  ctx.strokeStyle='rgba(10,28,58,.3)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(0,S.Y(0)); ctx.lineTo(w,S.Y(0)); ctx.moveTo(S.X(0),0); ctx.lineTo(S.X(0),h); ctx.stroke();
+  /* flechas de campo */
+  const NA=19, NB=14;
+  for (let i=0;i<NA;i++) for (let j=0;j<NB;j++){
+    const x=-2.4+4.8*i/(NA-1), y=-1.7+3.4*j/(NB-1);
+    const m=Math.hypot(fn.P(x,y),fn.Q(x,y)); if (m<1e-9) continue;
+    const L=Math.min(15, 6+9*Math.min(m,2.2)/2.2);
+    const ux=fn.P(x,y)/m, uy=fn.Q(x,y)/m;
+    const px=S.X(x), py=S.Y(y);
+    ctx.strokeStyle='rgba(10,28,58,.28)'; ctx.lineWidth=1.3;
+    ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+ux*L, py-uy*L); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(px+ux*L, py-uy*L);
+    ctx.lineTo(px+ux*L-ux*4.5-uy*3, py-uy*L+uy*4.5-ux*3);
+    ctx.lineTo(px+ux*L-ux*4.5+uy*3, py-uy*L+uy*4.5+ux*3);
+    ctx.closePath(); ctx.fillStyle='rgba(10,28,58,.28)'; ctx.fill();
+  }
+  /* círculo de prueba */
+  ctx.beginPath(); ctx.arc(S.X(DV.cx), S.Y(DV.cy), r*S.s, 0, Math.PI*2);
+  ctx.strokeStyle='#B8860B'; ctx.lineWidth=2.4; ctx.stroke();
+  /* ticks: flujo (verde, radial) y circulación (dorado, tangencial) */
+  const M=48;
+  for (let i=0;i<M;i++){
+    const th=i/M*2*Math.PI;
+    const nx=Math.cos(th), ny=Math.sin(th);
+    const tx=-ny, ty=nx;
+    const x=DV.cx+r*nx, y=DV.cy+r*ny;
+    const Fx=fn.P(x,y), Fy=fn.Q(x,y);
+    const fnv=Fx*nx+Fy*ny, ftv=Fx*tx+Fy*ty;
+    const px=S.X(x), py=S.Y(y);
+    if (Math.abs(fnv)>0.05){
+      const sgn=Math.sign(fnv), L=Math.min(13, Math.abs(fnv)*7);
+      ctx.strokeStyle='rgba(0,123,93,.8)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+nx*sgn*L, py-ny*sgn*L); ctx.stroke();
+    }
+    if (Math.abs(ftv)>0.05){
+      const sgn=Math.sign(ftv), L=Math.min(11, Math.abs(ftv)*7);
+      ctx.strokeStyle='rgba(201,168,76,.95)'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(px,py); ctx.lineTo(px+tx*sgn*L, py-ty*sgn*L); ctx.stroke();
+    }
+  }
+  /* centro */
+  ctx.beginPath(); ctx.arc(S.X(DV.cx), S.Y(DV.cy), 3.5, 0, Math.PI*2);
+  ctx.fillStyle='#B8860B'; ctx.fill();
+  /* números */
+  const M2=400, ds=2*Math.PI*r/M2;
+  let flujo=0, circ=0;
+  for (let i=0;i<M2;i++){
+    const th=i/M2*2*Math.PI;
+    const nx=Math.cos(th), ny=Math.sin(th);
+    const x=DV.cx+r*nx, y=DV.cy+r*ny;
+    const Fx=fn.P(x,y), Fy=fn.Q(x,y);
+    flujo += (Fx*nx+Fy*ny)*ds;
+    circ  += (Fx*(-ny)+Fy*nx)*ds;
+  }
+  const area=Math.PI*r*r;
+  $('#dvFlujo').textContent = f3(flujo);
+  $('#dvCirc').textContent  = f3(circ);
+  $('#dvFA').textContent = f3(flujo/area) + '   ·   div(' + f2(DV.cx) + ',' + f2(DV.cy) + ') = ' + f2(fn.div(DV.cx,DV.cy));
+  $('#dvCA').textContent = f3(circ/area) + '   ·   rot(' + f2(DV.cx) + ',' + f2(DV.cy) + ') = ' + f2(fn.rot(DV.cx,DV.cy));
+  $('#dvNote').innerHTML = 'Con r pequeño, flujo/área converge a \\(\\nabla\\cdot\\mathbf F\\) y circulación/área a \\((\\nabla\\times\\mathbf F)\\cdot\\mathbf k\\) en el centro. Con r grande, Green integra por toda la región.';
+  typeset($('#dvNote'));
+  const eq=$('#eqText');
+  eq.innerHTML=`\\(\\displaystyle \\oint \\mathbf F\\cdot\\mathbf n\\,ds=\\iint \\nabla\\cdot\\mathbf F\\,dA,\\qquad \\oint \\mathbf F\\cdot d\\mathbf r=\\iint(\\nabla\\times\\mathbf F)\\cdot\\mathbf k\\,dA\\)`;
+  typeset(eq);
+}
+function divPointer(e){
+  const cv = $('#divCanvas'); if (!cv) return;
+  const rect = cv.getBoundingClientRect();
+  const S = worldMapper([-2.6,2.6,-1.9,1.9], rect.width, rect.height);
+  DV.cx = Math.max(-2.2, Math.min(2.2, S.wx(e.clientX-rect.left)));
+  DV.cy = Math.max(-1.6, Math.min(1.6, S.wy(e.clientY-rect.top)));
+  drawDiv();
+}
+(function initDivCanvas(){
+  const cv = $('#divCanvas');
+  cv.addEventListener('pointerdown', e=>{ DV.dragging=true; divPointer(e); try{cv.setPointerCapture(e.pointerId);}catch(_){}});
+  cv.addEventListener('pointermove', e=>{ if (DV.dragging) divPointer(e); });
+  const up=()=>{DV.dragging=false;};
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+})();
+
+/* ---------- Loop maestro ---------- */
+let lastT = performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.05, (now - lastT)/1000 || 0.016); lastT = now;
+  if (hero && sizeCheck(hero)){ hero.controls.update(); hero.renderer.render(hero.scene, hero.camera); }
+  if (sim  && sizeCheck(sim)) { sim.controls.update();  sim.renderer.render(sim.scene, sim.camera); }
+  heroT += dt*1.15;
+  if (heroT > HERO_HELIX.t1) heroT = HERO_HELIX.t0;
+  heroUpdate();
+}
+window.addEventListener('resize', () => { drawTray(); drawDiv(); });
+
+/* ---------- Controles del simulador ---------- */
+ $$('.sim-tab').forEach(b => b.addEventListener('click', () => {
+  $$('.sim-tab').forEach(x => x.classList.remove('active'));
+  $$('.sim-panel').forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+  $('#st-' + b.dataset.stab).classList.add('active');
+  SIMCUR.tab = b.dataset.stab;
+  $('#threeContainer').hidden = SIMCUR.tab !== 'curvas';
+  $('#trayContainer').hidden  = SIMCUR.tab !== 'trabajo';
+  $('#divContainer').hidden   = SIMCUR.tab !== 'divrot';
+  if (SIMCUR.tab === 'curvas'){ if (sim) rebuildSim(); else requestAnimationFrame(initSim); }
+  if (SIMCUR.tab === 'trabajo'){ drawTray(); updateTrayInfo(); }
+  if (SIMCUR.tab === 'divrot') drawDiv();
+  const CAPS = {
+    curvas:'Curva \( \\mathbf r(t) \\) (azul), poligonal de n cuerdas (dorado oscuro), punto móvil con su tangente (verde). Mueve t y sube n: las cuerdas se pegan a la curva y la longitud converge.',
+    trabajo:'Tres rutas de A a B sobre el campo de flechas. El botón «Calcular» compara los trabajos: si coinciden, el campo es conservativo.',
+    divrot:'Círculo de prueba sobre el campo: los ticks verdes miden el flujo local y los dorados la circulación local. Arrastra el centro o cambia el radio.'
+  };
+  const cap = $('#graphCap');
+  cap.textContent = CAPS[SIMCUR.tab];
+  typeset(cap);
+}));
+const SIMCUR = { tab:'curvas' };
+ $('#selCurva').addEventListener('change', rebuildSim);
+ $('#tSlider').addEventListener('input', e => {
+  CVW.tFrac = (+e.target.value)/1000;
+  const def = CURV[$('#selCurva').value];
+  $('#tVal').textContent = f2(def.t0 + CVW.tFrac*(def.t1-def.t0));
+  rebuildSim();
+});
+ $('#nSlider').addEventListener('input', e => { $('#nVal').textContent = e.target.value; rebuildSim(); });
+ $('#btnPoly').addEventListener('click', () => { CVW.showPoly=!CVW.showPoly; rebuildSim(); });
+ $('#btnCurva').addEventListener('click', () => {
+  rebuildSim();
+  if (!state.sim.curvas){ state.sim.curvas=true; persist(); showToast('Módulo «Curvas y longitud» registrado en tu boleta.', true); }
+});
+ $('#selCampoT').addEventListener('change', () => { TRAYSEL.active=null; drawTray(); updateTrayInfo(); });
+ $$('[data-tray]').forEach(b => b.addEventListener('click', () => {
+  TRAYSEL.active = b.dataset.tray; drawTray();
+}));
+ $('#btnTrabajo').addEventListener('click', () => {
+  updateTrayInfo(); drawTray();
+  if (!state.sim.trabajo){ state.sim.trabajo=true; persist(); showToast('Módulo «Trabajo y conservativos» registrado en tu boleta.', true); }
+});
+ $('#selCampoD').addEventListener('change', drawDiv);
+ $('#rSlider').addEventListener('input', e => { $('#rVal').textContent = f2(+e.target.value); drawDiv(); });
+ $('#btnDivrot').addEventListener('click', () => {
+  drawDiv();
+  if (!state.sim.divrot){ state.sim.divrot=true; persist(); showToast('Módulo «Divergencia y rotacional» registrado en tu boleta.', true); }
+});
+
+/* ============================================================
+   QUIZ
+============================================================ */
+function quizCorrect(){
+  let n = 0;
+  $$('.quiz-q').forEach(q => { const a = state.quiz.answers[q.dataset.qid]; if (a && a === q.dataset.correct) n++; });
+  return n;
+}
+function updateQuizResult(){
+  $('#quizResult').innerHTML = `<strong>${quizCorrect()}</strong> de 6 aciertos`;
+}
+function gradeQuestion(q, correct, chosen, reveal){
+  q.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('is-correct','is-wrong','locked');
+    if (o.querySelector('input').value === correct) o.classList.add('is-correct');
+    else if (reveal && o.querySelector('input').value === chosen) o.classList.add('is-wrong');
+    o.classList.add('locked');
+  });
+  const ex = q.querySelector('.explain'); if (ex) ex.hidden = !reveal;
+}
+ $$('.quiz-q').forEach(q => {
+  const qid = q.dataset.qid, correct = q.dataset.correct;
+  q.querySelectorAll('.opt input').forEach(inp => inp.addEventListener('change', () => {
+    gradeQuestion(q, correct, inp.value, true);
+    state.quiz.answers[qid] = inp.value;
+    persist(); updateQuizResult();
+  }));
+});
+ $('#btnQuizReset').addEventListener('click', () => {
+  state.quiz.answers = {}; persist();
+  $$('.quiz-q').forEach(q => {
+    q.querySelectorAll('input').forEach(i => i.checked = false);
+    q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+    const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+  });
+  updateQuizResult(); showToast('Quiz reiniciado.', true);
+});
+
+/* ============================================================
+   CHECKBOXES
+============================================================ */
+function syncChk(i){ const c = i.closest('.chk'); if (c) c.classList.toggle('done', i.checked); }
+ $$('input[data-ej]').forEach(i => {
+  i.checked = !!state.ej[i.dataset.ej]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.ej[i.dataset.ej] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Ejercicio marcado como resuelto. ¡Bien!', true);
+  });
+});
+ $$('input[data-tar]').forEach(i => {
+  i.checked = !!state.tar[i.dataset.tar]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.tar[i.dataset.tar] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Problema de tarea registrado.', true);
+  });
+});
+
+/* ============================================================
+   EDITOR LATEX
+============================================================ */
+const CMDS = [
+  { g:'Curvas e integrales de línea', items:[
+    { code:'\\mathbf r(t)=(x(t),\\;y(t),\\;z(t))', view:'\\mathbf r(t)=(x(t),\\;y(t),\\;z(t))' },
+    { code:'\\mathbf r\\,\'(t)', view:'\\mathbf r\\,\'(t)' },
+    { code:'L=\\int_a^b\\|\\mathbf r\\,\'(t)\\|\\,dt', view:'L=\\int_a^b\\|\\mathbf r\\,\'(t)\\|\\,dt' },
+    { code:'\\int_C \\mathbf F\\cdot d\\mathbf r', view:'\\int_C \\mathbf F\\cdot d\\mathbf r' },
+    { code:'\\int_C P\\,dx+Q\\,dy+R\\,dz', view:'\\int_C P\\,dx+Q\\,dy+R\\,dz' }
+  ]},
+  { g:'Operadores y teoremas', items:[
+    { code:'\\nabla f', view:'\\nabla f' },
+    { code:'\\nabla\\cdot\\mathbf F', view:'\\nabla\\cdot\\mathbf F' },
+    { code:'\\nabla\\times\\mathbf F', view:'\\nabla\\times\\mathbf F' },
+    { code:'\\oint_{\\partial D} P\\,dx+Q\\,dy=\\iint_D\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)dA', view:'\\oint_{\\partial D}=\\iint_D' },
+    { code:'\\iint_S \\mathbf F\\cdot\\mathbf n\\,dS=\\iiint_E \\nabla\\cdot\\mathbf F\\,dV', view:'\\iint_{\\partial E}=\\iiint_E\\nabla\\cdot\\mathbf F\\,dV' },
+    { code:'\\oint_{\\partial S}\\mathbf F\\cdot d\\mathbf r=\\iint_S(\\nabla\\times\\mathbf F)\\cdot\\mathbf n\\,dS', view:'\\oint_{\\partial S}=\\iint_S(\\nabla\\times\\mathbf F)\\cdot\\mathbf n\\,dS' }
+  ]},
+  { g:'Símbolos', items:[
+    { code:'\\mathbf n', view:'\\mathbf n' },
+    { code:'\\Phi_B', view:'\\Phi_B' },
+    { code:'\\varepsilon_0\\ \\ \\mu_0', view:'\\varepsilon_0\\ \\ \\mu_0' },
+    { code:'\\Rightarrow', view:'\\Rightarrow' }
+  ]}
+];
+function initEditors(){
+  $$('.ed-box').forEach(box => {
+    const key = box.dataset.ed;
+    const manual = CMDS.map(g => `<div class="ed-cmd-title">${g.g}</div>` + g.items.map(it => `
+      <div class="cmd-row">
+        <span class="cmd-code">${esc(it.code)}</span>
+        <span class="cmd-view">\\(${it.view}\\)</span>
+        <button class="cmd-add" data-code="${esc(it.code).replace(/"/g,'&quot;')}" title="Insertar en el cursor">+</button>
+      </div>`).join('')).join('');
+    box.innerHTML = `
+      <div class="ed-toolbar">
+        <span class="ed-title"><i data-lucide="pen-line"></i>Editor LaTeX · Ejercicio ${key.slice(1)}</span>
+        <span class="ed-status" data-role="status"><span class="dot"></span><span data-role="statusTxt">Sin guardar</span></span>
+      </div>
+      <div class="ed-grid">
+        <div class="ed-main">
+          <textarea class="ed-ta" data-role="ta" placeholder="Escribe tu solución. Usa \\( ... \\) para fórmulas en línea y $$ ... $$ para centradas."></textarea>
+          <div class="ed-preview-wrap">
+            <div class="ed-preview-head">Vista previa</div>
+            <div class="ed-preview" data-role="prev"><span class="ed-ph">La vista previa aparecerá aquí…</span></div>
+          </div>
+        </div>
+        <div class="ed-manual">
+          <p class="ed-note">Haz clic en <b>+</b> para insertar un comando en el cursor. Delimitadores: <code>\\( \\)</code> en línea, <code>$$ $$</code> centrado.</p>
+          ${manual}
+        </div>
+      </div>
+      <div class="ed-foot">
+        <span class="ed-count" data-role="count">0 caracteres</span>
+        <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-role="clear">Limpiar</button>
+          <button class="btn sm" data-role="save"><i data-lucide="save"></i>Guardar borrador</button>
+        </span>
+      </div>`;
+    const ta = box.querySelector('[data-role=ta]');
+    const prev = box.querySelector('[data-role=prev]');
+    const statusEl = box.querySelector('[data-role=status]');
+    const statusTxt = box.querySelector('[data-role=statusTxt]');
+    const count = box.querySelector('[data-role=count]');
+    if (state.ed[key]) ta.value = state.ed[key];
+    const renderPrev = () => {
+      if (!ta.value.trim()){ prev.innerHTML = '<span class="ed-ph">La vista previa aparecerá aquí…</span>'; return; }
+      prev.textContent = ta.value;
+      typeset(prev);
+    };
+    const setSaved = s => { statusEl.classList.toggle('saved', s); statusTxt.textContent = s ? 'Guardado' : 'Sin guardar'; };
+    let deb;
+    ta.addEventListener('input', () => {
+      count.textContent = ta.value.length + ' caracteres';
+      setSaved(false);
+      clearTimeout(deb); deb = setTimeout(renderPrev, 350);
+    });
+    box.querySelectorAll('.cmd-add').forEach(btn => btn.addEventListener('click', () => {
+      const code = btn.dataset.code;
+      const s = ta.selectionStart, e2 = ta.selectionEnd;
+      ta.value = ta.value.slice(0, s) + code + ta.value.slice(e2);
+      ta.focus(); ta.selectionStart = ta.selectionEnd = s + code.length;
+      ta.dispatchEvent(new Event('input'));
+    }));
+    box.querySelector('[data-role=save]').addEventListener('click', () => {
+      state.ed[key] = ta.value; persist(); setSaved(true);
+      showToast('Borrador del ejercicio ' + key.slice(1) + ' guardado.', true);
+    });
+    box.querySelector('[data-role=clear]').addEventListener('click', () => {
+      ta.value = ''; ta.dispatchEvent(new Event('input')); renderPrev();
+    });
+    if (state.ed[key]) setSaved(true);
+    renderPrev();
+    count.textContent = ta.value.length + ' caracteres';
+  });
+  if (window.lucide) lucide.createIcons();
+}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+function initials(name){
+  return (name.trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase()) || '?';
+}
+function updateBoleta(){
+  const simN = ['curvas','trabajo','divrot'].filter(k => state.sim[k]).length;
+  const ejN  = Object.values(state.ej).filter(Boolean).length;
+  const qN   = Object.keys(state.quiz.answers).length;
+  const qC   = quizCorrect();
+  const tarN = Object.values(state.tar).filter(Boolean).length;
+  const pSim = 1.5*simN/3, pEj = 2.5*ejN/10, pQ = 3*qC/6, pT = 3*tarN/4;
+  const total = pSim + pEj + pQ + pT;
+
+  $('#barSim').style.width = (simN/3*100)+'%';
+  $('#bdSim').textContent  = `${simN} de 3 módulos explorados`;
+  $('#ptSim').innerHTML    = `${pSim.toFixed(1)} <small>/ 1.5</small>`;
+  $('#barEj').style.width  = (ejN/10*100)+'%';
+  $('#bdEj').textContent   = `${ejN} de 10 ejercicios resueltos`;
+  $('#ptEj').innerHTML     = `${pEj.toFixed(1)} <small>/ 2.5</small>`;
+  $('#barQuiz').style.width = (qC/6*100)+'%';
+  $('#bdQuiz').textContent  = `${qN} de 6 respondidas · ${qC} aciertos`;
+  $('#ptQuiz').innerHTML    = `${pQ.toFixed(1)} <small>/ 3.0</small>`;
+  $('#barTar').style.width  = (tarN/4*100)+'%';
+  $('#bdTar').textContent   = `${tarN} de 4 problemas entregados`;
+  $('#ptTar').innerHTML     = `${pT.toFixed(1)} <small>/ 3.0</small>`;
+
+  $('#bTotal').textContent = total.toFixed(1);
+  $('#bSeal').textContent  = total.toFixed(1);
+  $('#bMeta').textContent  = `${simN + ejN + qN + tarN} de 23 evidencias registradas`;
+  $('#statNota').textContent = total > 0 ? total.toFixed(1) : '—';
+
+  const has = !!state.name;
+  $('#boletaForm').hidden = has;
+  $('#boletaCard').hidden = !has;
+  $('#boletaActions').hidden = !has;
+  if (has){
+    $('#bName').textContent = state.name;
+    const av = $('#bAvatar');
+    av.textContent = initials(state.name);
+    av.style.background = ['#C9A84C','#007B5D','#143466'][state.name.length % 3];
+  }
+}
+ $('#btnRegister').addEventListener('click', () => {
+  const v = $('#studentName').value.trim();
+  if (v.length < 3){ showToast('Escribe tu nombre completo para registrarte.', false); return; }
+  state.name = v; persist();
+  showToast('¡Registrado! Tu boleta está lista.', true);
+});
+ $('#studentName').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btnRegister').click(); });
+
+let delTO = null;
+ $('#btnDelete').addEventListener('click', function(){
+  if (!this.classList.contains('confirm')){
+    this.classList.add('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>¿Confirmar?';
+    if (window.lucide) lucide.createIcons();
+    delTO = setTimeout(() => {
+      this.classList.remove('confirm');
+      this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+      if (window.lucide) lucide.createIcons();
+    }, 2600);
+  } else {
+    clearTimeout(delTO);
+    localStorage.removeItem(KEY);
+    state = freshState();
+    $$('input[data-ej],input[data-tar]').forEach(i => { i.checked = false; syncChk(i); });
+    $$('.quiz-q').forEach(q => {
+      q.querySelectorAll('input').forEach(i => i.checked = false);
+      q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+      const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+    });
+    updateQuizResult();
+    $$('.ed-box').forEach(b => { const ta = b.querySelector('.ed-ta'); if (ta){ ta.value = ''; ta.dispatchEvent(new Event('input')); } });
+    $('#studentName').value = '';
+    this.classList.remove('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+    if (window.lucide) lucide.createIcons();
+    updateBoleta();
+    showToast('Registro y progreso eliminados.', false);
+  }
+});
+
+/* ============================================================
+   CARGA DEL MOTOR 3D (aislada)
+============================================================ */
+async function start3D(){
+  const cap = $('#graphCap');
+  try{
+    if (!window.THREE){
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+        'https://unpkg.com/three@0.128.0/build/three.min.js'
+      ];
+      for (const u of urls){
+        try { await loadScript(u); } catch(e){ console.warn('CDN falló:', u); }
+        if (window.THREE) break;
+      }
+    }
+    if (!window.THREE) throw new Error('Three.js no disponible');
+    if (!window.THREE.OrbitControls){
+      try { await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'); } catch(e){}
+    }
+    initHero();
+    initSim();
+  } catch(err){
+    console.error('[3D]', err);
+    if (cap) cap.textContent = 'No se pudo cargar Three.js (revisa tu conexión a internet y recarga la página). Los módulos 2D, la teoría y la boleta funcionan con normalidad.';
+    showToast('Visor 3D no disponible: sin conexión a los CDN.', false);
+  }
+}
+
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+if (window.lucide){
+  lucide.createIcons();
+} else {
+  loadScript('https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js')
+    .then(() => { if (window.lucide) lucide.createIcons(); })
+    .catch(()=>{});
+}
+typeset(document.body);
+(async function ensureKatex(){
+  if (window.renderMathInElement) return;
+  try{
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
+    typeset(document.body);
+  }catch(e){}
+})();
+initEditors();
+updateTrayInfo();
+(function restore(){
+  if (state.name) $('#studentName').value = state.name;
+  $$('.quiz-q').forEach(q => {
+    const a = state.quiz.answers[q.dataset.qid];
+    if (a){
+      const inp = q.querySelector(`input[value="${a}"]`);
+      if (inp){ inp.checked = true; gradeQuestion(q, q.dataset.correct, a, true); }
+    }
+  });
+  updateQuizResult();
+})();
+ $('#bFootDate').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+updateBoleta();
+start3D();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
