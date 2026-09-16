@@ -541,6 +541,379 @@
     .dialog-btn:hover {
       color: var(--up-blue);
     }
+
+    /* ============================================================
+       SIMULADOR — REGLA DE LA CADENA
+    ============================================================ */
+    .sim-wrap {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 1.2rem;
+      margin-top: 1rem;
+    }
+    @media (max-width: 960px) {
+      .sim-wrap { grid-template-columns: 1fr; }
+    }
+    .sim-panel {
+      background: var(--up-white);
+      border-radius: 12px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 4px 16px var(--up-shadow);
+      border-left: 6px solid var(--up-blue);
+    }
+    .sim-panel h3 {
+      margin-top: 0;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sim-tabs {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--up-gray-dark);
+      padding-bottom: 0.6rem;
+    }
+    .sim-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--up-text);
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .sim-tab:hover {
+      border-color: var(--up-gray-dark);
+      background: #f0f2f5;
+    }
+    .sim-tab.active {
+      background: var(--up-blue);
+      color: #fff;
+    }
+    .sim-view { display: none; }
+    .sim-view.active { display: block; animation: fade 0.3s ease; }
+
+    /* Flujo de composición */
+    .flow-container {
+      position: relative;
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem 1rem;
+      border: 1px solid var(--up-gray-dark);
+      overflow-x: auto;
+    }
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      min-height: 110px;
+    }
+    .flow-node {
+      flex: none;
+      width: 96px;
+      height: 96px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 6px;
+      font-weight: 700;
+      box-shadow: 0 3px 10px var(--up-shadow);
+      transition: all 0.35s ease;
+      position: relative;
+    }
+    .flow-node .node-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      opacity: 0.85;
+      margin-bottom: 2px;
+    }
+    .flow-node .node-value {
+      font-size: 1rem;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+    }
+    .flow-node.input {
+      background: #eaf2fa;
+      border: 2px solid var(--up-blue);
+      color: var(--up-blue);
+    }
+    .flow-node.func {
+      background: var(--up-gold-light);
+      border: 2px solid var(--up-gold);
+      color: #6b5418;
+    }
+    .flow-node.output {
+      background: var(--up-green-light);
+      border: 2px solid var(--up-green);
+      color: #0b4a2a;
+    }
+    .flow-node.pulse {
+      transform: scale(1.08);
+      box-shadow: 0 0 0 4px rgba(201,168,76,.35), 0 6px 16px var(--up-shadow);
+    }
+    .flow-node.reveal .node-value {
+      animation: popValue 0.5s ease;
+    }
+    @keyframes popValue {
+      0% { transform: scale(0.4); opacity: 0; }
+      60% { transform: scale(1.25); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    .flow-arrow {
+      flex: none;
+      font-size: 1.6rem;
+      color: var(--up-gold);
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+    .flow-arrow.pulse {
+      color: var(--up-green);
+      transform: translateX(4px);
+    }
+    .flow-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      color: #64748b;
+    }
+    .flow-stage .stage-num {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--up-blue);
+      color: #fff;
+      display: grid; place-items: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+    .flow-formula {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 0.7rem 1rem;
+      background: var(--up-white);
+      border-radius: 8px;
+      border: 1px dashed var(--up-gold);
+      font-size: 1rem;
+      overflow-x: auto;
+    }
+    .flow-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.9rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .flow-step-info {
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-left: auto;
+    }
+
+    /* Árbol de dependencias */
+    .tree-svg {
+      width: 100%;
+      height: 340px;
+      background: #f8fafc;
+      border-radius: 10px;
+      border: 1px solid var(--up-gray-dark);
+      display: block;
+    }
+    .tree-legend {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.8rem;
+      color: #64748b;
+      margin-top: 0.6rem;
+    }
+    .tree-legend .dot {
+      display: inline-block;
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+    .tree-list {
+      margin-top: 0.8rem;
+      padding: 0.7rem 0.9rem;
+      background: var(--up-white);
+      border-radius: 8px;
+      border: 1px solid var(--up-gray-dark);
+      font-size: 0.9rem;
+      max-height: 180px;
+      overflow-y: auto;
+    }
+    .tree-list .term {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.3rem 0.4rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+    }
+    .tree-list .term:hover {
+      background: var(--up-gold-light);
+    }
+    .tree-list .term .coef {
+      font-weight: 700;
+      color: var(--up-green);
+    }
+
+    /* Jacobiano matricial */
+    .jac-container {
+      padding: 1rem 0.5rem;
+      overflow-x: auto;
+      text-align: center;
+    }
+    .jac-display {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 0.8rem 0;
+    }
+    .matrix {
+      display: inline-grid;
+      gap: 6px;
+      padding: 10px 14px;
+      position: relative;
+      background: #f8fafc;
+      border-radius: 8px;
+    }
+    .matrix::before, .matrix::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 8px;
+      border: 2px solid var(--up-blue);
+    }
+    .matrix::before {
+      left: 0;
+      border-right: none;
+      border-radius: 6px 0 0 6px;
+    }
+    .matrix::after {
+      right: 0;
+      border-left: none;
+      border-radius: 0 6px 6px 0;
+    }
+    .matrix-cell {
+      padding: 8px 12px;
+      min-width: 56px;
+      text-align: center;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.9rem;
+      font-weight: 600;
+      background: var(--up-white);
+      border-radius: 4px;
+      border: 1px solid var(--up-gray-dark);
+      transition: all 0.3s;
+    }
+    .matrix-cell.highlight {
+      background: var(--up-gold-light);
+      border-color: var(--up-gold);
+      transform: scale(1.06);
+    }
+    .matrix-cell.result {
+      background: var(--up-green-light);
+      border-color: var(--up-green);
+      color: #0b4a2a;
+    }
+    .matrix-var {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      color: var(--up-blue);
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .matrix-label {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 4px;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .jac-multiply {
+      font-size: 1.8rem;
+      color: var(--up-gold);
+      font-weight: 700;
+    }
+    .jac-equals {
+      font-size: 1.8rem;
+      color: var(--up-green);
+      font-weight: 700;
+    }
+    .jac-steps {
+      margin-top: 1rem;
+      padding: 0.9rem 1rem;
+      background: var(--up-white);
+      border-radius: 8px;
+      border: 1px dashed var(--up-gold);
+      text-align: left;
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .jac-steps .step-line {
+      padding: 0.2rem 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 0.82rem;
+    }
+    .jac-steps .step-line .val {
+      color: var(--up-green);
+      font-weight: 700;
+    }
+    .jac-controls {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Selector de ejemplo */
+    .sim-selector {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .sim-selector button {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.85rem;
+    }
+    .sim-selector button.active {
+      background: var(--up-green);
+      color: #fff;
+    }
+
+    .sim-info {
+      background: #eaf2fa;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-size: 0.9rem;
+      border-left: 4px solid var(--up-blue);
+      margin-top: 0.8rem;
+    }
+    .sim-info .lbl {
+      font-weight: 700;
+      color: var(--up-blue);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+    }
   </style>
 </head>
 <body>
@@ -560,13 +933,14 @@
     <button data-tab="teo">📐 Teorema</button>
     <button data-tab="casos">🧩 Casos</button>
     <button data-tab="ejemplos">💡 Ejemplos</button>
+    <button data-tab="sim">🔬 Simulador</button>
     <button data-tab="aplic">⚙️ Aplicaciones</button>
     <button data-tab="polar">🌀 Polares</button>
-    <button data-tab="demo">🔬 Demostración</button>
+    <button data-tab="demo">📖 Demostración</button>
     <button data-tab="fill">✏️ Completa</button>
     <button data-tab="mc">✔️ Opción múltiple</button>
     <button data-tab="essay">📝 Ensayo</button>
-    <button data-tab="glossary">📖 Glosario</button>
+    <button data-tab="glossary">📚 Glosario</button>
   </nav>
 
   <main>
@@ -753,10 +1127,103 @@
 
     </section>
 
+    <!-- ============ SIMULADOR ============ -->
+    <section id="sim">
+      <div class="card">
+        <h2>6. Simulador interactivo de la regla de la cadena</h2>
+        <p>Explora la regla de la cadena multivariable desde tres perspectivas dinámicas: el <b>flujo de composición</b> (cómo los valores pasan de una función a otra), el <b>diagrama de árbol</b> (las rutas de dependencia que generan los términos de la suma) y el <b>producto jacobiano</b> (la multiplicación matricial paso a paso).</p>
+      </div>
+
+      <!-- Selector de ejemplo -->
+      <div class="card accent" style="padding:1rem 1.4rem">
+        <label style="font-size:0.82rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--up-blue);display:block;margin-bottom:0.5rem">Elige un ejemplo</label>
+        <div class="sim-selector" id="simSelector">
+          <button class="btn secondary active" data-ex="ex1">f: ℝ → ℝ², g: ℝ² → ℝ</button>
+          <button class="btn secondary" data-ex="ex2">f: ℝ² → ℝ², g: ℝ² → ℝ</button>
+          <button class="btn secondary" data-ex="ex3">f: ℝ → ℝ³, g: ℝ³ → ℝ</button>
+        </div>
+      </div>
+
+      <div class="sim-wrap">
+        <!-- Panel de control -->
+        <div class="sim-panel">
+          <h3>⚙️ Panel de control</h3>
+          <div class="sim-tabs">
+            <button class="sim-tab active" data-simtab="flow">🔀 Flujo</button>
+            <button class="sim-tab" data-simtab="tree">🌳 Árbol</button>
+            <button class="sim-tab" data-simtab="jac">📊 Jacobiano</button>
+          </div>
+
+          <!-- Vista: Flujo -->
+          <div class="sim-view active" id="sim-flow">
+            <p style="font-size:0.9rem;color:#64748b;margin-top:0">Observa cómo los valores entran a la primera función, se transforman, y luego alimentan a la segunda función. Pulsa <b>Siguiente paso</b> para avanzar por las 5 etapas del proceso.</p>
+            <div class="flow-controls" style="margin-top:1rem">
+              <button class="btn success" id="btnFlowPlay">▶ Reproducir</button>
+              <button class="btn" id="btnFlowStep">Siguiente paso</button>
+              <button class="btn secondary" id="btnFlowReset">↺ Reiniciar</button>
+              <span class="flow-step-info" id="flowStepInfo">Etapa 0 de 5</span>
+            </div>
+            <div class="sim-info" style="margin-top:0.8rem">
+              <span class="lbl">Punto de evaluación</span>
+              <div id="flowPoint" style="font-size:0.9rem;margin-top:0.2rem"></div>
+            </div>
+          </div>
+
+          <!-- Vista: Árbol -->
+          <div class="sim-view" id="sim-tree">
+            <p style="font-size:0.9rem;color:#64748b;margin-top:0">El diagrama de árbol muestra todas las rutas de dependencia desde las variables de entrada hasta la salida. Cada ruta produce un término de la suma de la regla de la cadena.</p>
+            <div class="tree-legend" style="margin-top:0.6rem">
+              <span><span class="dot" style="background:#0A1C3A"></span>Variable de entrada</span>
+              <span><span class="dot" style="background:#C9A84C"></span>Variable intermedia</span>
+              <span><span class="dot" style="background:#007B5D"></span>Variable de salida</span>
+            </div>
+            <div class="sim-info" style="margin-top:0.8rem">
+              <span class="lbl">Términos de la suma</span>
+              <div id="treeFormula" style="font-size:0.9rem;margin-top:0.3rem"></div>
+            </div>
+          </div>
+
+          <!-- Vista: Jacobiano -->
+          <div class="sim-view" id="sim-jac">
+            <p style="font-size:0.9rem;color:#64748b;margin-top:0">Producto matricial paso a paso: $Dg(Q) \cdot Df(P)$. Cada celda del resultado es el producto punto de una fila de $Dg$ con una columna de $Df$.</p>
+            <div class="jac-controls" style="margin-top:0.8rem">
+              <button class="btn" id="btnJacStep">Siguiente celda</button>
+              <button class="btn secondary" id="btnJacReset">↺ Reiniciar</button>
+              <span class="flow-step-info" id="jacStepInfo">Celda 0 de 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel de visualización -->
+        <div class="sim-panel" style="border-left-color:var(--up-green)">
+          <h3>📺 Visualización</h3>
+
+          <!-- Vista: Flujo -->
+          <div class="sim-view active" id="vis-flow">
+            <div class="flow-container">
+              <div class="flow-row" id="flowRow"></div>
+            </div>
+            <div class="flow-formula" id="flowFormula"></div>
+          </div>
+
+          <!-- Vista: Árbol -->
+          <div class="sim-view" id="vis-tree">
+            <svg class="tree-svg" id="treeSvg" viewBox="0 0 600 340" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="tree-list" id="treeList"></div>
+          </div>
+
+          <!-- Vista: Jacobiano -->
+          <div class="sim-view" id="vis-jac">
+            <div class="jac-container" id="jacContainer"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ APLICACIONES ============ -->
     <section id="aplic">
       <div class="card">
-        <h2>6. Aplicaciones: demostrar reglas de derivación</h2>
+        <h2>7. Aplicaciones: demostrar reglas de derivación</h2>
         <p>La regla de la cadena permite <b>deducir</b> reglas elementales como la derivada de la suma y del producto.</p>
         <button class="dialog-btn" data-dialog="aplic-detail">↪ Ver demostración detallada</button>
         <div id="aplic-detail" style="display:none; margin-top:0.8rem; padding:0.8rem; background:#f0f2f5; border-radius:6px;">
@@ -769,7 +1236,7 @@
     <!-- ============ POLARES ============ -->
     <section id="polar">
       <div class="card">
-        <h2>7. Cambio a coordenadas polares</h2>
+        <h2>8. Cambio a coordenadas polares</h2>
         <p>Un caso muy importante es el cambio de variables $(x,y)\leftrightarrow (r,\theta)$ dado por:</p>
         <div class="formula">$$x = r\cos\theta, \qquad y = r\sin\theta$$</div>
         <p>Si $f=f(x,y)$, queremos expresar $\dfrac{\partial f}{\partial r}$ y $\dfrac{\partial f}{\partial \theta}$ en términos de $\dfrac{\partial f}{\partial x}$ y $\dfrac{\partial f}{\partial y}$.</p>
@@ -793,7 +1260,7 @@
     <!-- ============ DEMOSTRACIÓN ============ -->
     <section id="demo">
       <div class="card">
-        <h2>8. Demostración del Teorema 12.1</h2>
+        <h2>9. Demostración del Teorema 12.1</h2>
         <p>Presentamos la demostración clásica basada en un lema auxiliar.</p>
         <button class="accordion-toggle open" data-target="demo-lema">▸ Lema 12.4 (cota de Lipschitz local) <span class="arrow">▼</span></button>
         <div class="accordion-content open" id="demo-lema">
@@ -953,6 +1420,7 @@
         document.getElementById(btn.dataset.tab).classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+        if (btn.dataset.tab === 'sim') { renderSim(); }
       });
     });
 
@@ -1001,7 +1469,7 @@
     /* ===== GLOSARIO ===== */
     const glossary = {
       'regla-cadena-1v': { t: 'Regla de la cadena (una variable)', d: 'Si $h(x)=g(f(x))$, entonces $h\'(x)=g\'(f(x))\\cdot f\'(x)$. Es el caso más elemental, donde las derivadas son números reales y la composición se traduce en producto.' },
-      'matriz-jacobiana': { t: 'Matriz jacobiana', d: 'Dada $f: {R}^n\to{R}^m$, la matriz jacobiana $Df$ es la matriz $m\\times n$ cuyas entradas son $\\dfrac{\\partial f_i}{\\partial x_j}$. Representa la mejor aproximación lineal de $f$ cerca de un punto.' },
+      'matriz-jacobiana': { t: 'Matriz jacobiana', d: 'Dada $f: {R}^n\\to{R}^m$, la matriz jacobiana $Df$ es la matriz $m\\times n$ cuyas entradas son $\\dfrac{\\partial f_i}{\\partial x_j}$. Representa la mejor aproximación lineal de $f$ cerca de un punto.' },
       'derivada-total': { t: 'Derivada total', d: 'Generalización del concepto de derivada a funciones entre espacios $\\mathbb{R}^n\\to\\mathbb{R}^m$. Se representa por la matriz jacobiana y codifica todas las derivadas direccionales.' },
       'diferenciable': { t: 'Función diferenciable', d: 'Una función $f$ es diferenciable en $P$ si existe una transformación lineal $Df(P)$ tal que $f(P+\\vec{h})=f(P)+Df(P)\\vec{h}+o(\\|\\vec{h}\\|)$. Es la versión multivariable de "tener derivada".' },
       'producto-punto': { t: 'Producto punto', d: 'Operación entre dos vectores de igual dimensión: $\\vec{a}\\cdot\\vec{b}=\\sum a_i b_i$. Aparece al calcular entradas específicas del producto de matrices jacobianas.' },
@@ -1186,8 +1654,538 @@
       f.textContent = '✅ Respuestas guardadas como archivo de texto.';
     }
 
+    /* ============================================================
+       SIMULADOR — REGLA DE LA CADENA
+    ============================================================ */
+    const SIM_EXAMPLES = {
+      ex1: {
+        label: 'f: ℝ → ℝ², g: ℝ² → ℝ',
+        inputVars: ['x'],
+        interVars: ['u', 'v'],
+        outputVars: ['z'],
+        point: { x: 2 },
+        f: (p) => ({ u: p.x * p.x, v: p.x * p.x * p.x }),      // f(x) = (x², x³)
+        g: (q) => ({ z: q.u * q.v }),                           // g(u,v) = uv
+        fTex: 'f(x) = (x^2,\\; x^3)',
+        gTex: 'g(u,v) = u\\,v',
+        compTex: '(g\\circ f)(x) = x^5',
+        DfTex: 'Df(x) = \\begin{pmatrix} 2x \\\\ 3x^2 \\end{pmatrix}',
+        DgTex: 'Dg(u,v) = \\begin{pmatrix} v & u \\end{pmatrix}',
+        Df: (p) => [[2 * p.x], [3 * p.x * p.x]],
+        Dg: (q) => [[q.v, q.u]],
+        dfLabels: ['∂u/∂x', '∂v/∂x'],
+        dgLabels: ['∂z/∂u', '∂z/∂v'],
+        resultLabel: 'dz/dx',
+        tree: {
+          input: 'x',
+          inter: ['u', 'v'],
+          output: 'z',
+          edges: [
+            { from: 'x', to: 'u', label: '∂u/∂x' },
+            { from: 'x', to: 'v', label: '∂v/∂x' },
+            { from: 'u', to: 'z', label: '∂z/∂u' },
+            { from: 'v', to: 'z', label: '∂z/∂v' }
+          ],
+          paths: [
+            { nodes: ['x', 'u', 'z'], term: '∂z/∂u · ∂u/∂x' },
+            { nodes: ['x', 'v', 'z'], term: '∂z/∂v · ∂v/∂x' }
+          ]
+        },
+        finalTex: '\\frac{dz}{dx} = \\frac{\\partial z}{\\partial u}\\frac{\\partial u}{\\partial x} + \\frac{\\partial z}{\\partial v}\\frac{\\partial v}{\\partial x}'
+      },
+      ex2: {
+        label: 'f: ℝ² → ℝ², g: ℝ² → ℝ',
+        inputVars: ['x', 'y'],
+        interVars: ['u', 'v'],
+        outputVars: ['z'],
+        point: { x: 1, y: 2 },
+        f: (p) => ({ u: p.x + p.y, v: p.x - p.y }),
+        g: (q) => ({ z: q.u * q.v }),
+        fTex: 'f(x,y) = (x+y,\\; x-y)',
+        gTex: 'g(u,v) = u\\,v',
+        compTex: '(g\\circ f)(x,y) = x^2 - y^2',
+        DfTex: 'Df(x,y) = \\begin{pmatrix} 1 & 1 \\\\ 1 & -1 \\end{pmatrix}',
+        DgTex: 'Dg(u,v) = \\begin{pmatrix} v & u \\end{pmatrix}',
+        Df: (p) => [[1, 1], [1, -1]],
+        Dg: (q) => [[q.v, q.u]],
+        dfLabels: ['∂u/∂x', '∂u/∂y', '∂v/∂x', '∂v/∂y'],
+        dgLabels: ['∂z/∂u', '∂z/∂v'],
+        resultLabel: '∂z/∂x, ∂z/∂y',
+        tree: {
+          input: ['x', 'y'],
+          inter: ['u', 'v'],
+          output: 'z',
+          edges: [
+            { from: 'x', to: 'u', label: '∂u/∂x' },
+            { from: 'y', to: 'u', label: '∂u/∂y' },
+            { from: 'x', to: 'v', label: '∂v/∂x' },
+            { from: 'y', to: 'v', label: '∂v/∂y' },
+            { from: 'u', to: 'z', label: '∂z/∂u' },
+            { from: 'v', to: 'z', label: '∂z/∂v' }
+          ],
+          paths: [
+            { nodes: ['x', 'u', 'z'], term: '∂z/∂u · ∂u/∂x' },
+            { nodes: ['x', 'v', 'z'], term: '∂z/∂v · ∂v/∂x' },
+            { nodes: ['y', 'u', 'z'], term: '∂z/∂u · ∂u/∂y' },
+            { nodes: ['y', 'v', 'z'], term: '∂z/∂v · ∂v/∂y' }
+          ]
+        },
+        finalTex: '\\frac{\\partial z}{\\partial x} = \\frac{\\partial z}{\\partial u}\\frac{\\partial u}{\\partial x} + \\frac{\\partial z}{\\partial v}\\frac{\\partial v}{\\partial x}, \\quad \\frac{\\partial z}{\\partial y} = \\frac{\\partial z}{\\partial u}\\frac{\\partial u}{\\partial y} + \\frac{\\partial z}{\\partial v}\\frac{\\partial v}{\\partial y}'
+      },
+      ex3: {
+        label: 'f: ℝ → ℝ³, g: ℝ³ → ℝ',
+        inputVars: ['t'],
+        interVars: ['x', 'y', 'z'],
+        outputVars: ['w'],
+        point: { t: Math.PI / 2 },
+        f: (p) => ({ x: Math.cos(p.t), y: Math.sin(p.t), z: p.t }),
+        g: (q) => ({ w: q.x * q.x + q.y * q.y + q.z * q.z }),
+        fTex: 'f(t) = (\\cos t,\\; \\sin t,\\; t)',
+        gTex: 'g(x,y,z) = x^2 + y^2 + z^2',
+        compTex: '(g\\circ f)(t) = 1 + t^2',
+        DfTex: 'Df(t) = \\begin{pmatrix} -\\sin t \\\\ \\cos t \\\\ 1 \\end{pmatrix}',
+        DgTex: 'Dg(x,y,z) = \\begin{pmatrix} 2x & 2y & 2z \\end{pmatrix}',
+        Df: (p) => [[-Math.sin(p.t)], [Math.cos(p.t)], [1]],
+        Dg: (q) => [[2 * q.x, 2 * q.y, 2 * q.z]],
+        dfLabels: ['∂x/∂t', '∂y/∂t', '∂z/∂t'],
+        dgLabels: ['∂w/∂x', '∂w/∂y', '∂w/∂z'],
+        resultLabel: 'dw/dt',
+        tree: {
+          input: 't',
+          inter: ['x', 'y', 'z'],
+          output: 'w',
+          edges: [
+            { from: 't', to: 'x', label: '∂x/∂t' },
+            { from: 't', to: 'y', label: '∂y/∂t' },
+            { from: 't', to: 'z', label: '∂z/∂t' },
+            { from: 'x', to: 'w', label: '∂w/∂x' },
+            { from: 'y', to: 'w', label: '∂w/∂y' },
+            { from: 'z', to: 'w', label: '∂w/∂z' }
+          ],
+          paths: [
+            { nodes: ['t', 'x', 'w'], term: '∂w/∂x · ∂x/∂t' },
+            { nodes: ['t', 'y', 'w'], term: '∂w/∂y · ∂y/∂t' },
+            { nodes: ['t', 'z', 'w'], term: '∂w/∂z · ∂z/∂t' }
+          ]
+        },
+        finalTex: '\\frac{dw}{dt} = \\frac{\\partial w}{\\partial x}\\frac{\\partial x}{\\partial t} + \\frac{\\partial w}{\\partial y}\\frac{\\partial y}{\\partial t} + \\frac{\\partial w}{\\partial z}\\frac{\\partial z}{\\partial t}'
+      }
+    };
+
+    let SIM = {
+      example: 'ex1',
+      view: 'flow',
+      flowStep: 0,
+      flowPlaying: false,
+      flowTimer: null,
+      jacStep: 0
+    };
+
+    function fmt(n) {
+      if (!isFinite(n)) return '—';
+      if (Math.abs(n) < 1e-10) return '0';
+      if (Math.abs(n - Math.round(n)) < 1e-10) return String(Math.round(n));
+      return n.toFixed(3);
+    }
+    function fmtPi(n) {
+      if (!isFinite(n)) return '—';
+      if (Math.abs(n) < 1e-10) return '0';
+      // detectar múltiplos de π
+      const k = n / Math.PI;
+      if (Math.abs(k - Math.round(k)) < 1e-9 && Math.round(k) !== 0) {
+        const kk = Math.round(k);
+        if (kk === 1) return 'π';
+        if (kk === -1) return '−π';
+        return kk + 'π';
+      }
+      if (Math.abs(k*2 - Math.round(k*2)) < 1e-9 && Math.round(k*2) !== 0) {
+        const kk = Math.round(k*2);
+        if (kk === 1) return 'π/2';
+        if (kk === -1) return '−π/2';
+        return kk + 'π/2';
+      }
+      if (Math.abs(n - Math.round(n)) < 1e-10) return String(Math.round(n));
+      return n.toFixed(3);
+    }
+
+    function renderSim() {
+      const ex = SIM_EXAMPLES[SIM.example];
+      // resaltar el selector
+      document.querySelectorAll('#simSelector button').forEach(b => {
+        b.classList.toggle('active', b.dataset.ex === SIM.example);
+      });
+      // resaltar tab
+      document.querySelectorAll('.sim-tab').forEach(t => t.classList.toggle('active', t.dataset.simtab === SIM.view));
+      document.querySelectorAll('.sim-view').forEach(v => v.classList.remove('active'));
+      // activar vistas
+      document.getElementById('sim-' + SIM.view).classList.add('active');
+      // la vista correspondiente en el panel de visualización
+      if (SIM.view === 'flow') {
+        document.getElementById('vis-flow').classList.add('active');
+        renderFlow();
+      } else if (SIM.view === 'tree') {
+        document.getElementById('vis-tree').classList.add('active');
+        renderTree();
+      } else {
+        document.getElementById('vis-jac').classList.add('active');
+        renderJac();
+      }
+      if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    /* ---------- FLUJO ---------- */
+    function renderFlow() {
+      const ex = SIM_EXAMPLES[SIM.example];
+      const row = document.getElementById('flowRow');
+      row.innerHTML = '';
+
+      // Nodo de entrada
+      const inputNode = document.createElement('div');
+      inputNode.className = 'flow-node input';
+      inputNode.id = 'flowNodeInput';
+      const pointStr = Object.entries(ex.point).map(([k, v]) => `${k} = ${fmtPi(v)}`).join(', ');
+      inputNode.innerHTML = `<div class="node-label">Entrada P</div><div class="node-value">${pointStr}</div>`;
+      row.appendChild(inputNode);
+
+      // Flecha
+      row.appendChild(makeArrow());
+
+      // Nodo función f (muestra la salida Q=f(P) tras revelarse)
+      const fNode = document.createElement('div');
+      fNode.className = 'flow-node func';
+      fNode.id = 'flowNodeF';
+      fNode.innerHTML = `<div class="node-label">f(P) = Q</div><div class="node-value" id="flowFVal">?</div>`;
+      row.appendChild(fNode);
+
+      // Flecha
+      row.appendChild(makeArrow());
+
+      // Nodo función g
+      const gNode = document.createElement('div');
+      gNode.className = 'flow-node func';
+      gNode.id = 'flowNodeG';
+      gNode.innerHTML = `<div class="node-label">g(Q) = z</div><div class="node-value" id="flowGVal">?</div>`;
+      row.appendChild(gNode);
+
+      // Flecha
+      row.appendChild(makeArrow());
+
+      // Nodo salida
+      const outNode = document.createElement('div');
+      outNode.className = 'flow-node output';
+      outNode.id = 'flowNodeOut';
+      outNode.innerHTML = `<div class="node-label">Resultado</div><div class="node-value" id="flowOutVal">?</div>`;
+      row.appendChild(outNode);
+
+      // Información de punto
+      document.getElementById('flowPoint').innerHTML = `Evaluando en $${Object.entries(ex.point).map(([k,v])=>`${k}=${fmtPi(v)}`).join(',\\; ')}$`;
+      // Fórmula
+      const formulaDiv = document.getElementById('flowFormula');
+      formulaDiv.innerHTML = `$$${ex.compTex}$$`;
+      document.getElementById('flowStepInfo').textContent = `Etapa ${SIM.flowStep} de 5`;
+      applyFlowStep();
+    }
+
+    function makeArrow() {
+      const a = document.createElement('div');
+      a.className = 'flow-arrow';
+      a.textContent = '→';
+      return a;
+    }
+
+    function applyFlowStep() {
+      const ex = SIM_EXAMPLES[SIM.example];
+      const q = ex.f(ex.point);
+      const z = ex.g(q);
+      const qStr = Object.entries(q).map(([k, v]) => `${k}=${fmtPi(v)}`).join(', ');
+      const zStr = Object.entries(z).map(([k, v]) => `${k}=${fmtPi(v)}`).join(', ');
+
+      const nodes = ['flowNodeInput', 'flowNodeF', 'flowNodeG', 'flowNodeOut'];
+      nodes.forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.remove('pulse', 'reveal');
+      });
+      // reset values
+      document.getElementById('flowFVal').textContent = '?';
+      document.getElementById('flowGVal').textContent = '?';
+      document.getElementById('flowOutVal').textContent = '?';
+
+      const step = SIM.flowStep;
+      if (step >= 1) {
+        document.getElementById('flowNodeInput').classList.add('pulse');
+      }
+      if (step >= 2) {
+        const el = document.getElementById('flowNodeF');
+        el.classList.add('pulse', 'reveal');
+        document.getElementById('flowFVal').textContent = qStr;
+      }
+      if (step >= 3) {
+        // La flecha intermedia y g
+      }
+      if (step >= 4) {
+        const el = document.getElementById('flowNodeG');
+        el.classList.add('pulse', 'reveal');
+        document.getElementById('flowGVal').textContent = zStr;
+      }
+      if (step >= 5) {
+        const el = document.getElementById('flowNodeOut');
+        el.classList.add('pulse', 'reveal');
+        document.getElementById('flowOutVal').textContent = zStr;
+      }
+      document.getElementById('flowStepInfo').textContent = `Etapa ${step} de 5`;
+    }
+
+    document.getElementById('btnFlowStep').addEventListener('click', () => {
+      if (SIM.flowStep < 5) SIM.flowStep++;
+      applyFlowStep();
+    });
+    document.getElementById('btnFlowReset').addEventListener('click', () => {
+      SIM.flowStep = 0;
+      stopFlowPlay();
+      renderFlow();
+    });
+    function stopFlowPlay() {
+      SIM.flowPlaying = false;
+      if (SIM.flowTimer) { clearInterval(SIM.flowTimer); SIM.flowTimer = null; }
+      const btn = document.getElementById('btnFlowPlay');
+      if (btn) btn.textContent = '▶ Reproducir';
+    }
+    document.getElementById('btnFlowPlay').addEventListener('click', function() {
+      if (SIM.flowPlaying) {
+        stopFlowPlay();
+        return;
+      }
+      SIM.flowPlaying = true;
+      this.textContent = '⏸ Pausar';
+      if (SIM.flowStep >= 5) SIM.flowStep = 0;
+      applyFlowStep();
+      SIM.flowTimer = setInterval(() => {
+        if (SIM.flowStep >= 5) { stopFlowPlay(); return; }
+        SIM.flowStep++;
+        applyFlowStep();
+      }, 1100);
+    });
+
+    /* ---------- ÁRBOL ---------- */
+    function renderTree() {
+      const ex = SIM_EXAMPLES[SIM.example];
+      const svg = document.getElementById('treeSvg');
+      const W = 600, H = 340;
+      svg.innerHTML = '';
+
+      const tree = ex.tree;
+      const inputArr = Array.isArray(tree.input) ? tree.input : [tree.input];
+      const interArr = tree.inter;
+      const outputArr = Array.isArray(tree.output) ? tree.output : [tree.output];
+
+      // Posiciones
+      const colX = [90, 300, 510];
+      const inputY = inputArr.map((_, i) => 80 + i * (H - 160) / Math.max(inputArr.length - 1, 1) || H / 2);
+      const interY = interArr.map((_, i) => 60 + i * (H - 120) / Math.max(interArr.length - 1, 1));
+      const outputY = outputArr.map((_, i) => H / 2);
+
+      const pos = {};
+      inputArr.forEach((v, i) => pos[v] = { x: colX[0], y: inputY[i] || H/2 });
+      interArr.forEach((v, i) => pos[v] = { x: colX[1], y: interY[i] });
+      outputArr.forEach((v, i) => pos[v] = { x: colX[2], y: outputY[i] || H/2 });
+
+      // Dibujar aristas
+      tree.edges.forEach((e, idx) => {
+        const from = pos[e.from], to = pos[e.to];
+        if (!from || !to) return;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const mx = (from.x + to.x) / 2;
+        const d = `M ${from.x} ${from.y} C ${mx} ${from.y}, ${mx} ${to.y}, ${to.x} ${to.y}`;
+        path.setAttribute('d', d);
+        path.setAttribute('fill', 'none');
+        path.setAttribute('stroke', '#C9A84C');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('opacity', '0.8');
+        // animación de dash
+        path.setAttribute('stroke-dasharray', '6 4');
+        svg.appendChild(path);
+        // etiqueta
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        label.setAttribute('x', mx);
+        label.setAttribute('y', (from.y + to.y) / 2 - 6);
+        label.setAttribute('font-size', '10');
+        label.setAttribute('fill', '#6b5418');
+        label.setAttribute('text-anchor', 'middle');
+        label.textContent = e.label;
+        svg.appendChild(label);
+      });
+
+      // Dibujar nodos
+      function drawNode(name, type) {
+        const p = pos[name];
+        if (!p) return;
+        const colors = { input: ['#0A1C3A', '#fff'], inter: ['#C9A84C', '#0A1C3A'], output: ['#007B5D', '#fff'] };
+        const [bg, fg] = colors[type];
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', p.x);
+        circle.setAttribute('cy', p.y);
+        circle.setAttribute('r', 24);
+        circle.setAttribute('fill', bg);
+        circle.setAttribute('stroke', '#fff');
+        circle.setAttribute('stroke-width', '2');
+        circle.setAttribute('filter', 'drop-shadow(0 2px 4px rgba(10,28,58,0.25))');
+        svg.appendChild(circle);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', p.x);
+        text.setAttribute('y', p.y + 6);
+        text.setAttribute('font-size', '20');
+        text.setAttribute('font-weight', '700');
+        text.setAttribute('fill', fg);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('font-family', 'Fraunces, serif');
+        text.textContent = name;
+        svg.appendChild(text);
+      }
+      inputArr.forEach(v => drawNode(v, 'input'));
+      interArr.forEach(v => drawNode(v, 'inter'));
+      outputArr.forEach(v => drawNode(v, 'output'));
+
+      // Lista de términos de la suma
+      const list = document.getElementById('treeList');
+      list.innerHTML = '';
+      tree.paths.forEach((p, i) => {
+        const termDiv = document.createElement('div');
+        termDiv.className = 'term';
+        termDiv.innerHTML = `<span>${i + 1}. ${p.term}</span><span class="coef">→ término ${i + 1}</span>`;
+        list.appendChild(termDiv);
+      });
+
+      // Fórmula
+      const ft = document.getElementById('treeFormula');
+      ft.innerHTML = `$$${ex.finalTex}$$`;
+    }
+
+    /* ---------- JACOBIANO ---------- */
+    function renderJac() {
+      const ex = SIM_EXAMPLES[SIM.example];
+      const q = ex.f(ex.point);
+      const Dg = ex.Dg(q);
+      const Df = ex.Df(ex.point);
+      const p = Df.length, m = Df[0].length, n = Dg.length;
+      const cells = [];
+      for (let i = 0; i < n; i++) {
+        for (let j = 0; j < m; j++) {
+          let sum = 0;
+          for (let k = 0; k < p; k++) sum += Dg[i][k] * Df[k][j];
+          cells.push({ i, j, sum, terms: Dg[i].map((gv, k) => ({ g: gv, f: Df[k][j] })) });
+        }
+      }
+      // Si ya nos pasamos, limitamos
+      if (SIM.jacStep > cells.length) SIM.jacStep = cells.length;
+
+      const cont = document.getElementById('jacContainer');
+      cont.innerHTML = '';
+
+      // Fila de la multiplicación: Dg · Df = D(g∘f)
+      const wrap = document.createElement('div');
+      wrap.className = 'jac-display';
+
+      // Matriz Dg
+      wrap.appendChild(makeMatrix(`Dg(${ex.interVars.join(',')})`, Dg, { rowLabels: ex.dgLabels, highlight: null }));
+      const times = document.createElement('span'); times.className = 'jac-multiply'; times.textContent = '·'; wrap.appendChild(times);
+      // Matriz Df
+      wrap.appendChild(makeMatrix(`Df(${ex.inputVars.join(',')})`, Df, { rowLabels: ex.dfLabels, highlight: null }));
+      const eq = document.createElement('span'); eq.className = 'jac-equals'; eq.textContent = '='; wrap.appendChild(eq);
+      // Resultado
+      const result = [];
+      for (let i = 0; i < n; i++) {
+        const row = [];
+        for (let j = 0; j < m; j++) {
+          const idx = i * m + j;
+          const known = idx < SIM.jacStep;
+          row.push(known ? cells[idx].sum : '?');
+        }
+        result.push(row);
+      }
+      wrap.appendChild(makeMatrix(`D(g∘f)(P)`, result, { result: true, highlight: null }));
+
+      cont.appendChild(wrap);
+
+      // Detalle del paso actual
+      const stepsDiv = document.createElement('div');
+      stepsDiv.className = 'jac-steps';
+      if (SIM.jacStep === 0) {
+        stepsDiv.innerHTML = `<em>Pulsa "Siguiente celda" para calcular cada entrada del producto matricial una por una.</em>`;
+      } else {
+        const idx = SIM.jacStep - 1;
+        const c = cells[idx];
+        const lines = c.terms.map((t, k) => `(${fmt(t.g)}) · (${fmt(t.f)})`).join(' + ');
+        stepsDiv.innerHTML = `<div class="step-line">Celda (${c.i + 1}, ${c.j + 1}) = ${lines} = <span class="val">${fmt(c.sum)}</span></div>`;
+      }
+      cont.appendChild(stepsDiv);
+      document.getElementById('jacStepInfo').textContent = `Celda ${SIM.jacStep} de ${cells.length}`;
+
+      if (window.MathJax && window.MathJax.typesetPromise) MathJax.typesetPromise();
+    }
+
+    function makeMatrix(label, data, opts) {
+      const wrap = document.createElement('div');
+      const lab = document.createElement('div');
+      lab.className = 'matrix-var';
+      lab.textContent = label;
+      wrap.appendChild(lab);
+      const m = document.createElement('div');
+      m.className = 'matrix';
+      m.style.gridTemplateColumns = `repeat(${data[0].length}, auto)`;
+      data.forEach((row, i) => row.forEach((v, j) => {
+        const c = document.createElement('div');
+        c.className = 'matrix-cell' + (opts && opts.result ? ' result' : '');
+        c.textContent = typeof v === 'number' ? fmt(v) : v;
+        if (opts && opts.highlight && opts.highlight[0] === i && opts.highlight[1] === j) {
+          c.classList.add('highlight');
+        }
+        m.appendChild(c);
+      }));
+      wrap.appendChild(m);
+      if (opts && opts.rowLabels) {
+        const lbl = document.createElement('div');
+        lbl.className = 'matrix-label';
+        lbl.textContent = opts.rowLabels.join(' · ');
+        wrap.appendChild(lbl);
+      }
+      return wrap;
+    }
+
+    /* Handlers de tabs y selector */
+    document.querySelectorAll('.sim-tab').forEach(t => {
+      t.addEventListener('click', () => {
+        SIM.view = t.dataset.simtab;
+        if (SIM.view === 'jac') SIM.jacStep = 0;
+        renderSim();
+      });
+    });
+    document.querySelectorAll('#simSelector button').forEach(b => {
+      b.addEventListener('click', () => {
+        SIM.example = b.dataset.ex;
+        SIM.flowStep = 0;
+        SIM.jacStep = 0;
+        stopFlowPlay();
+        renderSim();
+      });
+    });
+    document.getElementById('btnJacStep').addEventListener('click', () => {
+      const ex = SIM_EXAMPLES[SIM.example];
+      const Dg = ex.Dg(ex.f(ex.point));
+      const Df = ex.Df(ex.point);
+      const total = Dg.length * Df[0].length;
+      if (SIM.jacStep < total) SIM.jacStep++;
+      renderJac();
+    });
+    document.getElementById('btnJacReset').addEventListener('click', () => {
+      SIM.jacStep = 0;
+      renderJac();
+    });
+
     /* Inicializar */
     renderMC();
+    // Render inicial del simulador (aunque no esté visible, para que al abrir la pestaña ya esté listo)
+    renderSim();
   </script>
 </body>
 </html>
