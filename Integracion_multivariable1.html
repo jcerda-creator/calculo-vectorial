@@ -1,0 +1,2183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Integrales múltiples — Cálculo Vectorial · Unidad 5</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+<style>
+/* ============================================================
+   VARIABLES Y BASE — paleta institucional UP + verde Metrópolis
+============================================================ */
+:root{
+  --paper:#f5f5f5;
+  --card:#ffffff;
+  --ink:#0A1C3A;          /* azul marino */
+  --blue-light:#143466;
+  --pine:#007B5D;         /* verde Metrópolis */
+  --pine-soft:#005F47;
+  --pine-light:#D4EDDA;
+  --terra:#9a7d2e;        /* dorado oscuro (texto) */
+  --terra-soft:#E8D5A3;   /* dorado claro */
+  --gold:#C9A84C;         /* dorado pleno */
+  --err:#b02a37;
+  --err-bg:#f8d7da;
+  --line:rgba(10,28,58,.16);
+  --line-strong:rgba(10,28,58,.4);
+  --muted:rgba(30,42,68,.62);
+  --ok-bg:#D4EDDA;
+  --shadow:rgba(10,28,58,.15);
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:170px}
+[hidden]{display:none!important}
+body{
+  font-family:'Instrument Sans',sans-serif;
+  background:var(--paper);
+  color:#1E2A44;
+  line-height:1.6;
+  background-image:radial-gradient(rgba(10,28,58,.07) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.wrap{max-width:1150px;margin:0 auto;padding:0 24px}
+h1,h2,h3,.display{font-family:'Fraunces',serif;font-weight:600;line-height:1.12;letter-spacing:-.01em;color:var(--ink)}
+.overline{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--terra)}
+.mono{font-variant-numeric:tabular-nums}
+button{font-family:inherit;cursor:pointer}
+a{color:var(--pine)}
+svg.lucide{width:16px;height:16px;stroke-width:2}
+
+/* ============================================================
+   HEADER / NAV
+============================================================ */
+header.topbar{
+  position:sticky;top:0;z-index:60;
+  background:linear-gradient(135deg,rgba(10,28,58,.97) 0%,rgba(20,52,102,.97) 100%);
+  backdrop-filter:blur(10px);
+  border-bottom:4px solid var(--gold);
+  box-shadow:0 6px 20px var(--shadow);
+}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:700;font-size:1.15rem;color:#fff}
+.brand .brand-ico{width:34px;height:34px;border:1.5px solid var(--gold);border-radius:9px;display:grid;place-items:center;background:var(--gold);color:var(--ink)}
+.brand .brand-ico svg{width:17px;height:17px}
+.brand small{display:block;font-family:'Instrument Sans';font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.topbar-logo{
+  height:54px;width:auto;object-fit:contain;display:block;
+  filter:drop-shadow(0 3px 8px rgba(0,0,0,.55)) brightness(1.05);
+  transition:transform .18s ease;
+}
+.topbar-logo:hover{transform:scale(1.04)}
+@media (max-width:640px){ .topbar-logo{height:38px;} }
+
+nav.tabs{display:flex;gap:6px;border-top:1px solid rgba(255,255,255,.18);padding:10px 0;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+.nav-btn{
+  display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  border:1px solid transparent;background:transparent;color:#cbd5e1;
+  font-weight:600;font-size:13.5px;padding:8px 14px;border-radius:999px;
+  transition:all .18s ease;
+}
+.nav-btn svg{width:15px;height:15px}
+.nav-btn:hover{background:rgba(255,255,255,.12);color:#fff}
+.nav-btn.active{background:var(--gold);color:var(--ink)}
+
+/* ============================================================
+   VISTAS
+============================================================ */
+.view{padding:0 0 80px}
+.view-head{border-bottom:2px solid var(--ink);padding:52px 0 26px;margin-bottom:36px}
+.view-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);margin:8px 0 10px}
+.view-head p.sub{max-width:680px;color:var(--muted)}
+
+/* ============================================================
+   BOTONES / FORMULARIOS
+============================================================ */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--ink);color:#fff;
+  border:1px solid var(--ink);border-radius:10px;
+  padding:11px 18px;font-weight:600;font-size:14px;
+  transition:all .18s ease;box-shadow:0 3px 8px var(--shadow);
+}
+.btn:hover{background:var(--blue-light);border-color:var(--blue-light);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.ghost:hover{background:rgba(10,28,58,.06);transform:translateY(-1px)}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:8px}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{
+  font:inherit;font-size:14px;color:#1E2A44;
+  background:var(--card);border:1px solid var(--line-strong);
+  border-radius:8px;padding:10px 12px;width:100%;
+  transition:border-color .15s, box-shadow .15s;
+}
+.field input:focus,.field select:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.field input[type=range]{border:none;background:transparent;padding:0;box-shadow:none;height:28px;accent-color:var(--pine);cursor:pointer}
+.hint{font-size:12px;color:var(--muted)}
+
+/* ============================================================
+   INICIO / HERO
+============================================================ */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:64px 0 56px}
+.hero h1{font-size:clamp(2.3rem,4.6vw,3.7rem);margin:14px 0 18px}
+.hero h1 em{font-style:italic;color:var(--terra)}
+.hero .lead{font-size:1.05rem;color:var(--muted);max-width:520px}
+.hero-actions{display:flex;gap:12px;margin:26px 0 30px;flex-wrap:wrap}
+.meta-grid{display:grid;grid-template-columns:repeat(2,1fr);border-top:1px solid var(--line-strong);max-width:520px}
+.meta-grid>div{padding:12px 14px 12px 0;border-bottom:1px solid var(--line)}
+.meta-grid dt{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--muted)}
+.meta-grid dd{font-weight:600;font-size:14.5px}
+.hero-fig{border:1.5px solid var(--ink);border-radius:var(--radius);background:var(--card);overflow:hidden;box-shadow:6px 6px 0 var(--shadow)}
+.hero-fig canvas{display:block;width:100%;height:320px}
+.hero-fig figcaption{padding:12px 16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted)}
+.home-grid{display:grid;grid-template-columns:1.35fr .65fr;gap:44px;border-top:1.5px solid var(--ink);padding-top:38px}
+.route-item{display:grid;grid-template-columns:86px 1fr auto;gap:18px;align-items:center;border-top:1px solid var(--line);padding:22px 4px;cursor:pointer;transition:background .15s}
+.route-item:first-child{border-top:none}
+.route-item:hover{background:rgba(10,28,58,.045)}
+.route-no{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:400;color:rgba(0,123,93,.28)}
+.route-item h3{font-size:1.2rem;margin-bottom:4px}
+.route-item p{font-size:13.5px;color:var(--muted)}
+.route-go{width:38px;height:38px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;background:transparent;color:var(--ink);transition:all .18s}
+.route-item:hover .route-go{background:var(--ink);color:#fff}
+.side-stats{display:flex;flex-direction:column;gap:12px}
+.stat{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);padding:14px 18px;box-shadow:0 2px 8px var(--shadow)}
+.stat .num{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:600;line-height:1;color:var(--ink)}
+.stat .lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+
+/* ============================================================
+   TEORÍA
+============================================================ */
+.theory{display:grid;grid-template-columns:250px 1fr;gap:52px;align-items:start}
+.toc{position:sticky;top:170px;border-left:1.5px solid var(--ink);display:flex;flex-direction:column}
+.toc-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:0 0 10px 16px}
+.toc a{display:flex;gap:10px;align-items:baseline;text-decoration:none;color:var(--ink);padding:9px 16px;font-size:13.5px;font-weight:500;border-left:3px solid transparent;margin-left:-1.5px;transition:all .15s}
+.toc a span{font-family:'Fraunces',serif;color:var(--terra);font-weight:600;min-width:30px}
+.toc a:hover{border-left-color:var(--pine);background:rgba(0,123,93,.06)}
+.sec{border-top:1px solid var(--line);padding:44px 0}
+.sec:first-child{border-top:none;padding-top:0}
+.sec-no{font-family:'Fraunces',serif;font-size:3rem;font-weight:400;color:rgba(0,123,93,.22);line-height:1}
+.sec h3{font-size:1.55rem;margin:6px 0 16px}
+.prose p{margin:0 0 14px;max-width:70ch}
+.prose ul,.prose ol{margin:0 0 14px 22px;max-width:70ch}
+.prose li{margin-bottom:6px}
+.def{background:rgba(0,123,93,.07);border:1px solid rgba(0,123,93,.28);border-radius:0 10px 10px 0;border-left:4px solid var(--pine);padding:18px 22px;margin:20px 0}
+.def .def-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--pine)}
+.def p{margin:6px 0 0}
+.ex{background:#fef9e7;border:1px solid rgba(201,168,76,.45);border-left:4px solid var(--gold);border-radius:0 10px 10px 0;padding:18px 22px;margin:20px 0}
+.ex .ex-tag{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:#9a7d2e}
+.ex p{margin:6px 0 0}
+.formula-hero{display:flex;justify-content:center;padding:16px 0;font-size:1.15rem}
+.tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+.tbl th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1.5px solid var(--ink)}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--line)}
+.tbl tbody tr:hover{background:rgba(10,28,58,.04)}
+.tbl td.center,.tbl th.center{text-align:center}
+.tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px;border:1px solid}
+.tag.d{color:var(--pine);border-color:rgba(0,123,93,.45);background:var(--pine-light)}
+.tag.c{color:var(--terra);border-color:rgba(154,125,46,.45);background:var(--terra-soft)}
+
+/* ============================================================
+   APLICACIONES
+============================================================ */
+.app-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.app-card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--gold);border-radius:12px;box-shadow:0 4px 16px var(--shadow);padding:24px 26px}
+.app-card.green{border-left-color:var(--pine)}
+.app-card.blue{border-left-color:var(--ink)}
+.app-card h3{font-size:1.25rem;margin:12px 0 10px}
+.app-card p{font-size:14.5px;color:rgba(30,42,68,.85);margin-bottom:10px}
+.app-badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--pine);background:rgba(0,123,93,.1);padding:4px 10px;border-radius:999px}
+.app-card.blue .app-badge{color:var(--blue-light);background:#eaf2fa}
+.app-card.gold .app-badge{color:var(--terra);background:var(--terra-soft)}
+.formula-mini{background:#f0f2f5;border:1px dashed var(--gold);border-radius:8px;padding:10px 14px;margin:12px 0;text-align:center;font-size:1.02rem;overflow-x:auto}
+.app-link{font-size:12px;color:var(--muted);border-top:1px dashed var(--line-strong);padding-top:10px;margin-top:8px}
+.app-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);padding:20px 24px;margin-top:22px;box-shadow:0 4px 16px var(--shadow)}
+.app-cta p{margin:0;color:var(--muted);max-width:64ch}
+
+/* ============================================================
+   SIMULADOR
+============================================================ */
+.panel{background:var(--card);border:1.5px solid var(--ink);border-radius:var(--radius);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink)}
+.panel-body{padding:20px 18px}
+.lab-grid{display:grid;grid-template-columns:430px 1fr;gap:24px;align-items:start}
+.sim-tabs{display:flex;gap:6px;margin-bottom:18px;border-bottom:1px solid var(--line);padding-bottom:10px;flex-wrap:wrap}
+.sim-tab{background:transparent;border:1px solid transparent;padding:8px 14px;border-radius:999px;font-weight:600;font-size:13px;color:var(--muted);transition:all .15s}
+.sim-tab:hover{border-color:var(--line-strong)}
+.sim-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+.sim-panel{display:none}
+.sim-panel.active{display:block}
+.sim-3d-container{width:100%;height:420px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);background:#f6f7f9;position:relative}
+.sim-3d-container canvas{display:block;width:100%!important;height:100%!important}
+.sim-2d-container{width:100%;height:420px;border-radius:8px;overflow:hidden;border:1px solid var(--line-strong);background:#f6f7f9;position:relative}
+.sim-2d-container canvas{display:block;width:100%;height:100%;touch-action:none}
+.graph-cap{font-size:12.5px;color:var(--muted);padding:10px 16px 0}
+.sim-controls-3d{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.sim-controls-3d .field{margin-bottom:0}
+.sim-presets{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.sim-presets button{font-size:11px;padding:6px 12px}
+.legend-3d{display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.legend-3d .dot{display:inline-block;width:14px;height:14px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.note{font-size:12.5px;color:var(--muted);border-top:1px dashed var(--line-strong);margin-top:18px;padding-top:12px}
+.info-box{background:#eaf2fa;border-radius:8px;padding:12px 16px;margin-top:12px;font-size:14px;border-left:4px solid var(--ink)}
+.info-box .valor{font-family:'Fraunces',serif;font-size:1.1rem;color:var(--pine);font-weight:600}
+.info-box .label{font-weight:600;color:var(--muted)}
+#equationDisplay{padding:10px 16px;background:#eaf2fa;border-top:1px solid var(--line);font-family:'Fraunces',serif;font-size:1.1rem;text-align:center;color:var(--ink);min-height:40px;overflow-x:auto}
+
+/* ============================================================
+   ACTIVIDADES
+============================================================ */
+.act-block{margin-bottom:52px}
+.act-block>h3{font-size:1.45rem;margin:8px 0 6px}
+.act-block>.act-desc{color:var(--muted);max-width:70ch;margin-bottom:20px}
+.rub-row{display:grid;grid-template-columns:280px 1fr 60px;gap:16px;align-items:center;border-top:1px solid var(--line);padding:14px 4px}
+.rub-row:last-child{border-bottom:1px solid var(--line)}
+.rub-row .rub-name{font-weight:600;font-size:14.5px}
+.rub-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden}
+.rub-bar>div{height:100%;background:var(--pine)}
+.rub-pct{text-align:right;font-family:'Fraunces',serif;font-weight:600}
+details.sol{border:1px solid var(--line-strong);border-radius:10px;background:var(--card);margin-bottom:14px;overflow:hidden;box-shadow:0 2px 8px var(--shadow)}
+details.sol summary{list-style:none;display:flex;align-items:flex-start;gap:12px;padding:16px 18px;cursor:pointer;font-weight:600;transition:background .15s}
+details.sol summary::-webkit-details-marker{display:none}
+details.sol summary:hover{background:rgba(10,28,58,.04)}
+.sol-marker{flex:none;width:24px;height:24px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:15px;transition:transform .2s;margin-top:1px}
+details[open].sol .sol-marker{transform:rotate(45deg);background:var(--ink);color:#fff}
+.sol-body{border-top:1px dashed var(--line-strong);padding:16px 20px;font-size:14.5px}
+.sol-body p{margin-bottom:10px;max-width:75ch}
+.prob-tag{font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);display:block;margin-bottom:4px}
+.chk{display:flex;align-items:center;gap:11px;border:1px solid var(--line-strong);border-radius:9px;background:var(--card);padding:10px 14px;margin-bottom:9px;cursor:pointer;transition:all .15s;font-size:14.5px}
+.chk:hover{border-color:var(--pine)}
+.chk input{width:16px;height:16px;accent-color:var(--pine)}
+.chk.done{background:var(--ok-bg);border-color:var(--pine)}
+
+/* ============================================================
+   EDITOR DE REDACCIÓN
+============================================================ */
+.ed-box{border:1.5px solid var(--ink);border-radius:10px;margin-top:18px;overflow:hidden;background:var(--card)}
+.ed-toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--line);background:#eaf2fa;flex-wrap:wrap}
+.ed-title{display:inline-flex;align-items:center;gap:7px;font-size:10.5px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--pine)}
+.ed-title svg{width:13px;height:13px}
+.ed-status{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted)}
+.ed-status .dot{width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.ed-status.saved{color:var(--pine);font-weight:600}
+.ed-status.saved .dot{background:#2f855a}
+.ed-grid{display:grid;grid-template-columns:1fr 330px}
+.ed-main{padding:14px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ed-ta{width:100%;min-height:200px;resize:vertical;font:inherit;font-size:14.5px;line-height:1.6;padding:12px 14px;border:1px solid var(--line-strong);border-radius:8px;background:var(--paper);color:#1E2A44}
+.ed-ta:focus{outline:none;border-color:var(--pine);box-shadow:0 0 0 3px rgba(0,123,93,.14)}
+.ed-preview-wrap{border:1px dashed var(--line-strong);border-radius:8px;overflow:hidden;background:var(--paper)}
+.ed-preview-head{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:6px 12px;background:rgba(10,28,58,.04);border-bottom:1px dashed var(--line)}
+.ed-preview{padding:12px 14px;font-size:14.5px;min-height:56px;overflow-x:auto;white-space:pre-wrap}
+.ed-preview .katex-display{margin:6px 0}
+.ed-ph{color:var(--muted);font-size:13px}
+.ed-manual{border-left:1px solid var(--line);padding:12px 14px;background:rgba(10,28,58,.03);max-height:460px;overflow:auto}
+.ed-note{font-size:12px;color:var(--muted);margin-bottom:10px}
+.ed-note code{background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:11px}
+.ed-cmd-title{font-size:10px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:var(--terra);margin:12px 0 4px}
+.cmd-row{display:grid;grid-template-columns:minmax(0,1fr) auto 26px;align-items:center;gap:8px;padding:5px 0;border-bottom:1px dashed var(--line)}
+.cmd-code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;color:#1E2A44;overflow-x:auto;white-space:nowrap;display:block}
+.cmd-view{font-size:13px;text-align:right;max-width:130px;overflow-x:auto;padding:2px 0}
+.cmd-add{width:26px;height:26px;border:1px solid var(--line-strong);border-radius:6px;background:var(--card);display:grid;place-items:center;font-weight:700;color:var(--pine);transition:all .15s;font-size:14px;flex:none}
+.cmd-add:hover{background:var(--pine);color:#fff;border-color:var(--pine)}
+.ed-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 14px;border-top:1px dashed var(--line-strong);flex-wrap:wrap}
+.ed-count{font-size:12px;color:var(--muted)}
+details.mini-check{border:1px dashed var(--line-strong);border-radius:8px;background:var(--terra-soft);margin-top:14px}
+details.mini-check summary{padding:10px 14px;cursor:pointer;font-size:13px;font-weight:600;list-style:none}
+details.mini-check summary::-webkit-details-marker{display:none}
+details.mini-check summary:hover{color:var(--terra)}
+details.mini-check .sol-body{border-top:1px dashed var(--line-strong);padding-top:8px;font-size:13.5px}
+
+/* ============================================================
+   QUIZ
+============================================================ */
+.quiz-q{border-top:1px solid var(--line);padding:24px 4px}
+.quiz-q header{display:flex;gap:14px;margin-bottom:14px}
+.qnum{flex:none;font-family:'Fraunces',serif;font-weight:700;color:var(--terra);border:1.5px solid var(--terra);border-radius:8px;padding:2px 9px;height:fit-content}
+.quiz-q .q-text{font-weight:600;font-size:15.5px;padding-top:4px}
+.opts{display:grid;gap:9px;margin-left:56px}
+.opt{display:flex;align-items:center;gap:12px;border:1px solid var(--line-strong);border-radius:10px;padding:11px 14px;cursor:pointer;background:var(--card);transition:all .15s;font-size:14.5px}
+.opt:hover{border-color:var(--pine)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt-key{flex:none;width:26px;height:26px;border:1.5px solid var(--line-strong);border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:12px;transition:all .15s}
+.opt.is-correct{border-color:var(--pine);background:var(--ok-bg)}
+.opt.is-correct .opt-key{background:var(--pine);border-color:var(--pine);color:#fff}
+.opt.is-wrong{border-color:var(--err);background:var(--err-bg)}
+.opt.is-wrong .opt-key{background:var(--err);border-color:var(--err);color:#fff}
+.opt.locked{cursor:default}
+.explain{margin:12px 0 0 56px;font-size:13.5px;color:var(--muted);border-left:3px solid var(--gold);padding:8px 14px;background:var(--card)}
+.quiz-foot{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px;border-top:1.5px solid var(--ink);padding-top:20px}
+.quiz-result{font-size:15px}
+.quiz-result strong{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--pine);margin-right:8px}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;color:#fff}
+.del-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line-strong);background:transparent;color:var(--ink);border-radius:8px;padding:8px 12px;font-size:12.5px;font-weight:600;transition:all .15s}
+.del-btn:hover{border-color:var(--err);color:var(--err)}
+.del-btn.confirm{background:var(--err);border-color:var(--err);color:#fff}
+.boleta-card{position:relative;max-width:700px;background:var(--card);border:2px solid var(--ink);border-radius:var(--radius);box-shadow:8px 8px 0 var(--shadow);overflow:hidden}
+.b-head{display:flex;align-items:center;gap:16px;padding:22px 24px;border-bottom:1.5px solid var(--ink)}
+.b-head .avatar{width:52px;height:52px;font-size:17px;border:1.5px solid var(--ink)}
+.b-head>div{flex:1;min-width:0}
+.b-title{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--terra);margin-bottom:3px}
+.b-name{font-family:'Fraunces',serif;font-size:1.35rem;font-weight:700;line-height:1.15;color:var(--ink)}
+.b-meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+.b-seal{flex:none;width:82px;height:82px;border:2px solid var(--gold);border-radius:50%;display:grid;place-items:center;text-align:center;color:var(--terra);transform:rotate(-8deg);opacity:.9;line-height:1.25}
+.b-seal span{font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.b-seal strong{font-family:'Fraunces',serif;font-size:1.25rem}
+.b-body{padding:8px 24px 18px}
+.b-row{display:grid;grid-template-columns:1fr 150px 92px;gap:14px;align-items:center;border-top:1px solid var(--line);padding:13px 0}
+.b-row:first-child{border-top:none}
+.b-rubname{font-weight:600;font-size:14.5px}
+.b-rubdet{font-size:12px;color:var(--muted);margin-top:1px}
+.b-bar{height:10px;border:1px solid var(--line-strong);border-radius:999px;overflow:hidden;background:var(--paper)}
+.b-bar>div{height:100%;background:var(--pine);transition:width .4s ease}
+.b-pts{text-align:right;font-family:'Fraunces',serif;font-weight:600;font-size:1.05rem}
+.b-pts small{font-weight:400;color:var(--muted);font-size:.75em}
+.b-total{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:2px solid var(--ink);background:#eaf2fa;padding:16px 24px}
+.b-total-lbl{font-family:'Fraunces',serif;font-weight:700;font-size:1.05rem;color:var(--ink)}
+.b-total-det{font-size:11.5px;color:var(--muted);margin-top:2px}
+.b-score{display:flex;align-items:baseline;gap:6px}
+.b-score .big{font-family:'Fraunces',serif;font-size:3rem;font-weight:700;color:var(--pine);line-height:1}
+.b-score .den{font-family:'Fraunces',serif;font-size:1.2rem;color:var(--muted)}
+.b-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:1px dashed var(--line-strong);padding:11px 24px;font-size:11.5px;color:var(--muted)}
+.boleta-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;max-width:700px}
+
+/* ============================================================
+   TOASTS / FOOTER
+============================================================ */
+#toasts{position:fixed;bottom:22px;right:22px;z-index:100;display:flex;flex-direction:column;gap:10px;max-width:340px}
+.toast{display:flex;align-items:center;gap:10px;background:var(--ink);color:#fff;border-radius:10px;padding:12px 16px;font-size:13.5px;font-weight:500;box-shadow:0 8px 24px rgba(10,28,58,.3);animation:toastIn .28s cubic-bezier(.2,.9,.3,1.2)}
+.toast svg{flex:none;width:17px;height:17px}
+.toast.ok svg{color:#8fd0a5}
+.toast.err svg{color:#f0a284}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateX(20px)}}
+footer{background:var(--ink);border-top:4px solid var(--gold);padding:30px 0 38px;margin-top:20px}
+.foot-row{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;font-size:13px;color:rgba(255,255,255,.72)}
+.foot-row strong{color:#fff}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width:960px){
+  .hero{grid-template-columns:1fr;gap:34px}
+  .home-grid{grid-template-columns:1fr}
+  .theory{grid-template-columns:1fr}
+  .toc{position:static;flex-direction:row;overflow-x:auto;border-left:none;border-bottom:1.5px solid var(--ink);gap:2px}
+  .toc-title{display:none}
+  .toc a{white-space:nowrap;border-left:none;border-bottom:3px solid transparent}
+  .toc a:hover{border-bottom-color:var(--pine)}
+  .lab-grid,.task-panel,.app-grid{grid-template-columns:1fr}
+  .ed-grid{grid-template-columns:1fr}
+  .ed-manual{border-left:none;border-top:1px solid var(--line);max-height:none}
+  .sim-controls-3d{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .b-row{grid-template-columns:1fr 86px}
+  .b-bar{display:none}
+  .b-seal{display:none}
+  .b-total{flex-direction:column;align-items:flex-start;gap:6px}
+  .opts,.explain{margin-left:0}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== HEADER ==================== -->
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <div class="brand">
+      <span class="brand-ico"><i data-lucide="sigma"></i></span>
+      <span>Cálculo Vectorial <small>Aula interactiva — Dr. Adrián Cerda</small></span>
+    </div>
+    <div class="topbar-right">
+      <img src="logo-UP.png" alt="Logo Universidad Panamericana" class="topbar-logo">
+    </div>
+  </div>
+  <div class="wrap">
+    <nav class="tabs" id="mainNav">
+      <button class="nav-btn active" data-view="inicio"><i data-lucide="home"></i>Inicio</button>
+      <button class="nav-btn" data-view="teoria"><i data-lucide="book-open"></i>Teoría</button>
+      <button class="nav-btn" data-view="simulador"><i data-lucide="layout-dashboard"></i>Simulador</button>
+      <button class="nav-btn" data-view="aplicaciones"><i data-lucide="rocket"></i>Aplicaciones</button>
+      <button class="nav-btn" data-view="actividades"><i data-lucide="clipboard-list"></i>Actividades</button>
+      <button class="nav-btn" data-view="boleta"><i data-lucide="badge-check"></i>Mi registro y notas</button>
+    </nav>
+  </div>
+</header>
+<main>
+
+<!-- ==================== INICIO ==================== -->
+<section class="view" id="v-inicio">
+  <div class="wrap hero">
+    <div>
+      <p class="overline">Cálculo Vectorial · Universidad Panamericana</p>
+      <h1>Integrales múltiples: del corte de rebanadas al <em>volumen</em></h1>
+      <p class="lead">Integrales dobles y triples sobre rectángulos y regiones generales, los cuatro tipos de regiones planas, coordenadas polares, cilíndricas y esféricas, cambio de variable con jacobianos, centros de masa y momentos de inercia.</p>
+      <div class="hero-actions">
+        <button class="btn" data-view="teoria"><i data-lucide="book-open"></i>Entrar a la teoría</button>
+        <button class="btn ghost" data-view="simulador"><i data-lucide="layout-dashboard"></i>Explorar el simulador</button>
+      </div>
+      <dl class="meta-grid">
+        <div><dt>Unidad</dt><dd>V — Integración múltiple</dd></div>
+        <div><dt>Sesiones</dt><dd>3 de 2 horas cada una</dd></div>
+        <div><dt>Evaluación</dt><dd>Quiz + tareas + laboratorio</dd></div>
+        <div><dt>Texto</dt><dd>Marsden &amp; Tromba — Cap. 5</dd></div>
+      </dl>
+    </div>
+    <figure class="hero-fig">
+      <canvas id="heroCanvas"></canvas>
+      <figcaption><strong>Volumen bajo una superficie.</strong> La doble integral como límite de sumas de columnas: cada caja es \(f(x_i^*,y_j^*)\,\Delta A\).</figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap home-grid">
+    <div>
+      <p class="overline" style="margin-bottom:14px">Ruta de la unidad</p>
+      <div class="route-item" data-view="teoria">
+        <span class="route-no">01</span>
+        <div><h3>Desarrollo de la teoría</h3><p>Dobles en rectangulares y los cuatro tipos de regiones, volúmenes, polares, jacobianos, centros de masa, y triples en rectangulares, cilíndricas y esféricas.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="simulador">
+        <span class="route-no">02</span>
+        <div><h3>Laboratorio de integración</h3><p>Sumas de Riemann bajo la superficie en 3D, los cuatro tipos de regiones con sus franjas, y placas que se equilibran sobre su centro de masa.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="aplicaciones">
+        <span class="route-no">03</span>
+        <div><h3>Aplicaciones</h3><p>Densidad y masa, probabilidad, momentos de inercia en ingeniería, capacidad de tanques y coordenadas esféricas.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="actividades">
+        <span class="route-no">04</span>
+        <div><h3>Evaluación y tareas</h3><p>Ejercicios guiados, redacción en LaTeX, quiz y problemas del Marsden-Tromba.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+      <div class="route-item" data-view="boleta">
+        <span class="route-no">05</span>
+        <div><h3>Mi boleta</h3><p>Regístrate y sigue tu avance: tu progreso y calificación final.</p></div>
+        <span class="route-go"><i data-lucide="arrow-right"></i></span>
+      </div>
+    </div>
+    <aside>
+      <p class="overline" style="margin-bottom:14px">En un vistazo</p>
+      <div class="side-stats">
+        <div class="stat"><div class="num" id="statNota">—</div><div class="lbl">Tu nota (sobre 10)</div></div>
+        <div class="stat"><div class="num">8</div><div class="lbl">Secciones teóricas</div></div>
+        <div class="stat"><div class="num">6</div><div class="lbl">Preguntas del quiz</div></div>
+        <div class="stat"><div class="num">18</div><div class="lbl">Ejercicios y problemas</div></div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ==================== TEORÍA ==================== -->
+<section class="view" id="v-teoria" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Desarrollo de la teoría</p>
+      <h2>Integrales dobles y triples, regiones, cambio de variable y aplicaciones físicas</h2>
+      <p class="sub">Síntesis del Capítulo 5 de Marsden &amp; Tromba, <em>Cálculo Vectorial</em>: de la suma de Riemann al jacobiano, y del volumen a la física de placas y sólidos.</p>
+    </div>
+
+    <div class="theory">
+      <aside class="toc">
+        <p class="toc-title">Contenido</p>
+        <a href="#t51"><span>5.1</span>Doble integral rectangular</a>
+        <a href="#t52"><span>5.2</span>Regiones tipo I–IV y áreas</a>
+        <a href="#t53"><span>5.3</span>Volúmenes con dobles</a>
+        <a href="#t54"><span>5.4</span>Coordenadas polares</a>
+        <a href="#t55"><span>5.5</span>Cambio de variable y jacobiano</a>
+        <a href="#t56"><span>5.6</span>Centro de masa e inercia (placa)</a>
+        <a href="#t57"><span>5.7</span>Triples rectangulares y volúmenes</a>
+        <a href="#t58"><span>5.8</span>Cilíndricas, esféricas y CM 3D</a>
+      </aside>
+
+      <div class="prose">
+
+        <!-- 5.1 -->
+        <article class="sec" id="t51">
+          <div class="sec-no">5.1</div>
+          <h3>La doble integral en coordenadas rectangulares</h3>
+          <div class="def">
+            <span class="def-tag">Definición · Suma de Riemann</span>
+            <p>Sea \(R=[a,b]\times[c,d]\). Se subdivide en una malla de \(n\times m\) rectángulos de área \( \Delta A = \Delta x\,\Delta y \) y en cada celda se elige un punto \( (x_i^*, y_j^*) \). La <strong>doble integral</strong> de \(f\) sobre \(R\) es el límite de las sumas:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_R f(x,y)\,dA \;=\; \lim_{n,m\to\infty}\sum_{i=1}^{n}\sum_{j=1}^{m} f(x_i^*,y_j^*)\,\Delta A \)</p>
+            <p>Si \(f\ge 0\), cada término \(f(x_i^*,y_j^*)\Delta A\) es el <strong>volumen de una columna</strong>: la integral total es el volumen bajo la superficie \(z=f(x,y)\).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Teorema de Fubini</span>
+            <p>Si \(f\) es continua en el rectángulo \(R\), la doble integral puede calcularse como integrales iteradas en <em>cualquier</em> orden:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_R f\,dA = \int_a^b\!\!\int_c^d f(x,y)\,dy\,dx = \int_c^d\!\!\int_a^b f(x,y)\,dx\,dy \)</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>\( \displaystyle \iint_{[0,1]\times[0,2]} xy\,dA = \int_0^1\!\!\int_0^2 xy\,dy\,dx = \int_0^1 x\cdot\frac{y^2}{2}\Big|_0^2 dx = \int_0^1 2x\,dx = 1. \)</p>
+            <p>Con el otro orden: \( \int_0^2\!\!\int_0^1 xy\,dx\,dy = \int_0^2 \frac{y}{2}dy = 1 \). Fubini garantiza que da lo mismo.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Propiedades</span>
+            <p>Linealidad: \( \iint (\alpha f+\beta g) = \alpha\iint f + \beta\iint g \). Monotonía: si \(f\le g\) en \(R\), entonces \( \iint f \le \iint g \). Aditividad: si \(R\) se parte en dos rectángulos, la integral es la suma.</p>
+          </div>
+        </article>
+
+        <!-- 5.2 -->
+        <article class="sec" id="t52">
+          <div class="sec-no">5.2</div>
+          <h3>Áreas de regiones planas: los cuatro tipos</h3>
+          <p>Para integrar sobre regiones que no son rectángulos hay que saber <em>describirlas</em>. Los cuatro tipos estándar cubren prácticamente todas las regiones que aparecen en el curso:</p>
+          <div class="def">
+            <span class="def-tag">Tipo I · simple en \(y\) (franjas verticales)</span>
+            <p>\( D=\{(x,y): a\le x\le b,\; g_1(x)\le y\le g_2(x)\} \): entre dos curvas escritas como funciones de \(x\).</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_D f\,dA = \int_a^b\!\!\int_{g_1(x)}^{g_2(x)} f(x,y)\,dy\,dx \)</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Tipo II · simple en \(x\) (franjas horizontales)</span>
+            <p>\( D=\{(x,y): c\le y\le d,\; h_1(y)\le x\le h_2(y)\} \): entre dos curvas escritas como funciones de \(y\).</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_D f\,dA = \int_c^d\!\!\int_{h_1(y)}^{h_2(y)} f(x,y)\,dx\,dy \)</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Tipo III · simple en ambas direcciones</span>
+            <p>Regiones que son tipo I y tipo II a la vez (p. ej. el cuarto de disco \(x^2+y^2\le 1,\; x,y\ge 0\)): puede elegirse el orden que convenga y, si hace falta, partir la región en trozos tipo I o II.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Tipo IV · natural en polares</span>
+            <p>Regiones descritas por \( r_1(\theta)\le r\le r_2(\theta),\; \alpha\le\theta\le\beta \) (discos, anillos, sectores, cardioides): el enfoque más simple es pasar a coordenadas polares (§5.4).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · una región, dos lecturas</span>
+            <p>La región entre \(y=x\) y \(y=x^2\) es tipo I: \( 0\le x\le 1,\; x^2\le y\le x \). Su área:</p>
+            <p>\( \displaystyle A=\int_0^1\!\!\int_{x^2}^{x} dy\,dx=\int_0^1 (x-x^2)\,dx = \frac{1}{2}-\frac{1}{3}=\frac{1}{6}. \)</p>
+            <p>La misma región es tipo II: \( 0\le y\le 1,\; y\le x\le \sqrt{y} \): \( A=\int_0^1(\sqrt{y}-y)\,dy=\frac{1}{6} \). Elegir el tipo adecuado puede ahorrar mucho cálculo.</p>
+          </div>
+          <p>El área de cualquier región plana es la doble integral de la función constante 1: \( A=\iint_D 1\,dA \). El simulador, pestaña «Regiones tipo I–IV», dibuja las franjas de cada tipo.</p>
+        </article>
+
+        <!-- 5.3 -->
+        <article class="sec" id="t53">
+          <div class="sec-no">5.3</div>
+          <h3>Volumen de cuerpos con integrales dobles</h3>
+          <div class="def">
+            <span class="def-tag">Volumen bajo una superficie</span>
+            <p>Si \(f(x,y)\ge 0\) sobre \(D\), el volumen del sólido entre \(D\) y la superficie \(z=f(x,y)\) es \( V=\iint_D f\,dA \).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Volumen entre dos superficies</span>
+            <p>Si el sólido está limitado arriba por \(z=f_2(x,y)\), abajo por \(z=f_1(x,y)\) y a los lados por la proyección \(D\):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle V=\iint_D \big(f_2(x,y)-f_1(x,y)\big)\,dA \)</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Volumen bajo el paraboloide \( z=4-x^2-y^2 \) sobre el cuadrado \( [-1,1]\times[-1,1] \):</p>
+            <p>\( V=\int_{-1}^{1}\!\!\int_{-1}^{1}(4-x^2-y^2)\,dx\,dy = 16-\tfrac{4}{3}-\tfrac{4}{3} = \tfrac{40}{3}. \)</p>
+            <p>Por simetría también: \( V=4\int_0^1\!\!\int_0^1(4-x^2-y^2)dx\,dy \): usar la simetría es una técnica constante de la unidad.</p>
+          </div>
+        </article>
+
+        <!-- 5.4 -->
+        <article class="sec" id="t54">
+          <div class="sec-no">5.4</div>
+          <h3>Integrales dobles en coordenadas polares</h3>
+          <div class="def">
+            <span class="def-tag">Cambio a polares</span>
+            <p>Con \( x=r\cos\theta,\; y=r\sin\theta \), el elemento de área es \( dA = r\,dr\,d\theta \) (el factor \(r\) es el jacobiano del cambio). Para una región tipo IV:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_D f(x,y)\,dA = \int_\alpha^\beta\!\!\int_{r_1(\theta)}^{r_2(\theta)} f(r\cos\theta,\,r\sin\theta)\; r\,dr\,d\theta \)</p>
+          </div>
+          <p>Polares conviene cuando <em>la región</em> es circular (discos, anillos, sectores) o cuando <em>la función</em> contiene \(x^2+y^2=r^2\). Olvidar el factor \(r\) es el error clásico de la unidad.</p>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · volumen del paraboloide</span>
+            <p>Volumen bajo \( z=4 \) y sobre \( z=x^2+y^2 \), dentro del cilindro \( x^2+y^2\le 4 \): en polares, \(0\le r\le 2,\; 0\le\theta\le 2\pi\):</p>
+            <p>\( V=\int_0^{2\pi}\!\!\int_0^2 (4-r^2)\,r\,dr\,d\theta = 2\pi\Big[2r^2-\tfrac{r^4}{4}\Big]_0^2 = 2\pi(8-4)=8\pi. \)</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · una integral imposible en rectangular</span>
+            <p>\( \displaystyle \iint_{x^2+y^2\le 1} e^{x^2+y^2}\,dA = \int_0^{2\pi}\!\!\int_0^1 e^{r^2}\,r\,dr\,d\theta = 2\pi\cdot\tfrac{e-1}{2}=\pi(e-1). \)</p>
+            <p>En rectangulares \( \int e^{x^2}dx \) no tiene antiderivada elemental; el factor \(r\) de polares la salva.</p>
+          </div>
+        </article>
+
+        <!-- 5.5 -->
+        <article class="sec" id="t55">
+          <div class="sec-no">5.5</div>
+          <h3>Cambios de variable generales y el jacobiano</h3>
+          <div class="def">
+            <span class="def-tag">Teorema del cambio de variable</span>
+            <p>Sea \( T(u,v)=(x(u,v),\,y(u,v)) \) una transformación uno a uno con derivadas continuas que lleva la región \(S\) del plano \(uv\) sobre la región \(D\) del plano \(xy\). El <strong>jacobiano</strong> de la transformación es</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle J \;=\; \frac{\partial(x,y)}{\partial(u,v)} \;=\; \begin{vmatrix} \partial x/\partial u & \partial x/\partial v\\[2pt] \partial y/\partial u & \partial y/\partial v \end{vmatrix} \)</p>
+            <p>y la integral se transforma con</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iint_D f(x,y)\,dx\,dy = \iint_S f\big(x(u,v),y(u,v)\big)\,|J|\,du\,dv. \)</p>
+          </div>
+          <p>Polares es el caso particular \( x=r\cos\theta,\, y=r\sin\theta \) con \( |J|=r \). La estrategia: elegir la transformación que convierta la <em>región complicada</em> en un rectángulo. En 3D, el jacobiano es el determinante \(3\times 3\) de las derivadas, y el mismo teorema vale para triples (cilíndricas: \(|J|=r\); esféricas: \(|J|=\rho^2\sin\varphi\)).</p>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · paralelogramo</span>
+            <p>Con \( x=u+v,\; y=u-v \): \( J = \begin{vmatrix}1&1\\1&-1\end{vmatrix}=-2 \), luego \( |J|=2 \). La imagen del cuadrado unitario \( [0,1]^2 \) es el paralelogramo de vértices \( (0,0),(1,1),(2,0),(1,-1) \), cuyo área vale \( \iint 1\,dA = \iint_S 2\,du\,dv = 2 \).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · coordenadas elípticas</span>
+            <p>Para regiones dentro de \( \tfrac{x^2}{4}+\tfrac{y^2}{9}\le 1 \), la transformación \( x=2u,\; y=3v \) tiene \( J=6 \): el interior de la elipse es la imagen del disco unitario y su área es \( 6\cdot\pi=6\pi \).</p>
+          </div>
+        </article>
+
+        <!-- 5.6 -->
+        <article class="sec" id="t56">
+          <div class="sec-no">5.6</div>
+          <h3>Centros de masa y momentos de inercia de placas</h3>
+          <div class="def">
+            <span class="def-tag">Masa, momentos y centro de masa</span>
+            <p>Una placa que ocupa la región \(D\) con densidad \( \rho(x,y) \) tiene:</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle m=\iint_D \rho\,dA,\qquad M_x=\iint_D y\,\rho\,dA,\qquad M_y=\iint_D x\,\rho\,dA \)</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \bar{x}=\frac{M_y}{m},\qquad \bar{y}=\frac{M_x}{m} \)</p>
+            <p>El punto \( (\bar x,\bar y) \) es el <strong>centro de masa</strong>: la placa se equilibra suspendida exactamente en ese punto — lo que muestra el simulador, pestaña «Centro de masa».</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Momentos de inercia</span>
+            <p>Respecto de los ejes y del origen (momento polar):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle I_x=\iint_D y^2\rho\,dA,\qquad I_y=\iint_D x^2\rho\,dA,\qquad I_0=I_x+I_y=\iint_D (x^2+y^2)\rho\,dA \)</p>
+            <p>\(I_x\) mide la resistencia de la placa a rotar alrededor del eje \(x\) (la masa lejana al eje pesa al cuadrado).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · triángulo uniforme</span>
+            <p>Triángulo de vértices \( (0,0),(b,0),(0,h) \) con \( \rho=1 \). Sobre una franja vertical: \( m=\tfrac{bh}{2} \); el primer momento \( M_y=\int_0^b x\cdot h(1-\tfrac{x}{b})dx = \tfrac{hb^2}{6} \), de donde \( \bar{x}=\tfrac{b}{3} \) — el famoso «un tercio desde el vértice del ángulo recto». Además \( I_x = \int_0^b \tfrac{(h(1-x/b))^3}{3}dx=\tfrac{bh^3}{12} \).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · placa semicircular</span>
+            <p>Semicírculo superior de radio \(R\), uniforme: por simetría \( \bar{x}=0 \) y \( \bar{y}=\dfrac{1}{m}\iint y\,dA = \dfrac{4R}{3\pi} \) — está <em>dentro</em> de la placa, más cerca del diámetro de lo que la intuición sugiere.</p>
+          </div>
+        </article>
+
+        <!-- 5.7 -->
+        <article class="sec" id="t57">
+          <div class="sec-no">5.7</div>
+          <h3>Integrales triples rectangulares y volúmenes</h3>
+          <div class="def">
+            <span class="def-tag">Triple integral</span>
+            <p>Sobre una caja \( B=[a,b]\times[c,d]\times[p,q] \), con \( \Delta V=\Delta x\,\Delta y\,\Delta z \):</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \iiint_B f\,dV=\lim\sum f(x_i^*,y_j^*,z_k^*)\,\Delta V = \int_a^b\!\!\int_c^d\!\!\int_p^q f\,dz\,dy\,dx \)</p>
+            <p>Fubini se extiende: las tres integrales iteradas pueden ordenarse de 6 maneras. Para sólidos generales \(E\) con cotas \( z=u_1(x,y)\le z\le u_2(x,y) \) sobre una región \(D\): \( \iiint_E f\,dV=\iint_D\int_{u_1}^{u_2} f\,dz\,dA \).</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Volumen y masa</span>
+            <p>\( V=\iiint_E 1\,dV \) y, con densidad \( \rho(x,y,z) \): \( m=\iiint_E \rho\,dV \).</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo</span>
+            <p>Masa del sólido unitario \( [0,1]^3 \) con densidad \( \rho=xyz \):</p>
+            <p>\( m=\int_0^1\!\!\int_0^1\!\!\int_0^1 xyz\,dz\,dy\,dx=\Big(\tfrac{1}{2}\Big)^3=\tfrac{1}{8}. \)</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · volumen por capas</span>
+            <p>Volumen bajo \( z=3+x+y \) sobre el disco \( x^2+y^2\le 1 \) (desde \(z=0\)): los términos \(x\) y \(y\) se anulan por simetría sobre el disco y \( V=\iint_D 3\,dA=3\pi \).</p>
+          </div>
+        </article>
+
+        <!-- 5.8 -->
+        <article class="sec" id="t58">
+          <div class="sec-no">5.8</div>
+          <h3>Cilíndricas, esféricas y centros de masa en el espacio</h3>
+          <div class="def">
+            <span class="def-tag">Coordenadas cilíndricas</span>
+            <p>\( x=r\cos\theta,\; y=r\sin\theta,\; z=z \), con elemento de volumen \( dV=r\,dz\,dr\,d\theta \) (jacobiano \(r\)). Ideal para sólidos con eje: cilindros, conos, paraboloides de revolución.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Coordenadas esféricas</span>
+            <p>\( x=\rho\sin\varphi\cos\theta,\; y=\rho\sin\varphi\sin\theta,\; z=\rho\cos\varphi \), con \( \rho\ge0,\; 0\le\varphi\le\pi \), y elemento de volumen</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle dV=\rho^2\sin\varphi\; d\rho\, d\varphi\, d\theta \)</p>
+            <p>Ideal para bolas, conos \( \varphi=\text{cte} \) y regiones entre esferas. \( \varphi \) se mide desde el eje \(z\) positivo.</p>
+          </div>
+          <div class="def">
+            <span class="def-tag">Centro de masa y momentos en 3D</span>
+            <p>Con densidad \( \rho(x,y,z) \): \( m=\iiint\rho\,dV \), momentos \( M_{yz}=\iiint x\rho\,dV \) (y análogos), y</p>
+            <p style="display:flex;justify-content:center;padding:6px 0">\( \displaystyle \bar{x}=\frac{M_{yz}}{m},\quad \bar{y}=\frac{M_{xz}}{m},\quad \bar{z}=\frac{M_{xy}}{m} \)</p>
+            <p>Momentos de inercia: \( I_x=\iiint (y^2+z^2)\rho\,dV \) respecto del eje \(x\), y cíclicamente.</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · volumen de un cono (cilíndricas)</span>
+            <p>Cono de radio \(a\) y altura \(h\): la tapa es \( z=\dfrac{h}{a}r \):</p>
+            <p>\( V=\int_0^{2\pi}\!\!\int_0^a\!\!\int_0^{hr/a} r\,dz\,dr\,d\theta = 2\pi\int_0^a \tfrac{h}{a}r^2 dr = \tfrac{2\pi h}{a}\cdot\tfrac{a^3}{3}\cdot\tfrac{1}{2}\cdot 3 = \tfrac{\pi a^2h}{3}. \) ✓</p>
+          </div>
+          <div class="ex">
+            <span class="ex-tag">Ejemplo · volumen de la bola y CM del hemisferio</span>
+            <p>Bola de radio \(R\): \( V=\int_0^{2\pi}\!\!\int_0^{\pi}\!\!\int_0^R \rho^2\sin\varphi\,d\rho d\varphi d\theta = 2\pi\cdot 2\cdot \tfrac{R^3}{3}=\tfrac{4\pi R^3}{3} \).</p>
+            <p>Hemisferio sólido uniforme de radio \(R\): por simetría \( \bar{x}=\bar{y}=0 \) y con capas \( \bar{z}=\dfrac{1}{m}\int_0^R z\cdot\pi(R^2-z^2)dz = \dfrac{3R}{8} \): el centro de masa está a \( 3R/8 \) del centro, sobre el eje.</p>
+          </div>
+          <div class="info-box" style="margin-top:26px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <span>¿Dónde se usa todo esto fuera del aula? Visita la sección de aplicaciones.</span>
+            <button class="btn sm" data-view="aplicaciones"><i data-lucide="rocket"></i>Ver aplicaciones</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== APLICACIONES ==================== -->
+<section class="view" id="v-aplicaciones" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Sección de aplicaciones</p>
+      <h2>Las integrales múltiples en el mundo real</h2>
+      <p class="sub">De placas que se balancean a probabilidades y estructuras: la misma maquinaria de integración sostiene tecnología cotidiana.</p>
+    </div>
+
+    <div class="app-grid">
+      <article class="app-card green">
+        <span class="app-badge">Manufactura · Control de calidad</span>
+        <h3>Masa y densidad de placas</h3>
+        <p>Una lamina metálica con densidad variable \( \rho(x,y) \) (por tratamiento térmico, por ejemplo) tiene masa \( m=\iint\rho\,dA \) y un centro de masa que determina cómo se cuelga, se transporta o se ensambla. Un centro de masa fuera del soporte ⇒ la pieza se vuelca.</p>
+        <div class="formula-mini">\( m=\iint_D \rho\,dA,\qquad (\bar x,\bar y)=\Big(\tfrac{\iint x\rho}{m},\tfrac{\iint y\rho}{m}\Big) \)</div>
+        <p class="app-link">Conexión: teoría §5.6 · simulador «Centro de masa y equilibrio».</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Estadística · Probabilidad</span>
+        <h3>Distribuciones conjuntas</h3>
+        <p>Si \( (X,Y) \) tiene densidad conjunta \( p(x,y) \), la probabilidad de un suceso \(A\) es \( P(A)=\iint_A p\,dA \). La normalización \( \iint_{\mathbb R^2}p=1 \), las medias \( E[X]=\iint x\,p\,dA \) — es la maquinaria de §5.1–5.2 con otro nombre.</p>
+        <div class="formula-mini">\( P(X\le a,\,Y\le b)=\int_{-\infty}^{a}\!\!\int_{-\infty}^{b} p(x,y)\,dy\,dx \)</div>
+        <p class="app-link">Conexión: teoría §5.1 (Fubini) y §5.6 (esperanzas como primeros momentos).</p>
+      </article>
+
+      <article class="app-card gold">
+        <span class="app-badge">Ingeniería estructural</span>
+        <h3>Momentos de inercia de secciones</h3>
+        <p>La rigidez a flexión de una viga depende de \( I_x=\iint y^2\,dA \) de su sección transversal: alejar el material del eje (vigas en I) sube \(I_x\) sin añadir masa. El mismo integral decide ejes de giro de volantes y rotores: \( I_0=\iint (x^2+y^2)\rho\,dA \).</p>
+        <div class="formula-mini">\( I_x=\iint_D y^2\,\rho\,dA \quad\Rightarrow\quad \text{viga en I: } I_x \uparrow \text{ con la misma } m \)</div>
+        <p class="app-link">Conexión: teoría §5.6 · prueba con la placa en L del simulador.</p>
+      </article>
+
+      <article class="app-card blue">
+        <span class="app-badge">Diseño de tanques · Capacidad</span>
+        <h3>Volúmenes de depósitos</h3>
+        <p>La capacidad de un silo paraboloidal, un tanque esférico o una cisterna cónica se calcula con \( V=\iiint_E dV \) en cilíndricas o esféricas: el nivel de llenado contra el volumen es una integral, y las plantas lo usan para calibrar sensores de nivel.</p>
+        <div class="formula-mini">\( V=\int_0^{2\pi}\!\!\int_0^a\!\!\int_0^{z(r)} r\,dz\,dr\,d\theta \)</div>
+        <p class="app-link">Conexión: teoría §5.7 y §5.8.</p>
+      </article>
+
+      <article class="app-card green">
+        <span class="app-badge">Geodesia · Física</span>
+        <h3>Coordenadas esféricas en la naturaleza</h3>
+        <p>La Tierra ya viene en esféricas: latitud y longitud son \( \varphi \) y \( \theta \). Campos con simetría esférica (gravedad, cargas puntuales, radiación) se integran con \( dV=\rho^2\sin\varphi\,d\rho d\varphi d\theta \); el centro de masa de un planeta y el momento de inercia que mide un satélite salen de §5.8.</p>
+        <div class="formula-mini">\( \bar z=\tfrac{1}{m}\iiint z\,\rho\,dV \;\Rightarrow\; \text{hemisferio: } \bar z=\tfrac{3R}{8} \)</div>
+        <p class="app-link">Conexión: teoría §5.8 · jacobiano esférico §5.5.</p>
+      </article>
+
+      <article class="app-card gold">
+        <span class="app-badge">Visión por computadora · Gráficos</span>
+        <h3>Centroides y momentos en imágenes</h3>
+        <p>Una imagen binaria es una placa: \( \rho=1 \) sobre los píxeles del objeto. Su centro de masa (centroide) permite seguir objetos, y los momentos \( \iint x^k y^\ell\rho\,dA \) son descriptores clásicos de forma usados en reconocimiento de patrones y robótica de agarre (¡agarrar por el centroide!).</p>
+        <div class="formula-mini">\( \text{centroide}=\Big(\tfrac{\iint x\,dA}{A},\tfrac{\iint y\,dA}{A}\Big) \)</div>
+        <p class="app-link">Conexión: teoría §5.2 y §5.6 · el simulador lo hace en vivo.</p>
+      </article>
+    </div>
+
+    <div class="app-cta">
+      <p>Compruébalo en vivo: arrastra el punto de apoyo de una placa y observa cómo solo se equilibra sobre su centro de masa.</p>
+      <button class="btn" data-goto-sim="centro"><i data-lucide="layout-dashboard"></i>Abrir el simulador</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SIMULADOR ==================== -->
+<section class="view" id="v-simulador" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Laboratorio de simulación · Actividad práctica</p>
+      <h2>Sumas de Riemann, los cuatro tipos de regiones y el centro de masa</h2>
+      <p class="sub">Tres módulos: la doble integral como límite de columnas bajo una superficie, las regiones planas de los cuatro tipos con sus franjas de integración, y placas que solo se equilibran suspendidas en su centro de masa.</p>
+    </div>
+
+    <div class="lab-grid">
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="sliders-horizontal"></i>Controles</div>
+        <div class="panel-body">
+          <div class="sim-tabs">
+            <button class="sim-tab active" data-stab="riemann">Integral doble (Riemann)</button>
+            <button class="sim-tab" data-stab="regiones">Regiones tipo I–IV</button>
+            <button class="sim-tab" data-stab="centro">Centro de masa</button>
+          </div>
+
+          <!-- Pestaña: Riemann -->
+          <div class="sim-panel active" id="st-riemann">
+            <div class="field" style="margin-bottom:12px">
+              <label for="funcRiemann">Función \(f(x,y)\) sobre \([0,1]\times[0,1]\)</label>
+              <select id="funcRiemann">
+                <option value="parab" selected>x² + y² &nbsp;(exacto: 2/3)</option>
+                <option value="xy">x · y &nbsp;(exacto: 1/4)</option>
+                <option value="onda">sin(πx)·sin(πy) &nbsp;(exacto: 4/π²)</option>
+                <option value="parab4">4 − x² − y² &nbsp;(exacto: 10/3)</option>
+              </select>
+            </div>
+            <div class="field" style="margin-bottom:12px">
+              <label for="nSlider">Subdivisiones por lado: n = <span id="nVal" class="mono">8</span></label>
+              <input type="range" id="nSlider" min="4" max="20" step="1" value="8">
+            </div>
+            <button class="btn" id="btnRiemann"><i data-lucide="refresh-cw"></i>Actualizar columnas</button>
+
+            <div class="info-box" id="infoRiemann">
+              <div><span class="label">Suma de Riemann (punto medio):</span> <span id="rieSum" class="valor">—</span></div>
+              <div><span class="label">Valor exacto:</span> <span id="rieExact" class="valor">—</span></div>
+              <div><span class="label">Error |suma − exacto|:</span> <span id="rieErr" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="detalleRie">Sube \(n\) y observa el error reducirse.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#143466;"></span>Superficie \(z=f(x,y)\)</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Columnas \(f(x_i^*,y_j^*)\Delta A\)</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Región \([0,1]^2\)</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Regiones -->
+          <div class="sim-panel" id="st-regiones">
+            <div class="field" style="margin-bottom:12px">
+              <label for="selRegion">Tipo de región</label>
+              <select id="selRegion">
+                <option value="t1" selected>Tipo I — simple en \(y\) (franjas verticales)</option>
+                <option value="t2">Tipo II — simple en \(x\) (franjas horizontales)</option>
+                <option value="t3">Tipo III — simple en ambas direcciones</option>
+                <option value="t4">Tipo IV — natural en polares (sectores)</option>
+              </select>
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" id="btnStripes">Mostrar / ocultar franjas</button>
+            </div>
+            <button class="btn" id="btnRegiones"><i data-lucide="refresh-cw"></i>Actualizar región</button>
+
+            <div class="info-box" id="infoRegiones">
+              <div><span class="label">Área:</span> <span id="regVal" class="valor">—</span></div>
+              <div class="formula-mini" id="regTex" style="margin-top:8px">—</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="detalleReg">Cada tipo describe la región con distintos límites de integración.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#D4EDDA;border:1px solid #007B5D;"></span>Región \(D\)</span>
+              <span><span class="dot" style="background:rgba(201,168,76,.6);"></span>Franjas \(dy\) o \(dx\)</span>
+              <span><span class="dot" style="background:#007B5D;"></span>Sectores \(r\,dr\,d\theta\)</span>
+            </div>
+          </div>
+
+          <!-- Pestaña: Centro de masa -->
+          <div class="sim-panel" id="st-centro">
+            <div class="field" style="margin-bottom:12px">
+              <label for="selLamina">Placa</label>
+              <select id="selLamina">
+                <option value="tri" selected>Triángulo rectángulo (ρ = 1)</option>
+                <option value="semi">Semicírculo (ρ = 1)</option>
+                <option value="placaL">Placa en L (ρ = 1)</option>
+                <option value="dens">Cuadrado con ρ = x + 1</option>
+              </select>
+            </div>
+            <div class="sim-presets">
+              <button class="btn sm ghost" id="btnCmAuto">Apoyo en el centro de masa</button>
+              <button class="btn sm ghost" id="btnCmShake">Sacudir la placa</button>
+            </div>
+            <button class="btn" id="btnCentro"><i data-lucide="refresh-cw"></i>Actualizar placa</button>
+
+            <div class="info-box" id="infoCentro">
+              <div><span class="label">Masa m:</span> <span id="cmMass" class="valor">—</span></div>
+              <div><span class="label">Centro de masa \((\bar x,\bar y)\):</span> <span id="cmBar" class="valor">—</span></div>
+              <div><span class="label">Inercias \(I_x,\;I_y,\;I_0\):</span> <span id="cmIn" class="valor">—</span></div>
+              <div><span class="label">Estado:</span> <span id="cmEstado" class="valor">—</span></div>
+              <div style="font-size:13px;color:var(--muted);margin-top:4px" id="cmNote">Arrastra el punto de apoyo sobre la placa. Solo queda equilibrada en el centro de masa.</div>
+            </div>
+
+            <div class="legend-3d">
+              <span><span class="dot" style="background:#D4EDDA;border:1px solid #007B5D;"></span>Placa</span>
+              <span><span class="dot" style="background:#C9A84C;"></span>Centro de masa \((\bar x,\bar y)\)</span>
+              <span><span class="dot" style="background:#B8860B;"></span>Punto de apoyo</span>
+              <span><span class="dot" style="background:#007B5D;"></span>¡Equilibrada!</span>
+            </div>
+          </div>
+
+          <p class="note">En el módulo 3D arrastra para rotar y usa la rueda para acercar. En «Centro de masa», haz clic (o arrastra) sobre el lienzo para mover el punto de apoyo: la placa oscila y se cuelga; cuando el apoyo coincide con \( (\bar x,\bar y) \), queda suspendida equilibrada — sacúdela y vuelve al reposo.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><i data-lucide="box"></i>Visualización</div>
+        <div class="sim-3d-container" id="threeContainer" hidden></div>
+        <div class="sim-2d-container" id="regContainer" hidden><canvas id="regCanvas"></canvas></div>
+        <div class="sim-2d-container" id="cenContainer" hidden><canvas id="cenCanvas"></canvas></div>
+        <div class="graph-cap" id="graphCap">Cargando motor 3D…</div>
+        <div id="equationDisplay"><span id="eqText">\(\displaystyle \iint_{[0,1]^2} (x^2+y^2)\,dA = \tfrac{2}{3}\)</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ACTIVIDADES ==================== -->
+<section class="view" id="v-actividades" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Zona de evaluación</p>
+      <h2>Actividades de la Unidad 5</h2>
+      <p class="sub">Ejercicios guiados, redacción con LaTeX, quiz y problemas del Marsden-Tromba.</p>
+    </div>
+
+    <!-- Rúbrica -->
+    <div class="act-block">
+      <h3>Rúbrica de evaluación</h3>
+      <p class="act-desc">Ponderación de cada instrumento sobre la calificación de la unidad (nota final sobre 10).</p>
+      <div class="rub-row"><span class="rub-name">Prácticas en el simulador (3 módulos)</span><div class="rub-bar"><div style="width:15%"></div></div><span class="rub-pct">15%</span></div>
+      <div class="rub-row"><span class="rub-name">Ejercicios guiados (solución detallada)</span><div class="rub-bar"><div style="width:25%"></div></div><span class="rub-pct">25%</span></div>
+      <div class="rub-row"><span class="rub-name">Quiz de autoevaluación</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+      <div class="rub-row"><span class="rub-name">Tarea: problemas del Marsden-Tromba</span><div class="rub-bar"><div style="width:30%"></div></div><span class="rub-pct">30%</span></div>
+    </div>
+
+    <!-- Ejercicios guiados -->
+    <div class="act-block" id="ejBlock">
+      <h3>Ejercicios guiados con solución</h3>
+      <p class="act-desc">Intenta resolverlos por escrito antes de desplegar la solución.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 1 · Fubini en un rectángulo</span>Calcula \( \iint_{[0,1]\times[0,2]} xy\,dA \) en los dos órdenes posibles.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Orden \(dy\,dx\): \( \int_0^1\!\!\int_0^2 xy\,dy\,dx=\int_0^1 x\cdot\frac{y^2}{2}\Big|_0^2 dx=\int_0^1 2x\,dx=1. \)</p>
+          <p>Orden \(dx\,dy\): \( \int_0^2\!\!\int_0^1 xy\,dx\,dy=\int_0^2 \frac{y}{2}dy=1. \) ✓ Coinciden: Fubini.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e1"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 2 · Área entre y = x y y = x²</span>Halla el área de la región entre \(y=x\) y \(y=x^2\) como región tipo I y como tipo II.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Tipo I: \( 0\le x\le1,\; x^2\le y\le x \): \( A=\int_0^1(x-x^2)dx=\tfrac12-\tfrac13=\tfrac16. \)</p>
+          <p>Tipo II: \( 0\le y\le1,\; y\le x\le\sqrt y \): \( A=\int_0^1(\sqrt y-y)dy=\tfrac23-\tfrac12=\tfrac16. \) ✓</p>
+          <p>Verifica las curvas en el simulador, pestaña «Regiones tipo I–IV».</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e2"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 3 · Volumen bajo un paraboloide</span>Calcula el volumen bajo \( z=4-x^2-y^2 \) sobre \( [-1,1]\times[-1,1] \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( V=\int_{-1}^{1}\!\!\int_{-1}^{1}(4-x^2-y^2)dx\,dy = 4(2)(2) - \int_{-1}^{1}x^2dx\cdot 2 - 2\cdot\int_{-1}^{1}y^2dy \)</p>
+          <p>\( =16-\tfrac{2}{3}\cdot 2-\tfrac{2}{3}\cdot 2=16-\tfrac{8}{3}=\tfrac{40}{3}. \)</p>
+          <p>(Con \(z\ge0\) garantizado: en el cuadrado \( x^2+y^2\le 2 &lt; 4 \). ✓)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e3"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 4 · Polares con exponencial</span>Calcula \( \iint_D e^{x^2+y^2}\,dA \) donde \(D\) es el disco unitario.</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>En polares \( e^{x^2+y^2}=e^{r^2} \) y \( dA=r\,dr\,d\theta \):</p>
+          <p>\( \int_0^{2\pi}\!\!\int_0^1 e^{r^2}r\,dr\,d\theta = 2\pi\cdot \tfrac{1}{2}e^{r^2}\Big|_0^1 = \pi(e-1). \)</p>
+          <p>Sin el factor \(r\) esta integral sería imposible en elementales: ese es el poder del cambio polar.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e4"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 5 · Volumen entre paraboloide y plano</span>Calcula el volumen dentro de \( x^2+y^2\le 4 \) entre \( z=x^2+y^2 \) y \( z=4 \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( V=\iint_{r\le2}(4-r^2)\,r\,dr\,d\theta = \int_0^{2\pi}\!\!\int_0^2 (4r-r^3)dr\,d\theta \)</p>
+          <p>\( =2\pi\big[2r^2-\tfrac{r^4}{4}\big]_0^2=2\pi(8-4)=8\pi. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e5"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 6 · Jacobiano de un cambio lineal</span>Con \( x=u+v,\; y=u-v \), calcula \( J \) y el área de la imagen del cuadrado \( [0,1]^2 \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>\( J=\begin{vmatrix}1&1\\1&-1\end{vmatrix}=-2 \Rightarrow |J|=2. \)</p>
+          <p>Área \(=\iint_S |J|\,du\,dv = 2\cdot\text{área}(S)=2\cdot 1=2 \): el paralelogramo con vértices \( (0,0),(1,1),(2,0),(1,-1) \).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e6"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 7 · Centro de masa de un semicírculo</span>Halla \( (\bar x,\bar y) \) de la placa semicircular uniforme \( x^2+y^2\le R^2,\; y\ge0 \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Por simetría \( \bar x=0 \). En polares: \( m=\tfrac{\pi R^2}{2} \) y</p>
+          <p>\( M_x=\int_0^{\pi}\!\!\int_0^R (r\sin\theta)\,r\,dr\,d\theta = \Big(\int_0^\pi\sin\theta\,d\theta\Big)\tfrac{R^3}{3}=\tfrac{2R^3}{3}. \)</p>
+          <p>\( \bar y=\dfrac{M_x}{m}=\dfrac{2R^3/3}{\pi R^2/2}=\dfrac{4R}{3\pi}\approx 0.424\,R. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e7"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 8 · Momento de inercia de un triángulo</span>Para el triángulo uniforme \( (0,0),(b,0),(0,h) \) con \( \rho=1 \), calcula \( I_x=\iint y^2\,dA \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Franja vertical en \(x\): \(y\) va de \(0\) a \( h(1-x/b) \):</p>
+          <p>\( I_x=\int_0^b \frac{\big(h(1-\tfrac{x}{b})\big)^3}{3}\,dx=\frac{h^3}{3}\cdot\frac{b}{4}=\frac{bh^3}{12}. \)</p>
+          <p>Con \( m=\tfrac{bh}{2} \): \( I_x=\tfrac{mh^2}{6} \): la masa cercana a la base (\(y\) pequeño) pesa poco.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e8"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 9 · Triple integral</span>Calcula \( \iiint_{[0,1]^3} xyz\,dV \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>Fubini separa variables: \( \int_0^1 x\,dx\cdot\int_0^1 y\,dy\cdot\int_0^1 z\,dz=\tfrac12\cdot\tfrac12\cdot\tfrac12=\tfrac18. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e9"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 10 · Volumen de un cono en cilíndricas</span>Con cilíndricas, calcula el volumen del cono \( z=\sqrt{x^2+y^2} \) bajo \( z=h \).</span></summary>
+        <div class="sol-body">
+          <p><strong>Solución:</strong></p>
+          <p>El cono es \( r=z \); abajo \(z\) va de \(r\) a \(h\):</p>
+          <p>\( V=\int_0^{2\pi}\!\!\int_0^{h}\!\!\int_{r}^{h} r\,dz\,dr\,d\theta = 2\pi\int_0^{h} r(h-r)\,dr = 2\pi\Big(\tfrac{h^3}{2}-\tfrac{h^3}{3}\Big)=\tfrac{\pi h^3}{3}. \)</p>
+          <p>(Con radio \(a=h\): \( \pi a^2h/3 \), la fórmula clásica.)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-ej="e10"><span>Ya resolví este ejercicio</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Refuerzo con redacción -->
+    <div class="act-block" id="redBlock">
+      <h3>Refuerzo: redacta tu solución</h3>
+      <p class="act-desc">Cuatro problemas adicionales sin solución visible. Redacta con LaTeX en el editor; puedes guardar tus borradores.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 11 · Masa con densidad radial (esféricas)</span>Una bola de radio \(R\) tiene densidad \( \rho=k\,r \) (proporcional a la distancia al centro). Calcula su masa.</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e11"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( m=\int_0^{2\pi}\!\!\int_0^{\pi}\!\!\int_0^R k\rho_s\cdot\rho_s^2\sin\varphi\,d\rho_s d\varphi d\theta = 4\pi k\cdot\tfrac{R^4}{4}=\pi k R^4. \)</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 12 · Cambio de variable con jacobiano</span>Calcula \( \iint_D dA \) donde \( D=\{(x,y): 1\le x+y\le 2,\; 1\le x-y\le 2\} \), usando \( u=x+y,\; v=x-y \).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e12"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>De \(u=x+y, v=x-y\): \( x=\tfrac{u+v}{2}, y=\tfrac{u-v}{2} \), \( J=\tfrac12 \). \(D\) es el cuadrado \( [1,2]^2 \) en \(uv\).</p>
+              <p>\( A=\iint_{[1,2]^2}\tfrac12\,du\,dv=\tfrac12. \)</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 13 · Momento de inercia de un disco</span>Calcula \( I_x \) de un disco uniforme de radio \(R\) y masa \(m\), respecto de un diámetro.</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e13"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( I_x=\iint y^2\rho\,dA = \int_0^{2\pi}\!\!\int_0^R (r\sin\theta)^2 \rho\, r\,dr\,d\theta = \rho\pi\tfrac{R^4}{4}=\tfrac{mR^2}{4}. \)</p>
+            </div>
+          </details>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Ejercicio 14 · Volumen en esféricas</span>Calcula el volumen dentro de la esfera \( \rho\le 2 \) y dentro del cono \( \varphi\le \pi/4 \) (casquete cónico).</span></summary>
+        <div class="sol-body">
+          <div class="ed-box" data-ed="e14"></div>
+          <details class="mini-check">
+            <summary>Resultado de control</summary>
+            <div class="sol-body">
+              <p>\( V=\int_0^{2\pi}\!\!\int_0^{\pi/4}\!\!\int_0^2 \rho_s^2\sin\varphi\, d\rho_s d\varphi d\theta = 2\pi\cdot\tfrac{8}{3}\cdot\big(1-\tfrac{\sqrt2}{2}\big)=\tfrac{16\pi}{3}\big(1-\tfrac{\sqrt2}{2}\big). \)</p>
+            </div>
+          </details>
+        </div>
+      </details>
+    </div>
+
+    <!-- Tarea -->
+    <div class="act-block" id="tareaBlock">
+      <h3>Tarea · Marsden &amp; Tromba, Cap. 5</h3>
+      <p class="act-desc">Cuatro problemas para entregar por escrito en la próxima sesión (30% de la nota). Marca cada uno al terminarlo.</p>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 1 · Región tipo I</span>Halla el área de la región acotada por \( y=2-x^2 \) y \( y=x \).</span></summary>
+        <div class="sol-body">
+          <p>Intersección: \( x=2-x^2\Rightarrow x^2+x-2=0\Rightarrow x=1 \) (la raíz \(-2\) da la otra rama; el cierre acotado relevante es \(0\le x\le 1\), donde \(2-x^2\ge x\)).</p>
+          <p>\( A=\int_0^1\!\!\int_x^{2-x^2} dy\,dx=\int_0^1(2-x-x^2)dx=2-\tfrac12-\tfrac13=\tfrac{7}{6}. \)</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t1"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 2 · Volumen con simetría</span>Calcula el volumen bajo \( z=3+x+y \) sobre el disco \( x^2+y^2\le 1 \) (desde \( z=0 \)).</span></summary>
+        <div class="sol-body">
+          <p>\( V=\iint_D (3+x+y)\,dA=3A+\iint x+\iint y = 3\pi+0+0=3\pi, \)</p>
+          <p>por imparidad de \(x\) e \(y\) sobre el disco centrado. Verifícalo en polares.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t2"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 3 · Centro de masa</span>Encuentra el centro de masa de la placa uniforme entre \(y=x\) y \(y=x^2\).</span></summary>
+        <div class="sol-body">
+          <p>\( m=\tfrac16 \), \( M_y=\int_0^1\!\!\int_{x^2}^{x} x\,dy\,dx=\int_0^1(x^2-x^3)dx=\tfrac{1}{12} \Rightarrow \bar x=\tfrac12. \)</p>
+          <p>\( M_x=\int_0^1 \tfrac{x^2-x^4}{2}dx=\tfrac{1}{15}\Rightarrow \bar y=\tfrac{2}{5}. \)</p>
+          <p>Centro de masa: \( \big(\tfrac12,\tfrac25\big) \) — dentro de la región, desplazado hacia el lado más ancho.</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t3"><span>Problema entregado</span></label>
+        </div>
+      </details>
+
+      <details class="sol">
+        <summary><span class="sol-marker">+</span><span><span class="prob-tag">Tarea 4 · Momento polar de un cuadrado</span>Calcula \( I_0=\iint (x^2+y^2)\,dA \) sobre \( [-1,1]\times[-1,1] \) con \( \rho=1 \), y exprésalo en función de la masa \(m\).</span></summary>
+        <div class="sol-body">
+          <p>\( I_x=\int_{-1}^{1}\!\!\int_{-1}^{1} y^2 dx\,dy=2\cdot\tfrac23=\tfrac43 \); por simetría \( I_y=\tfrac43 \).</p>
+          <p>\( I_0=I_x+I_y=\tfrac83. \) Con \( m=4 \): \( I_0=\tfrac{2m}{3} \) (en general \( I_0=\tfrac{ma^2}{6} \) para lado \(a\)).</p>
+          <label class="chk chk-ej" style="margin-top:14px"><input type="checkbox" data-tar="t4"><span>Problema entregado</span></label>
+        </div>
+      </details>
+    </div>
+
+    <!-- Quiz -->
+    <div class="act-block" id="quizBlock">
+      <h3>Quiz de autoevaluación</h3>
+      <p class="act-desc">Seis preguntas de opción múltiple sobre toda la unidad. Selecciona una opción y se verificará al instante.</p>
+
+      <div class="quiz-q" data-qid="q1" data-correct="b">
+        <header><span class="qnum">1</span><p class="q-text">\( \displaystyle\iint_{[0,1]\times[0,2]} xy\,dA \) vale:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q1" value="a"><span class="opt-key">A</span><span>\(\tfrac12\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="b"><span class="opt-key">B</span><span>\(1\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="c"><span class="opt-key">C</span><span>\(2\)</span></label>
+          <label class="opt"><input type="radio" name="q1" value="d"><span class="opt-key">D</span><span>\(\tfrac14\)</span></label>
+        </div>
+        <div class="explain" hidden>\(\int_0^1\int_0^2 xy\,dy\,dx=\int_0^1 2x\,dx=1\). Fubini garantiza el mismo resultado en el otro orden.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q2" data-correct="b">
+        <header><span class="qnum">2</span><p class="q-text">En coordenadas polares, el elemento de área es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q2" value="a"><span class="opt-key">A</span><span>\(dr\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="b"><span class="opt-key">B</span><span>\(r\,dr\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="c"><span class="opt-key">C</span><span>\(r^2\,dr\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q2" value="d"><span class="opt-key">D</span><span>\(\tfrac{1}{r}dr\,d\theta\)</span></label>
+        </div>
+        <div class="explain" hidden>El jacobiano del cambio \(x=r\cos\theta, y=r\sin\theta\) es \(r\): una celda polar es un "rectángulo curvo" de área \(\approx r\,\Delta r\,\Delta\theta\).</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q3" data-correct="c">
+        <header><span class="qnum">3</span><p class="q-text">El área de la región entre \(y=x\) y \(y=x^2\) es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q3" value="a"><span class="opt-key">A</span><span>\(\tfrac13\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="b"><span class="opt-key">B</span><span>\(\tfrac12\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="c"><span class="opt-key">C</span><span>\(\tfrac16\)</span></label>
+          <label class="opt"><input type="radio" name="q3" value="d"><span class="opt-key">D</span><span>\(\tfrac23\)</span></label>
+        </div>
+        <div class="explain" hidden>\(A=\int_0^1(x-x^2)dx=\frac12-\frac13=\frac16\). Como tipo II: \(\int_0^1(\sqrt y-y)dy=\frac16\): misma región, misma área.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q4" data-correct="b">
+        <header><span class="qnum">4</span><p class="q-text">Si \( x=u+v,\; y=u-v \), el jacobiano del cambio satisface \( |J| = \):</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q4" value="a"><span class="opt-key">A</span><span>\(1\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="b"><span class="opt-key">B</span><span>\(2\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="c"><span class="opt-key">C</span><span>\(\tfrac12\)</span></label>
+          <label class="opt"><input type="radio" name="q4" value="d"><span class="opt-key">D</span><span>\(4\)</span></label>
+        </div>
+        <div class="explain" hidden>\(J=\begin{vmatrix}1&1\\1&-1\end{vmatrix}=-2\), y en la fórmula del cambio de variable se usa su valor absoluto: \(|J|=2\).</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q5" data-correct="a">
+        <header><span class="qnum">5</span><p class="q-text">El centro de masa de una placa triangular uniforme con vértices \((0,0),(6,0),(0,3)\) tiene \(\bar x =\):</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q5" value="a"><span class="opt-key">A</span><span>\(2\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="b"><span class="opt-key">B</span><span>\(3\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="c"><span class="opt-key">C</span><span>\(1\)</span></label>
+          <label class="opt"><input type="radio" name="q5" value="d"><span class="opt-key">D</span><span>\(4\)</span></label>
+        </div>
+        <div class="explain" hidden>Para el triángulo rectángulo uniforme, \(\bar x=b/3=6/3=2\) y \(\bar y=h/3=1\): a un tercio desde el vértice del ángulo recto.</div>
+      </div>
+
+      <div class="quiz-q" data-qid="q6" data-correct="c">
+        <header><span class="qnum">6</span><p class="q-text">En coordenadas esféricas, el elemento de volumen es:</p></header>
+        <div class="opts">
+          <label class="opt"><input type="radio" name="q6" value="a"><span class="opt-key">A</span><span>\(d\rho\,d\varphi\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="b"><span class="opt-key">B</span><span>\(\rho\,d\rho\,d\varphi\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="c"><span class="opt-key">C</span><span>\(\rho^2\sin\varphi\; d\rho\,d\varphi\,d\theta\)</span></label>
+          <label class="opt"><input type="radio" name="q6" value="d"><span class="opt-key">D</span><span>\(\rho^2\cos\varphi\; d\rho\,d\varphi\,d\theta\)</span></label>
+        </div>
+        <div class="explain" hidden>Es el jacobiano del cambio esférico: \(dV=\rho^2\sin\varphi\,d\rho d\varphi d\theta\). El \(\sin\varphi\) se anula en los polos, como debe ser.</div>
+      </div>
+
+      <div class="quiz-foot">
+        <div class="quiz-result" id="quizResult"><strong>0</strong> de 6 aciertos</div>
+        <button class="btn ghost sm" id="btnQuizReset"><i data-lucide="rotate-ccw"></i>Reiniciar quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BOLETA ==================== -->
+<section class="view" id="v-boleta" hidden>
+  <div class="wrap">
+    <div class="view-head">
+      <p class="overline">Seguimiento personal</p>
+      <h2>Mi boleta de la Unidad 5</h2>
+      <p class="sub">Regístrate para activar tu boleta. El progreso (simulador, ejercicios, quiz y tarea) se acumula automáticamente y se guarda solo en tu navegador.</p>
+    </div>
+
+    <div class="panel" id="boletaForm" style="max-width:700px">
+      <div class="panel-head"><i data-lucide="user-plus"></i>Registro del estudiante</div>
+      <div class="panel-body">
+        <div class="field" style="max-width:420px">
+          <label for="studentName">Tu nombre</label>
+          <input id="studentName" placeholder="Nombre y apellido" autocomplete="name">
+        </div>
+        <button class="btn" id="btnRegister" style="margin-top:14px"><i data-lucide="badge-check"></i>Registrarme</button>
+        <p class="hint" style="margin-top:10px">No se envía nada a un servidor: todo vive en el <em>localStorage</em> de este navegador.</p>
+      </div>
+    </div>
+
+    <div class="boleta-card" id="boletaCard" hidden>
+      <div class="b-head">
+        <div class="avatar" id="bAvatar">—</div>
+        <div>
+          <div class="b-title">Cálculo Vectorial · Unidad 5</div>
+          <div class="b-name" id="bName">—</div>
+          <div class="b-meta" id="bMeta">0 de 23 evidencias registradas</div>
+        </div>
+        <div class="b-seal"><span>Unidad 5</span><strong id="bSeal">0.0</strong><span>nota / 10</span></div>
+      </div>
+      <div class="b-body">
+        <div class="b-row">
+          <div><div class="b-rubname">Prácticas en el simulador</div><div class="b-rubdet" id="bdSim">0 de 3 módulos explorados</div></div>
+          <div class="b-bar"><div id="barSim" style="width:0%"></div></div>
+          <div class="b-pts" id="ptSim">0.0 <small>/ 1.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Ejercicios guiados</div><div class="b-rubdet" id="bdEj">0 de 10 ejercicios resueltos</div></div>
+          <div class="b-bar"><div id="barEj" style="width:0%"></div></div>
+          <div class="b-pts" id="ptEj">0.0 <small>/ 2.5</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Quiz de autoevaluación</div><div class="b-rubdet" id="bdQuiz">0 de 6 respondidas · 0 aciertos</div></div>
+          <div class="b-bar"><div id="barQuiz" style="width:0%"></div></div>
+          <div class="b-pts" id="ptQuiz">0.0 <small>/ 3.0</small></div>
+        </div>
+        <div class="b-row">
+          <div><div class="b-rubname">Tarea Marsden-Tromba</div><div class="b-rubdet" id="bdTar">0 de 4 problemas entregados</div></div>
+          <div class="b-bar"><div id="barTar" style="width:0%"></div></div>
+          <div class="b-pts" id="ptTar">0.0 <small>/ 3.0</small></div>
+        </div>
+      </div>
+      <div class="b-total">
+        <div>
+          <div class="b-total-lbl">Calificación final de la unidad</div>
+          <div class="b-total-det">Simulador 15% · Ejercicios 25% · Quiz 30% · Tarea 30%</div>
+        </div>
+        <div class="b-score"><span class="big" id="bTotal">0.0</span><span class="den">/ 10</span></div>
+      </div>
+      <div class="b-foot"><span id="bFootDate">—</span><span>Dr. Adrián Cerda · Cálculo Vectorial · Unidad 5</span></div>
+    </div>
+
+    <div class="boleta-actions" id="boletaActions" hidden>
+      <button class="del-btn" id="btnDelete"><i data-lucide="trash-2"></i>Eliminar registro</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="toasts"></div>
+
+<footer>
+  <div class="wrap foot-row">
+    <span><strong>Cálculo Vectorial</strong> — Integrales múltiples y aplicaciones</span>
+    <span>Dr. Adrián Cerda · Marsden &amp; Tromba, Cap. 5 · 2026</span>
+  </div>
+</footer>
+
+<!-- ==================== LIBRERÍAS ==================== -->
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<script>
+/* ============================================================
+   UTILIDADES Y ESTADO
+============================================================ */
+console.log('%c✔ Cálculo Vectorial · U5 (Integrales múltiples) cargada','color:#0A1C3A;font-weight:bold');
+
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const f2 = n => (+n).toFixed(2);
+const f3 = n => (+n).toFixed(3);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+function loadScript(src){
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res;
+    s.onerror = () => { s.remove(); rej(new Error('fallo: ' + src)); };
+    document.head.appendChild(s);
+  });
+}
+
+const KEY = 'calc2-u5-state';
+const freshState = () => ({ name:'', ej:{}, tar:{}, quiz:{answers:{}}, sim:{}, ed:{} });
+let state = freshState();
+try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && typeof s === 'object') state = Object.assign(freshState(), s); } catch(e){}
+state.quiz = state.quiz || {answers:{}};
+state.sim = state.sim || {}; state.ej = state.ej || {}; state.tar = state.tar || {}; state.ed = state.ed || {};
+
+function persist(){ localStorage.setItem(KEY, JSON.stringify(state)); updateBoleta(); }
+
+function typeset(el){
+  if (window.renderMathInElement) renderMathInElement(el || document.body, {
+    delimiters:[{left:'\\(',right:'\\)',display:false},{left:'$$',right:'$$',display:true}],
+    throwOnError:false
+  });
+}
+function showToast(msg, ok=true){
+  const t = document.createElement('div');
+  t.className = 'toast ' + (ok ? 'ok' : 'err');
+  t.innerHTML = `<i data-lucide="${ok?'check-circle-2':'alert-circle'}"></i><span>${esc(msg)}</span>`;
+  $('#toasts').appendChild(t);
+  if (window.lucide) lucide.createIcons();
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(), 320); }, 3200);
+}
+
+/* ============================================================
+   NAVEGACIÓN
+============================================================ */
+function showView(name){
+  $$('.view').forEach(v => v.hidden = (v.id !== 'v-' + name));
+  $$('.nav-btn').forEach(b => b.classList.toggle('active', b.dataset.view === name));
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if (name === 'simulador') requestAnimationFrame(() => { drawRegions(); drawCenter(); });
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-view]');
+  if (t) showView(t.dataset.view);
+});
+ $$('[data-goto-sim]').forEach(b => b.addEventListener('click', () => {
+  showView('simulador');
+  const tab = document.querySelector(`.sim-tab[data-stab="${b.dataset.gotoSim}"]`);
+  if (tab) tab.click();
+}));
+
+/* ============================================================
+   DATOS MATEMÁTICOS
+============================================================ */
+/* Funciones para el módulo de Riemann sobre [0,1]×[0,1] */
+const RFN = {
+  parab:  { tex:'x^2+y^2',                  f:(x,y)=>x*x+y*y,                               exact:2/3,           exactTxt:'\\tfrac{2}{3}',           zs:2.2 },
+  xy:     { tex:'x\\,y',                    f:(x,y)=>x*y,                                   exact:0.25,          exactTxt:'\\tfrac{1}{4}',           zs:6.0  },
+  onda:   { tex:'\\sin(\\pi x)\\sin(\\pi y)', f:(x,y)=>Math.sin(Math.PI*x)*Math.sin(Math.PI*y), exact:4/(Math.PI*Math.PI), exactTxt:'\\tfrac{4}{\\pi^2}', zs:2.2 },
+  parab4: { tex:'4-x^2-y^2',                f:(x,y)=>4-x*x-y*y,                             exact:10/3,          exactTxt:'\\tfrac{10}{3}',          zs:0.62 }
+};
+
+/* Regiones de los cuatro tipos */
+const REG = {
+  t1:{ name:'Tipo I',  val:'A = 2/3 ≈ 0.667',
+       tex:'A=\\int_0^2\\!\\!\\int_{x^2/2}^{x} dy\\,dx = \\tfrac{2}{3}',
+       det:'Tipo I: para cada \(x\\in[0,2]\) la franja vertical va de \\(y=x^2/2\\) (parábola) a \\(y=x\\) (recta).',
+       xmin:-0.4, xmax:2.5, ymin:-0.7, ymax:2.3 },
+  t2:{ name:'Tipo II', val:'A = 1/6 ≈ 0.167',
+       tex:'A=\\int_0^1\\!\\!\\int_{y^2}^{y} dx\\,dy = \\tfrac{1}{6}',
+       det:'Tipo II: para cada \\(y\\in[0,1]\\) la franja horizontal va de \\(x=y^2\\) a \\(x=y\\): los límites se leen "de adentro hacia afuera".',
+       xmin:-0.55, xmax:1.65, ymin:-0.45, ymax:1.45 },
+  t3:{ name:'Tipo III', val:'A = π/4 ≈ 0.785',
+       tex:'A=\\int_0^1\\!\\!\\int_0^{\\sqrt{1-x^2}} dy\\,dx = \\tfrac{\\pi}{4}',
+       det:'Tipo III: el cuarto de disco es simple en \\(x\\) y en \\(y\\) a la vez; también podría resolverse con polares (\\(r\\le1\\)).',
+       xmin:-0.5, xmax:1.5, ymin:-0.5, ymax:1.5 },
+  t4:{ name:'Tipo IV', val:'A = 3π/4 ≈ 2.356',
+       tex:'A=\\int_0^{\\pi/2}\\!\\!\\int_1^2 r\\,dr\\,d\\theta = \\tfrac{3\\pi}{4}',
+       det:'Tipo IV: sector anular \\(1\\le r\\le 2,\\; 0\\le\\theta\\le\\pi/2\\). En polares la región es un "rectángulo" \\((r,\\theta)\\) y el área lleva el factor \\(r\\).',
+       xmin:-0.6, xmax:2.6, ymin:-0.6, ymax:2.6 }
+};
+
+/* Placas para el centro de masa */
+const LAM = {
+  tri: { label:'Triángulo rectángulo',
+    bbox:[-0.7,4.9,-1.1,3.9], rho:(x,y)=>1, px0:2.5, py0:1.1,
+    test:(x,y)=> x>=-1e-9 && y>=-1e-9 && (3*x+4*y)<=12+1e-9,
+    path(c){ c.moveTo(0,0); c.lineTo(4,0); c.lineTo(0,3); c.closePath(); },
+    note:'Exactos: \\(m=6,\\; (\\bar x,\\bar y)=(\\tfrac43,\\,1),\\; I_x=9,\\; I_y=16,\\; I_0=25\\).' },
+  semi:{ label:'Semicírculo superior',
+    bbox:[-2.7,2.7,-1.0,3.0], rho:(x,y)=>1, px0:1.0, py0:0.6,
+    test:(x,y)=> (x*x+y*y)<=4+1e-9 && y>=-1e-9,
+    path(c){ c.moveTo(2,0); c.arc(0,0,2,0,Math.PI,false); c.closePath(); },
+    note:'Exactos: \\(m=2\\pi,\\; (\\bar x,\\bar y)=\\big(0,\\,\\tfrac{8}{3\\pi}\\big)\\approx(0,\\,0.849),\\; I_x=I_y=2\\pi,\\; I_0=4\\pi\\).' },
+  placaL:{ label:'Placa en L',
+    bbox:[-0.7,4.9,-1.1,3.9], rho:(x,y)=>1, px0:2.7, py0:1.7,
+    test:(x,y)=> ((x>=-1e-9&&x<=4+1e-9&&y>=-1e-9&&y<=1+1e-9) || (x>=-1e-9&&x<=1+1e-9&&y>1&&y<=3+1e-9)),
+    path(c){ c.moveTo(0,0); c.lineTo(4,0); c.lineTo(4,1); c.lineTo(1,1); c.lineTo(1,3); c.lineTo(0,3); c.closePath(); },
+    note:'Exactos (por composición): \\(m=6,\\; (\\bar x,\\bar y)=(1.5,\\,1)\\).' },
+  dens:{ label:'Cuadrado con ρ = x+1',
+    bbox:[-0.8,2.9,-1.0,3.0], rho:(x,y)=>x+1, px0:1.2, py0:1.7, gradient:true,
+    test:(x,y)=> x>=-1e-9 && x<=2+1e-9 && y>=-1e-9 && y<=2+1e-9,
+    path(c){ c.rect(0,0,2,2); },
+    note:'Exactos: \\(m=6,\\; (\\bar x,\\bar y)=\\big(\\tfrac{14}{9},\\,\\tfrac43\\big)\\approx(1.556,\\,1.333)\\): la densidad creciente jala el centro a la derecha.' }
+};
+
+/* ============================================================
+   THREE.JS — ESCENA
+============================================================ */
+const PAL = { ink:0x0A1C3A, blue:0x143466, pine:0x007B5D, gold:0xC9A84C, goldL:0xE8D5A3, goldD:0xB8860B, greenL:0xD4EDDA, gray:0x8f9aa8 };
+let hero = null, sim = null;
+const SIM = { tab:'riemann' };
+
+function SimpleOrbit(camera, el, opts={}){
+  const tgt = new THREE.Vector3(...(opts.target || [0,1,0]));
+  const off = new THREE.Vector3(...(opts.cam || [5,5,7])).sub(tgt);
+  const r0 = off.length() || 1;
+  const st = { r: r0, theta: Math.atan2(off.x, off.z), phi: Math.acos(Math.max(-1, Math.min(1, off.y / r0))) };
+  const api = { autoRotate: !!opts.autoRotate };
+  function apply(){
+    const sp = Math.sin(st.phi);
+    camera.position.set(tgt.x + st.r*sp*Math.sin(st.theta), tgt.y + st.r*Math.cos(st.phi), tgt.z + st.r*sp*Math.cos(st.theta));
+    camera.lookAt(tgt);
+  }
+  let drag = false, px = 0, py = 0;
+  el.style.touchAction = 'none';
+  el.addEventListener('pointerdown', e => { drag = true; px = e.clientX; py = e.clientY; try { el.setPointerCapture(e.pointerId); } catch(_){} });
+  el.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - px, dy = e.clientY - py; px = e.clientX; py = e.clientY;
+    st.theta -= dx * .008;
+    st.phi = Math.max(.2, Math.min(Math.PI - .2, st.phi - dy * .008));
+    apply();
+  });
+  const stop = () => { drag = false; };
+  el.addEventListener('pointerup', stop); el.addEventListener('pointercancel', stop); el.addEventListener('lostpointercapture', stop);
+  el.addEventListener('wheel', e => {
+    e.preventDefault();
+    st.r = Math.max(3, Math.min(45, st.r * (1 + Math.sign(e.deltaY) * .07)));
+    apply();
+  }, { passive:false });
+  api.update = () => { if (api.autoRotate){ st.theta += .0035; apply(); } };
+  apply();
+  return api;
+}
+function attachControls(camera, el, opts){
+  if (THREE.OrbitControls){
+    const c = new THREE.OrbitControls(camera, el);
+    c.enableDamping = true; c.dampingFactor = .08;
+    c.target.set(...(opts.target || [0,1,0]));
+    c.minDistance = 3; c.maxDistance = 45;
+    if (opts.autoRotate){ c.autoRotate = true; c.autoRotateSpeed = 1.1; }
+    c.update();
+    return c;
+  }
+  return SimpleOrbit(camera, el, opts);
+}
+function makeScene(el, opts={}){
+  let canvas, evEl;
+  if (el && el.tagName === 'CANVAS'){ canvas = el; evEl = el; }
+  else { canvas = document.createElement('canvas'); el.appendChild(canvas); evEl = el; }
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf6f7f9);
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 300);
+  camera.position.set(...(opts.cam || [5,5,7]));
+  const controls = attachControls(camera, evEl, opts);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xdfe4ea, .95));
+  const d1 = new THREE.DirectionalLight(0xffffff, .7); d1.position.set(6,10,5); scene.add(d1);
+  const d2 = new THREE.DirectionalLight(0xffffff, .28); d2.position.set(-7,5,-6); scene.add(d2);
+  return { renderer, scene, camera, controls };
+}
+function lineFromPoints(pts, color, opacity){
+  const geo = new THREE.BufferGeometry().setFromPoints(pts);
+  const mat = new THREE.LineBasicMaterial({ color, transparent:(opacity||1) < 1, opacity:opacity||1 });
+  return new THREE.Line(geo, mat);
+}
+function clearGroup(g){
+  [...g.children].forEach(c => {
+    g.remove(c);
+    c.traverse(o => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) (Array.isArray(o.material)?o.material:[o.material]).forEach(m => m.dispose && m.dispose());
+    });
+  });
+}
+function sizeCheck(o){
+  const c = o.renderer.domElement;
+  const w = c.clientWidth, h = c.clientHeight;
+  if (w < 4 || h < 4) return false;
+  const s = o.renderer.getSize(new THREE.Vector2());
+  if (s.x !== w || s.y !== h){ o.renderer.setSize(w, h, false); o.camera.aspect = w/h; o.camera.updateProjectionMatrix(); }
+  return true;
+}
+
+/* Construye superficie + columnas de Riemann de f sobre [0,1]² escaladas a S×S */
+function buildVolScene(group, def, S, n, withSurface){
+  const zs = def.zs;
+  if (withSurface){
+    const geo = new THREE.PlaneGeometry(S,S,56,56);
+    geo.rotateX(-Math.PI/2);
+    const pos = geo.attributes.position;
+    for (let i=0;i<pos.count;i++){
+      const x = pos.getX(i)/S + .5, y = pos.getZ(i)/S + .5;
+      pos.setY(i, Math.max(def.f(x,y),0)*zs);
+    }
+    geo.computeVertexNormals();
+    group.add(new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ color:PAL.blue, side:THREE.DoubleSide, transparent:true, opacity:.92 })));
+  }
+  const grid = new THREE.GridHelper(S*1.5, 8, 0xaab4c0, 0xdadfe6);
+  grid.position.y = -0.02;
+  group.add(grid);
+  const hw = S/2;
+  group.add(lineFromPoints([
+    new THREE.Vector3(-hw,.01,-hw), new THREE.Vector3(hw,.01,-hw),
+    new THREE.Vector3(hw,.01,hw), new THREE.Vector3(-hw,.01,hw), new THREE.Vector3(-hw,.01,-hw)
+  ], PAL.pine));
+  const cw = S/n;
+  const boxMat = new THREE.MeshLambertMaterial({ color:PAL.gold, transparent:true, opacity:.55 });
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++){
+    const x=(i+.5)/n, y=(j+.5)/n;
+    const h = Math.max(def.f(x,y)*zs, 0.002);
+    const b = new THREE.Mesh(new THREE.BoxGeometry(cw*.96, h, cw*.96), boxMat);
+    b.position.set((x-.5)*S, h/2, (y-.5)*S);
+    group.add(b);
+  }
+}
+function riemannSum(def, n){
+  let s = 0;
+  for (let i=0;i<n;i++) for (let j=0;j<n;j++) s += def.f((i+.5)/n,(j+.5)/n)/(n*n);
+  return s;
+}
+
+/* ---------- HERO ---------- */
+function initHero(){
+  hero = makeScene($('#heroCanvas'), { cam:[0,5.2,8.4], target:[0,1,0], autoRotate:true });
+  buildVolScene(hero.scene, RFN.parab4, 3.2, 9, true);
+}
+
+/* ---------- SIMULADOR 3D (módulo Riemann) ---------- */
+let simSurface = null;
+function initSim(){
+  sim = makeScene($('#threeContainer'), { cam:[5.2,4.4,6.4], target:[0,1,0] });
+  simSurface = new THREE.Group();
+  sim.scene.add(simSurface);
+  rebuildSim();
+}
+function rebuildSim(){
+  if (!sim || !simSurface) return;
+  clearGroup(simSurface);
+  const def = RFN[$('#funcRiemann').value];
+  const n = +$('#nSlider').value;
+  buildVolScene(simSurface, def, 2.6, n, true);
+  const sum = riemannSum(def, n);
+  $('#rieSum').textContent = f3(sum);
+  $('#rieExact').textContent = def.exactTxt + ' ≈ ' + f3(def.exact);
+  $('#rieErr').textContent = f3(Math.abs(sum - def.exact));
+  $('#detalleRie').innerHTML = `Malla de \\(${n}\\times${n}\\) celdas (\\(${n*n}\\) columnas, \\(\\Delta A=\\tfrac{1}{${n*n}}\\)), evaluando en el punto medio de cada celda. Al aumentar \\(n\\), la suma converge al valor exacto \\(${def.exactTxt}\\).`;
+  typeset($('#detalleRie'));
+  const eq = $('#eqText');
+  eq.innerHTML = `\\(\\displaystyle \\iint_{[0,1]^2} ${def.tex}\\;dA = ${def.exactTxt}\\)`;
+  typeset(eq);
+}
+
+/* ============================================================
+   CANVAS 2D — REGIONES Y CENTRO DE MASA
+============================================================ */
+function setup2D(cv){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (w<4 || h<4) return null;
+  cv.width = w*dpr; cv.height = h*dpr;
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return { ctx, w, h };
+}
+function worldMapper(bbox, w, h){
+  const [x0,x1,y0,y1] = bbox;
+  const s = Math.min(w/(x1-x0), h/(y1-y0)) * 0.86;
+  const ox = w/2 - (x0+x1)/2*s, oy = h/2 + (y0+y1)/2*s;
+  return { s, ox, oy, X:x=>ox+x*s, Y:y=>oy-y*s, wx:mx=>(mx-ox)/s, wy:my=>(oy-my)/s };
+}
+function drawGrid2D(ctx, S){
+  ctx.strokeStyle='rgba(10,28,58,.08)'; ctx.lineWidth=1;
+  for(let gx=Math.floor(-4);gx<=4;gx+=.5){
+    ctx.beginPath(); ctx.moveTo(S.X(gx), S.Y(S.wy(0))); ctx.moveTo(S.X(gx), 0); ctx.lineTo(S.X(gx), S.w); ctx.stroke();
+  }
+  for(let gy=Math.floor(-4);gy<=4;gy+=.5){
+    ctx.beginPath(); ctx.moveTo(0, S.Y(gy)); ctx.lineTo(S.w, S.Y(gy)); ctx.stroke();
+  }
+  ctx.strokeStyle='rgba(10,28,58,.3)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(0,S.Y(0)); ctx.lineTo(S.w,S.Y(0)); ctx.moveTo(S.X(0),0); ctx.lineTo(S.X(0),S.h); ctx.stroke();
+}
+let REGST = { stripes:true };
+
+function drawRegions(){
+  const cv = $('#regCanvas'); if (!cv) return;
+  const st = setup2D(cv); if (!st) return;
+  const { ctx, w, h } = st;
+  const key = $('#selRegion').value, R = REG[key];
+  const S = worldMapper([R.xmin,R.xmax,R.ymin,R.ymax], w, h);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#f6f7f9'; ctx.fillRect(0,0,w,h);
+  drawGrid2D(ctx, S);
+
+  ctx.save();
+  ctx.translate(S.ox, S.oy); ctx.scale(S.s, -S.s);
+  function regionPath(){
+    ctx.beginPath();
+    if (key==='t1'){ ctx.moveTo(0,0); for(let t=0;t<=2.001;t+=.05) ctx.lineTo(t, t*t/2); for(let t=2;t>=-.001;t-=.05) ctx.lineTo(t, Math.min(t, 2)); ctx.closePath(); }
+    else if (key==='t2'){ ctx.moveTo(0,0); for(let t=0;t<=1.001;t+=.02) ctx.lineTo(t*t, t); for(let t=1;t>=-.001;t-=.02) ctx.lineTo(t, t); ctx.closePath(); }
+    else if (key==='t3'){ ctx.moveTo(0,0); ctx.arc(0,0,1,0,Math.PI/2,false); ctx.closePath(); }
+    else { ctx.arc(0,0,2,0,Math.PI/2,false); ctx.arc(0,0,1,Math.PI/2,0,true); ctx.closePath(); }
+  }
+  regionPath();
+  ctx.fillStyle='rgba(212,237,218,.95)'; ctx.fill();
+  ctx.strokeStyle='#007B5D'; ctx.lineWidth=2/S.s; ctx.stroke();
+
+  if (REGST.stripes){
+    ctx.fillStyle='rgba(201,168,76,.45)';
+    if (key==='t1' || key==='t3'){
+      const n=14, a=0, b=1;
+      for(let i=0;i<n;i++){
+        const x=a+(i+.4)*(b-a)/n, x2=a+(i+.6)*(b-a)/n;
+        const y1=0, y2=Math.sqrt(Math.max(1-x*x,0));
+        ctx.beginPath(); ctx.rect(x,y1,x2-x,y2-y1); ctx.fill();
+      }
+    }
+    if (key==='t2'){
+      const n=14;
+      for(let i=0;i<n;i++){
+        const y=(i+.5)/n;
+        ctx.beginPath(); ctx.rect(y*y, y-.02, Math.max(y-y*y,0), .04); ctx.fill();
+      }
+    }
+    if (key==='t4'){
+      const n=10, dth=(Math.PI/2)/n;
+      for(let i=0;i<n;i++){
+        const ta=i*dth, tb=(i+1)*dth;
+        ctx.beginPath();
+        ctx.arc(0,0,2,ta,tb,false);
+        ctx.arc(0,0,1,tb,ta,true);
+        ctx.closePath(); ctx.fill();
+      }
+    }
+  }
+  ctx.restore();
+
+  /* etiquetas de curvas */
+  ctx.fillStyle='rgba(10,28,58,.75)'; ctx.font='600 12px Instrument Sans';
+  if (key==='t1'){ ctx.fillText('y = x', S.X(1.55), S.Y(1.75)); ctx.fillText('y = x²/2', S.X(1.15), S.Y(.45)); }
+  if (key==='t2'){ ctx.fillText('x = y²', S.X(.62), S.Y(.95)); ctx.fillText('x = y', S.X(1.12), S.Y(.6)); }
+  if (key==='t3'){ ctx.fillText('x² + y² = 1', S.X(.42), S.Y(.92)); }
+  if (key==='t4'){ ctx.fillText('r = 1', S.X(.12), S.Y(1.12)); ctx.fillText('r = 2', S.X(1.15), S.Y(1.65)); ctx.fillText('θ = π/2', S.X(.08), S.Y(2.2)); }
+
+  $('#regVal').textContent = R.val;
+  const tex = $('#regTex'); tex.innerHTML = `\\(${R.tex}\\)`; typeset(tex);
+  $('#detalleReg').innerHTML = R.det; typeset($('#detalleReg'));
+  const eq = $('#eqText'); eq.innerHTML = `\\(${R.tex}\\)`; typeset(eq);
+}
+
+/* ---------- Centro de masa ---------- */
+const CM = { lam:'tri', data:null, px:0, py:0, th:0, w:0, balanced:false, dragging:false };
+
+function computeMoments(L){
+  const [x0,x1,y0,y1] = L.bbox;
+  const N = 240, dx=(x1-x0)/N, dy=(y1-y0)/N, dA=dx*dy;
+  let m=0, Mx=0, My=0, Ix=0, Iy=0;
+  for (let i=0;i<N;i++) for (let j=0;j<N;j++){
+    const x=x0+(i+.5)*dx, y=y0+(j+.5)*dy;
+    if (!L.test(x,y)) continue;
+    const r=L.rho(x,y);
+    m+=r; My+=x*r; Mx+=y*r; Ix+=y*y*r; Iy+=x*x*r;
+  }
+  m*=dA; Mx*=dA; My*=dA; Ix*=dA; Iy*=dA;
+  return { m, Mx, My, xbar:My/m, ybar:Mx/m, Ix, Iy, I0:Ix+Iy };
+}
+function cmSelect(){
+  CM.lam = $('#selLamina').value;
+  const L = LAM[CM.lam];
+  CM.data = computeMoments(L);
+  CM.px = L.px0; CM.py = L.py0; CM.th = 0; CM.w = 0; CM.balanced = false;
+  $('#cmMass').textContent = f3(CM.data.m);
+  $('#cmBar').textContent = `(${f3(CM.data.xbar)}, ${f3(CM.data.ybar)})`;
+  $('#cmIn').textContent = `${f3(CM.data.Ix)}, ${f3(CM.data.Iy)}, ${f3(CM.data.I0)}`;
+  $('#cmNote').innerHTML = L.note; typeset($('#cmNote'));
+  drawCenter();
+}
+function drawCenter(){
+  const cv = $('#cenCanvas'); if (!cv) return;
+  const st = setup2D(cv); if (!st || !CM.data) return;
+  const { ctx, w, h } = st;
+  const L = LAM[CM.lam];
+  const S = worldMapper(L.bbox, w, h);
+  ctx.clearRect(0,0,w,h);
+  ctx.fillStyle='#f6f7f9'; ctx.fillRect(0,0,w,h);
+  drawGrid2D(ctx, S);
+
+  const d = CM.data;
+  const ux = d.xbar - CM.px, uy = d.ybar - CM.py;
+  const cos = Math.cos(CM.th), sin = Math.sin(CM.th);
+
+  /* placa rotada alrededor del pivote */
+  ctx.save();
+  ctx.translate(S.X(CM.px), S.Y(CM.py));
+  ctx.rotate(-CM.th);           /* pantalla: rotación horaria si th>0 (mundo CCW) */
+  ctx.translate(-S.X(CM.px), -S.Y(CM.py));
+
+  ctx.save();
+  ctx.translate(S.ox, S.oy); ctx.scale(S.s, -S.s);
+  ctx.beginPath(); L.path(ctx);
+  ctx.fillStyle = '#D4EDDA'; ctx.fill();
+  if (L.gradient){
+    const g = ctx.createLinearGradient(0,0,2,0);
+    g.addColorStop(0,'rgba(212,237,218,0)'); g.addColorStop(1,'rgba(0,123,93,.5)');
+    ctx.fillStyle=g; ctx.fill();
+  }
+  ctx.strokeStyle='#0A1C3A'; ctx.lineWidth=2/S.s; ctx.stroke();
+  ctx.restore();
+
+  /* centro de masa rotado */
+  const cx = CM.px + ux*cos - uy*sin, cy = CM.py + ux*sin + uy*cos;
+  ctx.beginPath(); ctx.arc(S.X(cx), S.Y(cy), 9, 0, Math.PI*2);
+  ctx.fillStyle='#C9A84C'; ctx.globalAlpha=.9; ctx.fill(); ctx.globalAlpha=1;
+  ctx.beginPath(); ctx.moveTo(S.X(cx)-12, S.Y(cy)); ctx.lineTo(S.X(cx)+12, S.Y(cy));
+  ctx.moveTo(S.X(cx), S.Y(cy)-12); ctx.lineTo(S.X(cx), S.Y(cy)+12);
+  ctx.strokeStyle='#9a7d2e'; ctx.lineWidth=1.5; ctx.stroke();
+  ctx.restore();
+
+  /* punto de apoyo */
+  const bal = CM.balanced;
+  ctx.beginPath();
+  ctx.moveTo(S.X(CM.px), S.Y(CM.py)-4);
+  ctx.lineTo(S.X(CM.px)-11, S.Y(CM.py)+12);
+  ctx.lineTo(S.X(CM.px)+11, S.Y(CM.py)+12);
+  ctx.closePath();
+  ctx.fillStyle = bal ? '#007B5D' : '#B8860B'; ctx.fill();
+  ctx.beginPath(); ctx.arc(S.X(CM.px), S.Y(CM.py), 3.4, 0, Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill();
+  ctx.strokeStyle = bal ? '#007B5D' : '#B8860B'; ctx.lineWidth=2; ctx.stroke();
+
+  ctx.fillStyle='rgba(10,28,58,.7)'; ctx.font='600 12px Instrument Sans';
+  ctx.fillText('Arrastra el punto de apoyo', 14, 22);
+  ctx.fillStyle = bal ? '#007B5D' : '#9a7d2e';
+  ctx.fillText(bal ? 'Equilibrada ✓ (apoyo en el centro de masa)' : 'Oscilando… el apoyo no está en (x̄, ȳ)', 14, 40);
+}
+function cmFrame(dt){
+  if ($('#v-simulador').hidden || !CM.data) return;
+  const d = CM.data;
+  const ux = d.xbar - CM.px, uy = d.ybar - CM.py;
+  const r = Math.hypot(ux, uy);
+  if (r > 0.05){
+    CM.balanced = false;
+    const ip = 0.5 + r*r;
+    const tau = -12 * (ux*Math.cos(CM.th) - uy*Math.sin(CM.th));
+    CM.w += (tau/ip) * dt;
+    CM.w *= (1 - 1.2*dt);
+    CM.th += CM.w * dt;
+    if (CM.th > Math.PI) CM.th -= Math.PI*2;
+    if (CM.th < -Math.PI) CM.th += Math.PI*2;
+  } else {
+    CM.balanced = true;
+    CM.w *= 0.9;
+    CM.th *= 0.98;
+  }
+  drawCenter();
+}
+function cmPointer(e){
+  const cv = $('#cenCanvas'); if (!cv || !CM.data) return;
+  const r = cv.getBoundingClientRect();
+  const S = worldMapper(LAM[CM.lam].bbox, r.width, r.height);
+  const wx = S.wx(e.clientX - r.left), wy = S.wy(e.clientY - r.top);
+  CM.px = wx; CM.py = wy; CM.w = 0; CM.balanced = false;
+}
+
+/* ---------- Loop maestro ---------- */
+let lastT = performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt = Math.min(0.033, (now - lastT)/1000 || 0.016); lastT = now;
+  if (hero && sizeCheck(hero)){ hero.controls.update(); hero.renderer.render(hero.scene, hero.camera); }
+  if (sim  && sizeCheck(sim)) { sim.controls.update();  sim.renderer.render(sim.scene, sim.camera); }
+  cmFrame(dt);
+}
+
+/* ---------- Controles del simulador ---------- */
+ $$('.sim-tab').forEach(b => b.addEventListener('click', () => {
+  $$('.sim-tab').forEach(x => x.classList.remove('active'));
+  $$('.sim-panel').forEach(p => p.classList.remove('active'));
+  b.classList.add('active');
+  $('#st-' + b.dataset.stab).classList.add('active');
+  SIM.tab = b.dataset.stab;
+  $('#threeContainer').hidden = SIM.tab !== 'riemann';
+  $('#regContainer').hidden   = SIM.tab !== 'regiones';
+  $('#cenContainer').hidden   = SIM.tab !== 'centro';
+  if (SIM.tab === 'riemann'){ if (sim) rebuildSim(); else requestAnimationFrame(initSim); }
+  if (SIM.tab === 'regiones') drawRegions();
+  if (SIM.tab === 'centro')   drawCenter();
+  const CAPS = {
+    riemann:'Superficie \(z=f(x,y)\) sobre \([0,1]^2\) y columnas de la suma de Riemann del punto medio. Arrastra para rotar.',
+    regiones:'Los cuatro tipos de regiones planas con sus franjas (o sectores) de integración y el planteo del área.',
+    centro:'La placa cuelga del punto de apoyo; solo queda equilibrada cuando el apoyo coincide con \((\bar x,\bar y)\). Haz clic para mover el apoyo.'
+  };
+  $('#graphCap').textContent = CAPS[SIM.tab];
+  typeset($('#graphCap'));
+}));
+ $('#funcRiemann').addEventListener('change', rebuildSim);
+ $('#nSlider').addEventListener('input', e => { $('#nVal').textContent = e.target.value; rebuildSim(); });
+ $('#btnRiemann').addEventListener('click', () => {
+  rebuildSim();
+  if (!state.sim.riemann){ state.sim.riemann = true; persist(); showToast('Módulo «Integral doble (Riemann)» registrado en tu boleta.', true); }
+});
+ $('#selRegion').addEventListener('change', drawRegions);
+ $('#btnStripes').addEventListener('click', () => { REGST.stripes = !REGST.stripes; drawRegions(); });
+ $('#btnRegiones').addEventListener('click', () => {
+  drawRegions();
+  if (!state.sim.regiones){ state.sim.regiones = true; persist(); showToast('Módulo «Regiones tipo I–IV» registrado en tu boleta.', true); }
+});
+ $('#selLamina').addEventListener('change', cmSelect);
+ $('#btnCentro').addEventListener('click', () => {
+  cmSelect();
+  if (!state.sim.centro){ state.sim.centro = true; persist(); showToast('Módulo «Centro de masa» registrado en tu boleta.', true); }
+});
+ $('#btnCmAuto').addEventListener('click', () => {
+  if (!CM.data) return;
+  CM.px = CM.data.xbar; CM.py = CM.data.ybar; CM.w = 0;
+  drawCenter();
+  showToast('Apoyo colocado en el centro de masa: la placa queda equilibrada.', true);
+});
+ $('#btnCmShake').addEventListener('click', () => { CM.w += (Math.random()-.5)*7; CM.balanced=false; });
+
+(function initCenCanvas(){
+  const cv = $('#cenCanvas');
+  cv.addEventListener('pointerdown', e => { CM.dragging = true; cmPointer(e); try{ cv.setPointerCapture(e.pointerId);}catch(_){} });
+  cv.addEventListener('pointermove', e => { if (CM.dragging) cmPointer(e); });
+  const up = () => { CM.dragging = false; };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
+})();
+
+window.addEventListener('resize', () => { drawRegions(); drawCenter(); });
+
+/* ============================================================
+   QUIZ
+============================================================ */
+function quizCorrect(){
+  let n = 0;
+  $$('.quiz-q').forEach(q => { const a = state.quiz.answers[q.dataset.qid]; if (a && a === q.dataset.correct) n++; });
+  return n;
+}
+function updateQuizResult(){
+  $('#quizResult').innerHTML = `<strong>${quizCorrect()}</strong> de 6 aciertos`;
+}
+function gradeQuestion(q, correct, chosen, reveal){
+  q.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('is-correct','is-wrong','locked');
+    if (o.querySelector('input').value === correct) o.classList.add('is-correct');
+    else if (reveal && o.querySelector('input').value === chosen) o.classList.add('is-wrong');
+    o.classList.add('locked');
+  });
+  const ex = q.querySelector('.explain'); if (ex) ex.hidden = !reveal;
+}
+ $$('.quiz-q').forEach(q => {
+  const qid = q.dataset.qid, correct = q.dataset.correct;
+  q.querySelectorAll('.opt input').forEach(inp => inp.addEventListener('change', () => {
+    gradeQuestion(q, correct, inp.value, true);
+    state.quiz.answers[qid] = inp.value;
+    persist(); updateQuizResult();
+  }));
+});
+ $('#btnQuizReset').addEventListener('click', () => {
+  state.quiz.answers = {}; persist();
+  $$('.quiz-q').forEach(q => {
+    q.querySelectorAll('input').forEach(i => i.checked = false);
+    q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+    const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+  });
+  updateQuizResult(); showToast('Quiz reiniciado.', true);
+});
+
+/* ============================================================
+   CHECKBOXES
+============================================================ */
+function syncChk(i){ const c = i.closest('.chk'); if (c) c.classList.toggle('done', i.checked); }
+ $$('input[data-ej]').forEach(i => {
+  i.checked = !!state.ej[i.dataset.ej]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.ej[i.dataset.ej] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Ejercicio marcado como resuelto. ¡Bien!', true);
+  });
+});
+ $$('input[data-tar]').forEach(i => {
+  i.checked = !!state.tar[i.dataset.tar]; syncChk(i);
+  i.addEventListener('change', () => {
+    state.tar[i.dataset.tar] = i.checked; syncChk(i); persist();
+    if (i.checked) showToast('Problema de tarea registrado.', true);
+  });
+});
+
+/* ============================================================
+   EDITOR LATEX
+============================================================ */
+const CMDS = [
+  { g:'Integrales', items:[
+    { code:'\\iint_D f\\,dA', view:'\\iint_D f\\,dA' },
+    { code:'\\iiint_E f\\,dV', view:'\\iiint_E f\\,dV' },
+    { code:'\\int_a^b\\!\\!\\int_c^d f\\,dy\\,dx', view:'\\int_a^b\\!\\!\\int_c^d f\\,dy\\,dx' }
+  ]},
+  { g:'Cambios de variable', items:[
+    { code:'r\\,dr\\,d\\theta', view:'r\\,dr\\,d\\theta' },
+    { code:'\\rho^2\\sin\\varphi\\; d\\rho\\,d\\varphi\\,d\\theta', view:'\\rho^2\\sin\\varphi\\; d\\rho\\,d\\varphi\\,d\\theta' },
+    { code:'\\frac{\\partial(x,y)}{\\partial(u,v)}', view:'\\frac{\\partial(x,y)}{\\partial(u,v)}' },
+    { code:'\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}', view:'\\begin{vmatrix} a & b \\\\ c & d \\end{vmatrix}' }
+  ]},
+  { g:'Centro de masa e inercia', items:[
+    { code:'\\rho(x,y)', view:'\\rho(x,y)' },
+    { code:'\\bar{x}', view:'\\bar{x}' },
+    { code:'\\bar{y}', view:'\\bar{y}' },
+    { code:'I_x=\\iint y^2\\rho\\,dA', view:'I_x=\\iint y^2\\rho\\,dA' },
+    { code:'I_0=I_x+I_y', view:'I_0=I_x+I_y' }
+  ]},
+  { g:'Símbolos', items:[
+    { code:'\\pi', view:'\\pi' },
+    { code:'\\sqrt{x}', view:'\\sqrt{x}' },
+    { code:'\\tfrac{a}{b}', view:'\\tfrac{a}{b}' },
+    { code:'\\Rightarrow', view:'\\Rightarrow' }
+  ]}
+];
+function initEditors(){
+  $$('.ed-box').forEach(box => {
+    const key = box.dataset.ed;
+    const manual = CMDS.map(g => `<div class="ed-cmd-title">${g.g}</div>` + g.items.map(it => `
+      <div class="cmd-row">
+        <span class="cmd-code">${esc(it.code)}</span>
+        <span class="cmd-view">\\(${it.view}\\)</span>
+        <button class="cmd-add" data-code="${esc(it.code).replace(/"/g,'&quot;')}" title="Insertar en el cursor">+</button>
+      </div>`).join('')).join('');
+    box.innerHTML = `
+      <div class="ed-toolbar">
+        <span class="ed-title"><i data-lucide="pen-line"></i>Editor LaTeX · Ejercicio ${key.slice(1)}</span>
+        <span class="ed-status" data-role="status"><span class="dot"></span><span data-role="statusTxt">Sin guardar</span></span>
+      </div>
+      <div class="ed-grid">
+        <div class="ed-main">
+          <textarea class="ed-ta" data-role="ta" placeholder="Escribe tu solución. Usa \\( ... \\) para fórmulas en línea y $$ ... $$ para centradas."></textarea>
+          <div class="ed-preview-wrap">
+            <div class="ed-preview-head">Vista previa</div>
+            <div class="ed-preview" data-role="prev"><span class="ed-ph">La vista previa aparecerá aquí…</span></div>
+          </div>
+        </div>
+        <div class="ed-manual">
+          <p class="ed-note">Haz clic en <b>+</b> para insertar un comando en el cursor. Delimitadores: <code>\\( \\)</code> en línea, <code>$$ $$</code> centrado.</p>
+          ${manual}
+        </div>
+      </div>
+      <div class="ed-foot">
+        <span class="ed-count" data-role="count">0 caracteres</span>
+        <span style="display:flex;gap:8px">
+          <button class="btn ghost sm" data-role="clear">Limpiar</button>
+          <button class="btn sm" data-role="save"><i data-lucide="save"></i>Guardar borrador</button>
+        </span>
+      </div>`;
+    const ta = box.querySelector('[data-role=ta]');
+    const prev = box.querySelector('[data-role=prev]');
+    const statusEl = box.querySelector('[data-role=status]');
+    const statusTxt = box.querySelector('[data-role=statusTxt]');
+    const count = box.querySelector('[data-role=count]');
+    if (state.ed[key]) ta.value = state.ed[key];
+    const renderPrev = () => {
+      if (!ta.value.trim()){ prev.innerHTML = '<span class="ed-ph">La vista previa aparecerá aquí…</span>'; return; }
+      prev.textContent = ta.value;
+      typeset(prev);
+    };
+    const setSaved = s => { statusEl.classList.toggle('saved', s); statusTxt.textContent = s ? 'Guardado' : 'Sin guardar'; };
+    let deb;
+    ta.addEventListener('input', () => {
+      count.textContent = ta.value.length + ' caracteres';
+      setSaved(false);
+      clearTimeout(deb); deb = setTimeout(renderPrev, 350);
+    });
+    box.querySelectorAll('.cmd-add').forEach(btn => btn.addEventListener('click', () => {
+      const code = btn.dataset.code;
+      const s = ta.selectionStart, e2 = ta.selectionEnd;
+      ta.value = ta.value.slice(0, s) + code + ta.value.slice(e2);
+      ta.focus(); ta.selectionStart = ta.selectionEnd = s + code.length;
+      ta.dispatchEvent(new Event('input'));
+    }));
+    box.querySelector('[data-role=save]').addEventListener('click', () => {
+      state.ed[key] = ta.value; persist(); setSaved(true);
+      showToast('Borrador del ejercicio ' + key.slice(1) + ' guardado.', true);
+    });
+    box.querySelector('[data-role=clear]').addEventListener('click', () => {
+      ta.value = ''; ta.dispatchEvent(new Event('input')); renderPrev();
+    });
+    if (state.ed[key]) setSaved(true);
+    renderPrev();
+    count.textContent = ta.value.length + ' caracteres';
+  });
+  if (window.lucide) lucide.createIcons();
+}
+
+/* ============================================================
+   BOLETA
+============================================================ */
+function initials(name){
+  return (name.trim().split(/\s+/).slice(0,2).map(w => w[0] || '').join('').toUpperCase()) || '?';
+}
+function updateBoleta(){
+  const simN = ['riemann','regiones','centro'].filter(k => state.sim[k]).length;
+  const ejN  = Object.values(state.ej).filter(Boolean).length;
+  const qN   = Object.keys(state.quiz.answers).length;
+  const qC   = quizCorrect();
+  const tarN = Object.values(state.tar).filter(Boolean).length;
+  const pSim = 1.5*simN/3, pEj = 2.5*ejN/10, pQ = 3*qC/6, pT = 3*tarN/4;
+  const total = pSim + pEj + pQ + pT;
+
+  $('#barSim').style.width = (simN/3*100)+'%';
+  $('#bdSim').textContent  = `${simN} de 3 módulos explorados`;
+  $('#ptSim').innerHTML    = `${pSim.toFixed(1)} <small>/ 1.5</small>`;
+  $('#barEj').style.width  = (ejN/10*100)+'%';
+  $('#bdEj').textContent   = `${ejN} de 10 ejercicios resueltos`;
+  $('#ptEj').innerHTML     = `${pEj.toFixed(1)} <small>/ 2.5</small>`;
+  $('#barQuiz').style.width = (qC/6*100)+'%';
+  $('#bdQuiz').textContent  = `${qN} de 6 respondidas · ${qC} aciertos`;
+  $('#ptQuiz').innerHTML    = `${pQ.toFixed(1)} <small>/ 3.0</small>`;
+  $('#barTar').style.width  = (tarN/4*100)+'%';
+  $('#bdTar').textContent   = `${tarN} de 4 problemas entregados`;
+  $('#ptTar').innerHTML     = `${pT.toFixed(1)} <small>/ 3.0</small>`;
+
+  $('#bTotal').textContent = total.toFixed(1);
+  $('#bSeal').textContent  = total.toFixed(1);
+  $('#bMeta').textContent  = `${simN + ejN + qN + tarN} de 23 evidencias registradas`;
+  $('#statNota').textContent = total > 0 ? total.toFixed(1) : '—';
+
+  const has = !!state.name;
+  $('#boletaForm').hidden = has;
+  $('#boletaCard').hidden = !has;
+  $('#boletaActions').hidden = !has;
+  if (has){
+    $('#bName').textContent = state.name;
+    const av = $('#bAvatar');
+    av.textContent = initials(state.name);
+    av.style.background = ['#C9A84C','#007B5D','#143466'][state.name.length % 3];
+  }
+}
+ $('#btnRegister').addEventListener('click', () => {
+  const v = $('#studentName').value.trim();
+  if (v.length < 3){ showToast('Escribe tu nombre completo para registrarte.', false); return; }
+  state.name = v; persist();
+  showToast('¡Registrado! Tu boleta está lista.', true);
+});
+ $('#studentName').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btnRegister').click(); });
+
+let delTO = null;
+ $('#btnDelete').addEventListener('click', function(){
+  if (!this.classList.contains('confirm')){
+    this.classList.add('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>¿Confirmar?';
+    if (window.lucide) lucide.createIcons();
+    delTO = setTimeout(() => {
+      this.classList.remove('confirm');
+      this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+      if (window.lucide) lucide.createIcons();
+    }, 2600);
+  } else {
+    clearTimeout(delTO);
+    localStorage.removeItem(KEY);
+    state = freshState();
+    $$('input[data-ej],input[data-tar]').forEach(i => { i.checked = false; syncChk(i); });
+    $$('.quiz-q').forEach(q => {
+      q.querySelectorAll('input').forEach(i => i.checked = false);
+      q.querySelectorAll('.opt').forEach(o => o.classList.remove('is-correct','is-wrong','locked'));
+      const ex = q.querySelector('.explain'); if (ex) ex.hidden = true;
+    });
+    updateQuizResult();
+    $$('.ed-box').forEach(b => { const ta = b.querySelector('.ed-ta'); if (ta){ ta.value = ''; ta.dispatchEvent(new Event('input')); } });
+    $('#studentName').value = '';
+    this.classList.remove('confirm');
+    this.innerHTML = '<i data-lucide="trash-2"></i>Eliminar registro';
+    if (window.lucide) lucide.createIcons();
+    updateBoleta(); cmSelect();
+    showToast('Registro y progreso eliminados.', false);
+  }
+});
+
+/* ============================================================
+   CARGA DEL MOTOR 3D (aislada)
+============================================================ */
+async function start3D(){
+  const cap = $('#graphCap');
+  try{
+    if (!window.THREE){
+      const urls = [
+        'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js',
+        'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js',
+        'https://unpkg.com/three@0.128.0/build/three.min.js'
+      ];
+      for (const u of urls){
+        try { await loadScript(u); } catch(e){ console.warn('CDN falló:', u); }
+        if (window.THREE) break;
+      }
+    }
+    if (!window.THREE) throw new Error('Three.js no disponible');
+    if (!window.THREE.OrbitControls){
+      try { await loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js'); } catch(e){}
+    }
+    initHero();
+    initSim();
+  } catch(err){
+    console.error('[3D]', err);
+    if (cap) cap.textContent = 'No se pudo cargar Three.js (revisa tu conexión a internet y recarga la página). Las pestañas 2D, la teoría y la boleta funcionan con normalidad.';
+    showToast('Visor 3D no disponible: sin conexión a los CDN.', false);
+  }
+}
+
+/* ============================================================
+   INICIALIZACIÓN
+============================================================ */
+if (window.lucide){
+  lucide.createIcons();
+} else {
+  loadScript('https://cdn.jsdelivr.net/npm/lucide@0.294.0/dist/umd/lucide.min.js')
+    .then(() => { if (window.lucide) lucide.createIcons(); })
+    .catch(()=>{});
+}
+typeset(document.body);
+(async function ensureKatex(){
+  if (window.renderMathInElement) return;
+  try{
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js');
+    await loadScript('https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js');
+    typeset(document.body);
+  }catch(e){}
+})();
+initEditors();
+cmSelect();
+(function restore(){
+  if (state.name) $('#studentName').value = state.name;
+  $$('.quiz-q').forEach(q => {
+    const a = state.quiz.answers[q.dataset.qid];
+    if (a){
+      const inp = q.querySelector(`input[value="${a}"]`);
+      if (inp){ inp.checked = true; gradeQuestion(q, q.dataset.correct, a, true); }
+    }
+  });
+  updateQuizResult();
+})();
+ $('#bFootDate').textContent = 'Actualizado: ' + new Date().toLocaleDateString('es-MX', { day:'numeric', month:'long', year:'numeric' });
+updateBoleta();
+start3D();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
