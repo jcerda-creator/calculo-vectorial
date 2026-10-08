@@ -1,0 +1,3658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Centros de Masa y Momentos de Inercia | Clase Interactiva UP</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" />
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, katexOpts); onMathReady();"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+  /* ===== PALETA INSTITUCIONAL UP + VERDE METRÓPOLIS ===== */
+  :root {
+    --up-blue: #0A1C3A;
+    --up-gold: #C9A84C;
+    --up-gold-light: #E8D5A3;
+    --up-green: #007B5D;
+    --up-green-light: #D4EDDA;
+    --up-white: #FFFFFF;
+    --up-gray: #F5F5F5;
+    --up-gray-dark: #D0D0D0;
+    --up-text: #1E2A44;
+    --up-shadow: rgba(10, 28, 58, 0.15);
+
+    /* Aliases for components */
+    --bg: var(--up-gray);
+    --bg-soft: #ECEEF3;
+    --panel: var(--up-white);
+    --panel-2: #FAFBFC;
+    --ink: var(--up-text);
+    --ink-soft: #4A5575;
+    --muted: #8892A8;
+    --accent: var(--up-green);          /* verde Metrópolis */
+    --accent-2: var(--up-gold);         /* dorado UP */
+    --accent-3: var(--up-blue);         /* azul oscuro UP */
+    --good: #16A34A;
+    --warn: #E08A00;
+    --bad: #C0392B;
+    --line: rgba(10,28,58,.10);
+    --line-strong: rgba(10,28,58,.22);
+    --shadow: 0 6px 20px var(--up-shadow);
+    --radius: 14px;
+    --radius-sm: 10px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--up-gray);
+    background-image:
+      radial-gradient(900px 500px at 90% -10%, rgba(201,168,76,.08), transparent 60%),
+      radial-gradient(800px 400px at -5% 5%, rgba(0,123,93,.06), transparent 60%);
+    color: var(--up-text);
+    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(10,28,58,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,28,58,.025) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ===== Top bar (NO fija: se desplaza con el contenido) ===== */
+  .topbar {
+    position: relative;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 2px solid var(--up-gold);
+    box-shadow: 0 2px 12px rgba(10,28,58,.06);
+  }
+  .topbar-inner {
+    max-width: 1320px; margin: 0 auto;
+    padding: 10px 22px;
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 700;
+  }
+  .brand-logo {
+    width: 46px; height: 46px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--up-blue) 0%, var(--up-green) 100%);
+    display: grid; place-items: center;
+    box-shadow: 0 4px 12px rgba(10,28,58,.25);
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-logo::before {
+    content: ""; position: absolute;
+    width: 100%; height: 4px; bottom: 0; left: 0;
+    background: var(--up-gold);
+  }
+  .brand-logo svg { display: block; }
+  .brand-text small {
+    display: block; color: var(--up-green);
+    font-weight: 700; font-size: 10px;
+    letter-spacing: .14em; text-transform: uppercase;
+  }
+  .brand-text span {
+    color: var(--up-blue); font-size: 16px;
+    font-weight: 800;
+  }
+  .nav-tabs {
+    display: flex; gap: 2px; margin-left: auto;
+    flex-wrap: wrap;
+  }
+  .nav-tab {
+    background: transparent; border: 1px solid transparent;
+    color: var(--ink-soft);
+    padding: 7px 12px; border-radius: 8px;
+    cursor: pointer; font-size: 12.5px; font-weight: 600;
+    transition: all .2s ease;
+  }
+  .nav-tab:hover {
+    background: rgba(0,123,93,.08); color: var(--up-green);
+  }
+  .nav-tab.active {
+    background: var(--up-blue); color: white;
+    box-shadow: 0 2px 6px rgba(10,28,58,.2);
+  }
+  .nav-tab .num {
+    display: inline-block; min-width: 18px; height: 18px;
+    border-radius: 5px; background: rgba(10,28,58,.10);
+    font-size: 10px; text-align: center; line-height: 18px;
+    margin-right: 5px; color: var(--up-blue);
+  }
+  .nav-tab.active .num { background: var(--up-gold); color: var(--up-blue); }
+
+  .toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; border: 1px solid var(--line-strong);
+    padding: 6px 12px; border-radius: 999px;
+    cursor: pointer; font-size: 12.5px; color: var(--ink-soft);
+    transition: all .2s ease;
+  }
+  .toggle:hover { border-color: var(--up-green); color: var(--up-green); }
+  .toggle.on {
+    color: var(--up-green); border-color: var(--up-green);
+    background: var(--up-green-light);
+  }
+  .toggle .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); transition: all .2s ease;
+  }
+  .toggle.on .dot { background: var(--up-green); box-shadow: 0 0 8px var(--up-green); }
+
+  /* ===== Container ===== */
+  .container {
+    max-width: 1320px; margin: 0 auto;
+    padding: 24px 22px 80px;
+    position: relative; z-index: 1;
+  }
+  section { scroll-margin-top: 20px; }
+
+  /* ===== Hero ===== */
+  .hero {
+    background: linear-gradient(135deg, var(--up-blue) 0%, #163664 50%, var(--up-green) 100%);
+    color: white;
+    border-radius: var(--radius);
+    padding: 36px 32px 26px;
+    margin-bottom: 22px;
+    position: relative; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(10,28,58,.2);
+  }
+  .hero::after {
+    content: ""; position: absolute;
+    right: -100px; top: -100px;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,.25), transparent 70%);
+  }
+  .hero::before {
+    content: ""; position: absolute;
+    left: 0; bottom: 0; width: 100%; height: 5px;
+    background: linear-gradient(90deg, var(--up-gold) 0%, var(--up-gold-light) 50%, var(--up-gold) 100%);
+  }
+  .hero h1 {
+    margin: 0 0 6px; font-size: 32px; font-weight: 800;
+    color: white; position: relative; z-index: 2;
+  }
+  .hero .sub {
+    color: rgba(255,255,255,.9); font-size: 15px; max-width: 820px;
+    margin-bottom: 18px; position: relative; z-index: 2;
+  }
+  .hero .meta {
+    display: flex; gap: 18px; flex-wrap: wrap;
+    font-size: 12.5px; color: rgba(255,255,255,.85);
+    position: relative; z-index: 2;
+  }
+  .hero .meta span strong { color: var(--up-gold-light); font-weight: 700; }
+  .hero .pill {
+    background: rgba(255,255,255,.12); border: 1px solid rgba(201,168,76,.4);
+    color: var(--up-gold-light);
+  }
+
+  .obj-box {
+    margin-top: 18px;
+    background: rgba(255,255,255,.08);
+    border-left: 4px solid var(--up-gold);
+    padding: 14px 18px; border-radius: 8px;
+    font-size: 14px; color: white;
+    position: relative; z-index: 2;
+  }
+  .obj-box b { color: var(--up-gold-light); }
+
+  /* ===== Timeline ===== */
+  .timeline {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 10px; margin-top: 22px;
+  }
+  .tl-cell {
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    cursor: pointer; transition: all .25s ease;
+    position: relative;
+  }
+  .tl-cell:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,.16);
+    border-color: var(--up-gold);
+  }
+  .tl-cell.active {
+    border-color: var(--up-gold);
+    background: rgba(201,168,76,.18);
+    box-shadow: 0 0 0 1px rgba(201,168,76,.4) inset;
+  }
+  .tl-time {
+    font-size: 11px; color: var(--up-gold-light);
+    letter-spacing: .1em; text-transform: uppercase;
+    font-weight: 700;
+  }
+  .tl-title {
+    font-size: 14px; font-weight: 700; margin-top: 2px;
+    color: white;
+  }
+  .tl-dur {
+    font-size: 11px; color: rgba(255,255,255,.75); margin-top: 4px;
+    font-weight: 600;
+  }
+  .tl-bar {
+    height: 3px; border-radius: 2px;
+    background: rgba(255,255,255,.15); margin-top: 8px;
+    overflow: hidden;
+  }
+  .tl-bar > i {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--up-gold), var(--up-gold-light));
+    width: 0%; transition: width .8s ease;
+  }
+
+  /* ===== Section card ===== */
+  .card {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(10,28,58,.05);
+    border-top: 3px solid var(--up-blue);
+  }
+  .card-header {
+    display: flex; align-items: center; gap: 14px;
+    margin-bottom: 18px; flex-wrap: wrap;
+  }
+  .chip {
+    background: var(--up-blue); color: var(--up-gold-light);
+    padding: 5px 13px; border-radius: 999px;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: .08em;
+  }
+  .chip.green { background: var(--up-green); color: white; }
+  .chip.gold { background: var(--up-gold); color: var(--up-blue); }
+  .card h2 {
+    margin: 0; font-size: 22px; font-weight: 800;
+    color: var(--up-blue);
+  }
+  .card h3 {
+    margin: 18px 0 8px; font-size: 16.5px; font-weight: 700;
+    color: var(--up-green);
+  }
+  .card p { color: var(--ink-soft); font-size: 14.5px; margin: 8px 0; }
+  .card ul { color: var(--ink-soft); font-size: 14px; padding-left: 20px; }
+  .card ul li { margin: 4px 0; }
+
+  .math-block {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--up-gold);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 12px 0;
+    overflow-x: auto;
+    color: var(--up-text);
+  }
+  .math-inline { color: var(--up-green); font-weight: 600; }
+
+  /* ===== Grid ===== */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  @media (max-width: 860px) {
+    .grid-2, .grid-3, .timeline, .gallery-tabs { grid-template-columns: 1fr; }
+  }
+
+  /* ===== Mini info cards ===== */
+  .info-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    transition: all .25s ease;
+    border-top: 2px solid var(--up-gold);
+  }
+  .info-card:hover {
+    border-color: var(--up-green);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(0,123,93,.12);
+  }
+  .info-card .ic-label {
+    font-size: 11px; color: var(--up-green);
+    text-transform: uppercase; letter-spacing: .1em;
+    font-weight: 700; margin-bottom: 4px;
+  }
+  .info-card .ic-value {
+    font-size: 22px; font-weight: 800; color: var(--up-blue);
+  }
+  .info-card .ic-note {
+    font-size: 12px; color: var(--muted); margin-top: 4px;
+  }
+
+  /* ===== Step block ===== */
+  .step {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 0; margin: 12px 0;
+    overflow: hidden; transition: all .25s ease;
+  }
+  .step.solved { border-color: rgba(22,163,74,.4); border-left: 4px solid var(--good); }
+  .step-head {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px; cursor: pointer; user-select: none;
+  }
+  .step-head:hover { background: rgba(0,123,93,.05); }
+  .step-idx {
+    width: 28px; height: 28px; border-radius: 7px;
+    background: var(--up-blue); color: var(--up-gold-light);
+    display: grid; place-items: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .step.solved .step-idx {
+    background: var(--good); color: white;
+  }
+  .step-title { font-weight: 700; color: var(--up-blue); flex: 1; font-size: 14.5px; }
+  .step-toggle {
+    color: var(--muted); font-size: 12px;
+    transition: transform .2s ease;
+  }
+  .step.open .step-toggle { transform: rotate(90deg); }
+  .step-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height .4s ease;
+  }
+  .step.open .step-body { max-height: 1400px; }
+  .step-body-inner {
+    padding: 4px 16px 18px;
+    border-top: 1px dashed var(--line);
+    margin-top: 4px;
+  }
+  .step-body-inner p { font-size: 13.5px; }
+  .step .result-pill {
+    display: inline-block;
+    background: var(--up-green-light);
+    border: 1px solid var(--up-green);
+    color: var(--up-green);
+    padding: 4px 12px; border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    margin-top: 6px;
+  }
+
+  /* ===== Plot area ===== */
+  .plot-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 8px;
+    position: relative;
+  }
+  .plot-box .plot-title {
+    position: absolute; top: 12px; left: 14px; z-index: 5;
+    font-size: 12px; color: var(--up-blue); font-weight: 700;
+    background: rgba(255,255,255,.9); padding: 4px 10px; border-radius: 6px;
+    border: 1px solid var(--line);
+  }
+  .legend-row {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    padding: 8px 10px 4px;
+    font-size: 11.5px; color: var(--ink-soft);
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    box-shadow: 0 0 4px currentColor;
+  }
+
+  /* ===== Controls ===== */
+  .controls {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 12px;
+  }
+  .control-row {
+    display: flex; align-items: center; gap: 12px;
+    margin: 6px 0; flex-wrap: wrap;
+  }
+  .control-row label {
+    font-size: 12.5px; color: var(--up-blue);
+    min-width: 150px; font-weight: 700;
+  }
+  input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    flex: 1; min-width: 180px; height: 5px;
+    background: var(--up-gray-dark);
+    border-radius: 4px; outline: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--up-green); cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,123,93,.4);
+    transition: all .2s ease;
+  }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--up-green); cursor: pointer;
+    border: 2px solid white;
+  }
+  .val-tag {
+    background: var(--up-blue); color: var(--up-gold-light);
+    padding: 3px 10px; border-radius: 6px;
+    font-size: 12.5px; font-weight: 700;
+    font-family: 'JetBrains Mono', 'Consolas', monospace;
+    min-width: 50px; text-align: center;
+  }
+
+  .btn {
+    background: var(--up-blue); color: white;
+    border: none; padding: 9px 18px;
+    border-radius: 8px; cursor: pointer;
+    font-weight: 700; font-size: 13.5px;
+    transition: all .2s ease;
+    box-shadow: 0 3px 8px rgba(10,28,58,.2);
+  }
+  .btn:hover {
+    transform: translateY(-1px);
+    background: #163664;
+    box-shadow: 0 5px 12px rgba(10,28,58,.3);
+  }
+  .btn:active { transform: translateY(0); }
+  .btn.green {
+    background: var(--up-green);
+    box-shadow: 0 3px 8px rgba(0,123,93,.25);
+  }
+  .btn.green:hover { background: #009471; box-shadow: 0 5px 12px rgba(0,123,93,.35); }
+  .btn.gold {
+    background: var(--up-gold); color: var(--up-blue);
+    box-shadow: 0 3px 8px rgba(201,168,76,.25);
+  }
+  .btn.gold:hover { background: var(--up-gold-light); }
+  .btn.ghost {
+    background: white; color: var(--up-blue);
+    border: 1px solid var(--line-strong);
+    box-shadow: none;
+  }
+  .btn.ghost:hover {
+    background: var(--up-gray); border-color: var(--up-blue);
+  }
+  .btn.warn {
+    background: var(--bad); color: white;
+    box-shadow: 0 3px 8px rgba(192,57,43,.25);
+  }
+  .btn:disabled { opacity: .4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ===== Quiz options ===== */
+  .quiz-options {
+    display: grid; gap: 8px; margin-top: 12px;
+  }
+  .quiz-opt {
+    background: white;
+    border: 1px solid var(--line);
+    padding: 10px 14px; border-radius: 8px;
+    cursor: pointer; transition: all .2s ease;
+    font-size: 13.5px; color: var(--up-text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .quiz-opt:hover { border-color: var(--up-green); background: rgba(0,123,93,.04); }
+  .quiz-opt .opt-letter {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--up-blue); color: var(--up-gold-light);
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 800;
+    flex-shrink: 0;
+  }
+  .quiz-opt.correct {
+    border-color: var(--good);
+    background: var(--up-green-light);
+  }
+  .quiz-opt.correct .opt-letter {
+    background: var(--good); color: white;
+  }
+  .quiz-opt.wrong {
+    border-color: var(--bad);
+    background: rgba(192,57,43,.08);
+  }
+
+  /* ===== Builder ===== */
+  .builder {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 16px; margin-top: 12px;
+  }
+  .builder-row {
+    display: flex; align-items: center; gap: 6px;
+    flex-wrap: wrap; font-size: 20px;
+    padding: 10px 4px;
+    font-family: 'Cambria Math', 'Times New Roman', Georgia, serif;
+    line-height: 1.4;
+  }
+  .builder-row .br-label {
+    color: var(--up-blue); font-weight: 700; margin-right: 4px;
+  }
+  .builder-row .br-label sub {
+    font-size: 0.65em; color: var(--up-green);
+  }
+  .builder-row .br-int {
+    font-size: 32px; line-height: 1;
+    color: var(--up-blue); font-weight: 600;
+    margin: 0 2px;
+  }
+  .builder-row .br-brac {
+    font-size: 24px; color: var(--muted); font-weight: 400;
+    padding: 0 1px;
+  }
+  .builder-row .br-tag {
+    font-size: 11px; color: var(--up-green);
+    background: var(--up-green-light);
+    border: 1px solid var(--up-green);
+    border-radius: 4px;
+    padding: 1px 5px;
+    margin: 0 3px 0 1px;
+    font-family: 'Segoe UI', sans-serif;
+    vertical-align: middle;
+  }
+  .builder-row .br-comma {
+    color: var(--muted); margin: 0 2px;
+  }
+  .builder-row .br-times {
+    color: var(--muted); margin: 0 2px;
+    font-size: 18px;
+  }
+  .builder-row .br-dx {
+    font-style: italic; color: var(--up-blue);
+    font-family: 'Cambria Math', Georgia, serif;
+    margin-left: 4px; font-size: 17px;
+  }
+  .builder-row .br-sub {
+    width: 100%; margin-top: 4px;
+  }
+  .builder-row .slot {
+    min-width: 56px; min-height: 40px;
+    border: 2px dashed var(--line-strong);
+    border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 4px 10px;
+    background: rgba(255,255,255,.8);
+    color: var(--up-blue);
+    cursor: pointer; transition: all .2s ease;
+    font-size: 16px;
+    font-family: 'Cambria Math', Georgia, serif;
+  }
+  .builder-row .slot.filled { border-style: solid; border-color: var(--up-blue); background: white; }
+  .builder-row .slot.correct { border-color: var(--good); background: var(--up-green-light); color: var(--good); }
+  .builder-row .slot.wrong { border-color: var(--bad); background: rgba(192,57,43,.1); color: var(--bad); }
+  .token-bank {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;
+    padding: 10px; background: white;
+    border-radius: 8px; border: 1px solid var(--line);
+  }
+  .token {
+    background: var(--up-blue); color: var(--up-gold-light);
+    border: 1px solid var(--up-blue);
+    padding: 6px 12px; border-radius: 6px;
+    cursor: grab; font-size: 13px;
+    transition: all .15s ease; user-select: none;
+    font-weight: 700;
+  }
+  .token:hover { background: #163664; transform: translateY(-1px); }
+  .token:active { cursor: grabbing; }
+  .token.used { opacity: .35; pointer-events: none; }
+  .feedback {
+    margin-top: 12px; padding: 10px 14px; border-radius: 8px;
+    font-size: 13.5px; display: none;
+  }
+  .feedback.show { display: block; animation: pop .3s ease; }
+  .feedback.ok {
+    background: var(--up-green-light);
+    border: 1px solid var(--good);
+    color: var(--good);
+  }
+  .feedback.err {
+    background: rgba(224,138,0,.1);
+    border: 1px solid var(--warn);
+    color: var(--warn);
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: scale(.96); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* ===== Wizard ===== */
+  .wizard {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 20px; margin-top: 14px;
+    border-top: 3px solid var(--up-gold);
+  }
+  .wiz-progress { display: flex; gap: 4px; margin-bottom: 18px; }
+  .wiz-dot {
+    flex: 1; height: 6px; border-radius: 3px;
+    background: var(--up-gray-dark);
+    transition: all .3s ease;
+  }
+  .wiz-dot.done { background: linear-gradient(90deg, var(--up-blue), var(--up-green)); }
+  .wiz-dot.current { background: var(--up-gold); box-shadow: 0 0 8px var(--up-gold); }
+  .wiz-step-num {
+    color: var(--up-gold); font-size: 12px;
+    letter-spacing: .12em; font-weight: 700;
+    text-transform: uppercase;
+  }
+  .wiz-q {
+    font-size: 16px; font-weight: 700; color: var(--up-blue);
+    margin: 6px 0 14px;
+  }
+  .wiz-options { display: grid; gap: 10px; }
+  .wiz-option {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer; transition: all .2s ease;
+    font-size: 14px; color: var(--up-text);
+  }
+  .wiz-option:hover {
+    border-color: var(--up-green);
+    background: rgba(0,123,93,.04);
+    transform: translateX(4px);
+  }
+  .wiz-option.selected {
+    border-color: var(--up-blue);
+    background: rgba(10,28,58,.04);
+    box-shadow: 0 0 0 1px var(--up-blue) inset;
+  }
+  .wiz-option.correct {
+    border-color: var(--good);
+    background: var(--up-green-light);
+  }
+  .wiz-option.wrong {
+    border-color: var(--bad);
+    background: rgba(192,57,43,.1);
+    animation: shake .35s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-6px); }
+    40%,80% { transform: translateX(6px); }
+  }
+  .wiz-feedback {
+    margin-top: 14px; padding: 12px 14px;
+    border-radius: 8px; font-size: 13.5px;
+    display: none;
+  }
+  .wiz-feedback.show { display: block; animation: pop .3s ease; }
+  .wiz-feedback.ok { background: var(--up-green-light); border: 1px solid var(--good); color: var(--good); }
+  .wiz-feedback.err { background: rgba(224,138,0,.1); border: 1px solid var(--warn); color: var(--warn); }
+  .wiz-nav {
+    display: flex; gap: 10px; margin-top: 18px;
+    justify-content: space-between; align-items: center;
+  }
+  .wiz-trail {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+    display: none;
+  }
+  .wiz-trail.show { display: block; }
+  .wiz-trail .trail-item {
+    display: flex; gap: 10px; padding: 6px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .wiz-trail .trail-item:last-child { border-bottom: none; }
+  .wiz-trail .trail-step { color: var(--up-gold); font-weight: 700; min-width: 60px; }
+  .wiz-trail .trail-ans { color: var(--up-text); }
+  .wiz-final {
+    background: linear-gradient(135deg, var(--up-green-light), rgba(201,168,76,.1));
+    border: 1px solid var(--good);
+    border-radius: 10px; padding: 16px; margin-top: 14px;
+    display: none;
+  }
+  .wiz-final.show { display: block; animation: pop .4s ease; }
+  .wiz-final h4 { margin: 0 0 6px; color: var(--good); }
+
+  /* ===== Canvas manuscrito ===== */
+  .canvas-wrap {
+    background: #fefefe;
+    border: 2px solid var(--up-blue);
+    border-radius: var(--radius-sm);
+    position: relative; overflow: hidden;
+  }
+  .canvas-wrap canvas {
+    display: block; width: 100%;
+    touch-action: none;
+    cursor: crosshair;
+  }
+  .canvas-grid {
+    background-color: #fafbff;
+    background-image:
+      linear-gradient(rgba(10,28,58,.10) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(10,28,58,.10) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .canvas-toolbar {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    align-items: center;
+  }
+  .pen-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 3px solid transparent;
+    cursor: pointer; transition: all .2s ease;
+    display: grid; place-items: center;
+  }
+  .pen-btn.active {
+    border-color: var(--up-blue);
+    transform: scale(1.1);
+    box-shadow: 0 0 10px rgba(10,28,58,.3);
+  }
+  .pen-blue { background: #1e3a8a; }
+  .pen-black { background: #111827; }
+  .pen-red { background: #dc2626; }
+  .pen-eraser {
+    background: white; color: var(--up-blue);
+    border: 1px solid var(--line-strong);
+    font-size: 16px;
+  }
+  .size-control {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--up-blue); font-size: 12px;
+  }
+  .size-control input { width: 100px; }
+
+  /* ===== Guess game ===== */
+  .guess-stage {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    height: 360px;
+    position: relative; overflow: hidden;
+    cursor: crosshair;
+  }
+  .guess-overlay {
+    position: absolute; top: 12px; left: 14px;
+    background: rgba(255,255,255,.92);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 8px 12px; font-size: 12.5px; color: var(--up-text);
+    z-index: 5;
+  }
+  .guess-btn-row {
+    display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .pin {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: var(--up-gold);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--up-gold);
+    z-index: 4;
+    animation: pulse 1.6s infinite;
+  }
+  .pin.real {
+    background: var(--good);
+    box-shadow: 0 0 10px var(--good);
+    animation: none;
+    width: 22px; height: 22px; border-width: 3px;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.2); }
+  }
+
+  /* ===== Physics 3D ===== */
+  .physics-stage {
+    background: linear-gradient(180deg, #ECEEF3, #C8CED9);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    height: 460px;
+    position: relative; overflow: hidden;
+  }
+  .physics-status {
+    position: absolute; top: 14px; right: 14px; z-index: 6;
+    background: rgba(255,255,255,.95);
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px; color: var(--up-text);
+    min-width: 220px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(10,28,58,.1);
+  }
+  .physics-status .status-row {
+    display: flex; justify-content: space-between; gap: 10px;
+    padding: 3px 0;
+  }
+  .physics-status .status-row strong { color: var(--up-blue); }
+  .physics-status .verdict {
+    margin-top: 8px; padding-top: 8px;
+    border-top: 1px dashed var(--line);
+    font-weight: 700; font-size: 14px;
+  }
+  .verdict.balancea { color: var(--good); }
+  .verdict.cae { color: var(--bad); }
+  .verdict.espera { color: var(--muted); }
+
+  /* ===== Galería de simulaciones ===== */
+  .gallery {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 14px rgba(10,28,58,.05);
+    border-top: 3px solid var(--up-gold);
+  }
+  .gallery-tabs {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 6px; margin-bottom: 18px;
+    background: var(--bg-soft);
+    padding: 6px;
+    border-radius: 10px;
+  }
+  .gallery-tab {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px; font-weight: 700;
+    transition: all .2s ease;
+    text-align: center;
+  }
+  .gallery-tab:hover { background: rgba(0,123,93,.06); color: var(--up-green); }
+  .gallery-tab.active {
+    background: var(--up-blue); color: white;
+    box-shadow: 0 2px 6px rgba(10,28,58,.2);
+  }
+  .gallery-panel {
+    display: none;
+    animation: fadeIn .35s ease;
+  }
+  .gallery-panel.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .gallery-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px; flex-wrap: wrap; gap: 10px;
+  }
+  .gallery-header h3 {
+    margin: 0; color: var(--up-blue); font-size: 17px;
+  }
+  .gallery-reset {
+    background: white;
+    color: var(--bad);
+    border: 1px solid var(--bad);
+    padding: 6px 14px; border-radius: 8px;
+    cursor: pointer; font-size: 12.5px; font-weight: 700;
+    transition: all .2s ease;
+  }
+  .gallery-reset:hover {
+    background: var(--bad); color: white;
+  }
+
+  /* ===== Exit ticket ===== */
+  .ticket {
+    background: linear-gradient(135deg, rgba(201,168,76,.06), rgba(0,123,93,.06));
+    border: 1px solid rgba(201,168,76,.3);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  textarea {
+    width: 100%; background: white;
+    color: var(--up-text); border: 1px solid var(--line-strong);
+    border-radius: 8px; padding: 12px;
+    font-family: inherit; font-size: 14px;
+    min-height: 90px; resize: vertical;
+    outline: none;
+  }
+  textarea:focus { border-color: var(--up-green); }
+  .answer-key {
+    margin-top: 14px; padding: 14px;
+    background: var(--up-green-light);
+    border-left: 4px solid var(--up-green);
+    border-radius: 6px; font-size: 13.5px;
+    color: var(--up-text);
+    display: none;
+  }
+  .answer-key.show { display: block; animation: pop .3s ease; }
+
+  /* ===== Teacher mode reveal ===== */
+  .teacher-only { display: none; }
+  body.teacher .teacher-only { display: block; }
+
+  /* ===== Progress ===== */
+  .progress-wrap {
+    position: relative;
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 8px 22px;
+  }
+  .progress-bar {
+    max-width: 1320px; margin: 0 auto;
+    height: 4px; background: var(--up-gray-dark);
+    border-radius: 4px; overflow: hidden;
+  }
+  .progress-bar > i {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--up-blue), var(--up-green), var(--up-gold));
+    width: 0%; transition: width .35s ease;
+  }
+
+  /* ===== Footer ===== */
+  .foot {
+    text-align: center; color: var(--muted);
+    font-size: 12px; padding: 24px;
+    border-top: 1px solid var(--line);
+    margin-top: 30px;
+  }
+
+  /* utility */
+  .muted { color: var(--muted); }
+  .accent { color: var(--up-green); }
+  .bold { font-weight: 700; }
+  .small { font-size: 12.5px; }
+  .center { text-align: center; }
+  .flex { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  .pill {
+    display: inline-block; padding: 2px 9px; border-radius: 999px;
+    background: var(--bg-soft); border: 1px solid var(--line);
+    font-size: 11px; color: var(--ink-soft); margin-right: 4px;
+  }
+  hr.sep {
+    border: none; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+    margin: 22px 0;
+  }
+  .katex { font-size: 1.04em; }
+  .katex-display { margin: 8px 0; }
+  ::selection { background: rgba(0,123,93,.2); color: var(--up-text); }
+
+  .ratio-input {
+    width: 70px; background: white;
+    border: 1px solid var(--line-strong);
+    color: var(--up-text); border-radius: 6px;
+    padding: 6px 8px; font-size: 13px; text-align: center;
+    outline: none;
+  }
+  .ratio-input:focus { border-color: var(--up-green); }
+
+  .density-arrow {
+    position: absolute;
+    color: var(--up-gold);
+    font-weight: 800;
+    text-shadow: 0 0 6px rgba(201,168,76,.7);
+    pointer-events: none; z-index: 4;
+    font-size: 11px;
+  }
+
+  /* Comparison panel */
+  .compare-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+  }
+  .compare-card {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+  .compare-card h4 {
+    margin: 0 0 8px; color: var(--up-blue); font-size: 14px;
+  }
+  .compare-card .num {
+    color: var(--up-green); font-weight: 800; font-size: 18px;
+  }
+  @media (max-width: 860px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- Top bar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <path d="M8 4 C 5 4, 5 24, 8 24 C 11 24, 11 4, 8 4 Z" stroke="#C9A84C" stroke-width="2" fill="none"/>
+          <text x="14" y="20" font-family="Georgia" font-size="14" font-weight="bold" fill="#FFFFFF">ρ</text>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span>Centros de Masa e Inercia</span>
+        <small>Universidad Panamericana · Cálculo Multivariable</small>
+      </div>
+    </div>
+    <nav class="nav-tabs" id="navTabs">
+      <button class="nav-tab active" data-go="hero"><span class="num">0</span>Inicio</button>
+      <button class="nav-tab" data-go="apertura"><span class="num">1</span>Apertura</button>
+      <button class="nav-tab" data-go="desarrollo"><span class="num">2</span>Desarrollo</button>
+      <button class="nav-tab" data-go="galeria"><span class="num">3</span>Galería</button>
+      <button class="nav-tab" data-go="practica"><span class="num">4</span>Práctica</button>
+      <button class="nav-tab" data-go="escritura"><span class="num">5</span>Lienzo</button>
+      <button class="nav-tab" data-go="cierre"><span class="num">6</span>Cierre</button>
+    </nav>
+    <div class="flex" style="margin-left:auto">
+      <button class="toggle" id="teacherToggle" title="Modo profesor: muestra todas las soluciones">
+        <span class="dot"></span><span>Modo Profesor</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Progress bar -->
+<div class="progress-wrap">
+  <div class="progress-bar"><i id="progressFill"></i></div>
+</div>
+
+<main class="container">
+
+  <!-- ============ HERO ============ -->
+  <section id="hero" class="hero">
+    <span class="pill">Cálculo Multivariable</span>
+    <span class="pill">Ingeniería · 2° año</span>
+    <span class="pill">Basado en Thomas / Tromba</span>
+    <h1>Aplicaciones de la Integral Múltiple</h1>
+    <p class="sub">
+      Una clase interactiva de 35 minutos sobre <b>centros de masa</b> y <b>momentos de inercia</b>
+      mediante integración doble. Construye intuición geométrica, deduce las fórmulas
+      a partir de sumas de Riemann y resuelve problemas modelo con densidad variable.
+      Incluye galería de simulaciones, lienzo manuscrito y exportación a PDF.
+    </p>
+    <div class="obj-box">
+      <b>Objetivo de aprendizaje:</b> Al finalizar la sesión, el estudiante será capaz de plantear y
+      resolver integrales dobles para calcular el centro de masa de una lámina bidimensional con
+      densidad variable \(\rho(x,y)\), interpretando físicamente su equilibrio sobre un punto de apoyo
+      y comparando casos en coordenadas cartesianas y polares.
+    </div>
+    <div class="meta">
+      <span>📅 <strong>Materia:</strong> Cálculo Multivariable</span>
+      <span>⏱️ <strong>Duración:</strong> 35 minutos</span>
+      <span>🎯 <strong>Estrategia:</strong> Clase magistral activa + Peer Instruction</span>
+      <span>📝 <strong>Evaluación:</strong> Boleto de salida + 2 ejercicios guiados</span>
+    </div>
+
+    <div class="timeline" id="timeline">
+      <div class="tl-cell active" data-go="apertura">
+        <div class="tl-time">00:00 → 00:05</div>
+        <div class="tl-title">Apertura</div>
+        <div class="tl-dur">5 min · Reactivación</div>
+        <div class="tl-bar"><i style="width:100%"></i></div>
+      </div>
+      <div class="tl-cell" data-go="desarrollo">
+        <div class="tl-time">00:05 → 00:20</div>
+        <div class="tl-title">Desarrollo</div>
+        <div class="tl-dur">15 min · Teoría + Modelo</div>
+        <div class="tl-bar"><i style="width:60%"></i></div>
+      </div>
+      <div class="tl-cell" data-go="galeria">
+        <div class="tl-time">00:20 → 00:30</div>
+        <div class="tl-title">Galería + Ejercicios</div>
+        <div class="tl-dur">10 min · Simulaciones</div>
+        <div class="tl-bar"><i style="width:35%"></i></div>
+      </div>
+      <div class="tl-cell" data-go="cierre">
+        <div class="tl-time">00:30 → 00:35</div>
+        <div class="tl-title">Cierre</div>
+        <div class="tl-dur">5 min · Exit ticket + PDF</div>
+        <div class="tl-bar"><i style="width:18%"></i></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ APERTURA ============ -->
+  <section id="apertura" class="card">
+    <div class="card-header">
+      <span class="chip">01 · APERTURA</span>
+      <h2>¿Dónde se equilibra una placa con densidad variable?</h2>
+    </div>
+    <p>
+      <b>Estrategia didáctica:</b> Pregunta generadora y anclaje con Física Clásica.
+      En Cálculo I utilizábamos integrales simples para áreas homogéneas, donde bastaba
+      con promedios simples. Pero si la placa tiene <i>más peso en un extremo que en el otro</i> —
+      es decir, una densidad variable \(\rho(x,y)\) — el punto de equilibrio ya no es el centro
+      geométrico, sino un <b>promedio ponderado por la masa</b>.
+    </p>
+
+    <div class="grid-2" style="margin-top:14px">
+      <div>
+        <h3>🎯 Reto: localiza el centro de masa</h3>
+        <p class="small">
+          Observa la región triangular de densidad variable \(\rho(x,y)=x^2\).
+          <b>Los tonos amarillos-rojizos</b> en la esquina inferior derecha indican
+          <b>mayor densidad</b> (más masa acumulada hacia \(x=2\)).
+          Haz <b>clic sobre la región</b> donde crees que se ubicaría el punto de equilibrio.
+        </p>
+        <div class="guess-stage" id="guessStage">
+          <div class="guess-overlay">Haz clic para marcar tu predicción</div>
+        </div>
+        <div class="guess-btn-row">
+          <button class="btn ghost" id="guessReveal">🔍 Revelar centro real</button>
+          <button class="btn ghost" id="guessReset">↻ Reiniciar</button>
+          <button class="btn green" id="guessContinue">⬇ Ver en la galería 3D</button>
+        </div>
+        <span class="muted small" id="guessFeedback" style="display:block; margin-top:8px"></span>
+      </div>
+
+      <div>
+        <h3>💡 Pregunta generadora</h3>
+        <div class="math-block">
+          Si esta placa tiene más peso en un extremo que en el otro (densidad variable
+          \(\rho(x,y)\)), ¿cómo cambia matemáticamente el punto de equilibrio?
+        </div>
+        <p class="small">
+          <b>Anclaje con Física Clásica:</b> el centro de masa es el punto donde, teóricamente,
+          se concentra toda la masa del cuerpo. Si lo apoyamos ahí, el sistema queda en
+          equilibrio traslacional. La <b>inercia rotacional</b>, en cambio, no depende sólo
+          de la masa sino de <i>qué tan lejos</i> está del eje de giro.
+        </p>
+
+        <h3>🧠 Conceptos previos a activar</h3>
+        <ul>
+          <li>Promedio ponderado \(\bar{x} = \dfrac{\sum m_i x_i}{\sum m_i}\)</li>
+          <li>Momento de una fuerza: \(M = F \cdot d\)</li>
+          <li>Suma de Riemann → integral definida</li>
+          <li>Integrales iteradas en \(\mathbb{R}^2\) (cartesianas y polares)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DESARROLLO ============ -->
+  <section id="desarrollo" class="card">
+    <div class="card-header">
+      <span class="chip">02 · DESARROLLO</span>
+      <h2>Modelado matemático: del diferencial a la integral</h2>
+    </div>
+
+    <h3>1. Significado físico de cada magnitud</h3>
+    <p class="small">
+      Partimos de la idea de un diferencial de masa \(dm = \rho(x,y)\,dA\). Cada magnitud física
+      que nos interesa se obtiene acumulando (integrando) una cantidad puntual sobre toda la región \(R\).
+      Estas definiciones siguen el tratamiento clásico de <b>Thomas' Calculus</b> (Cap. 15) y
+      <b>Tromba & Marsden</b> (Cap. 5).
+    </p>
+    <div class="grid-3">
+      <div class="info-card">
+        <div class="ic-label">Masa total</div>
+        <div class="math-block" style="margin:6px 0; padding:8px 10px;">
+          \(m = \displaystyle\iint_R \rho(x,y)\,dA\)
+        </div>
+        <div class="ic-note">Acumula densidad · "cuánta materia hay"</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Momentos de masa</div>
+        <div class="math-block" style="margin:6px 0; padding:8px 10px;">
+          \(M_y = \displaystyle\iint_R x\,\rho\,dA\)<br>
+          \(M_x = \displaystyle\iint_R y\,\rho\,dA\)
+        </div>
+        <div class="ic-note">Primeros momentos · "qué tan cargado está cada lado"</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Momento de inercia</div>
+        <div class="math-block" style="margin:6px 0; padding:8px 10px;">
+          \(I_y = \displaystyle\iint_R x^2\,\rho\,dA\)
+        </div>
+        <div class="ic-note">Resistencia a la rotación · distancia al cuadrado</div>
+      </div>
+    </div>
+
+    <div class="math-block" style="margin-top:14px">
+      <b>Centro de masa:</b> el cociente entre el primer momento y la masa total.
+      \[
+        \bar{x} = \frac{M_y}{m}, \qquad \bar{y} = \frac{M_x}{m}
+      \]
+      <span class="muted small">
+        Nota clave: el subíndice del momento se <b>invierte</b> respecto a la coordenada del centro.
+        \(\bar{x}\) usa \(M_y\) porque \(M_y\) mide la "palanca" respecto al eje \(y\).
+      </span>
+    </div>
+
+    <hr class="sep">
+
+    <!-- Step by step solution -->
+    <h3>2. Solución paso a paso (problema modelo)</h3>
+    <p class="small">
+      <b>Problema:</b> Hallar el centro de masa de la lámina triangular acotada por \(y=x\), \(x=2\) y \(y=0\),
+      con densidad \(\rho(x,y) = x^2\). Haz clic en cada paso para desplegar la deducción.
+    </p>
+
+    <div class="step" data-step="1">
+      <div class="step-head">
+        <div class="step-idx">1</div>
+        <div class="step-title">Plantear la masa total \(m\)</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <p>Para el triángulo \(0 \le x \le 2\), \(0 \le y \le x\), integramos primero en \(y\) y luego en \(x\):</p>
+        <div class="math-block">
+          \[
+            m = \int_0^2 \int_0^x x^2\, dy\, dx = \int_0^2 x^2 \cdot \bigl[y\bigr]_0^x dx = \int_0^2 x^3\, dx = \left[\frac{x^4}{4}\right]_0^2 = \frac{16}{4} = 4
+          \]
+        </div>
+        <span class="result-pill">m = 4 unidades de masa</span>
+      </div></div>
+    </div>
+
+    <div class="step" data-step="2">
+      <div class="step-head">
+        <div class="step-idx">2</div>
+        <div class="step-title">Calcular el momento \(M_y\) (para \(\bar{x}\))</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <p>El momento respecto al eje \(y\) pondera por la distancia \(x\):</p>
+        <div class="math-block">
+          \[
+            M_y = \int_0^2 \int_0^x x \cdot x^2\, dy\, dx = \int_0^2 x^4\, dx = \left[\frac{x^5}{5}\right]_0^2 = \frac{32}{5} = 6.4
+          \]
+        </div>
+        <p class="small muted">
+          ¿Por qué \(M_y\) da \(\bar{x}\)? Porque \(M_y\) mide cuánta masa hay "hacia la derecha"
+          (la palanca respecto al eje \(y\)). Al dividir por \(m\), obtenemos la posición promedio en \(x\).
+        </p>
+        <span class="result-pill">M_y = 32/5 = 6.4</span>
+      </div></div>
+    </div>
+
+    <div class="step" data-step="3">
+      <div class="step-head">
+        <div class="step-idx">3</div>
+        <div class="step-title">Calcular el momento \(M_x\) (para \(\bar{y}\))</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <p>El momento respecto al eje \(x\) pondera por la distancia \(y\). Nota que \(y\) depende de \(x\):</p>
+        <div class="math-block">
+          \[
+            M_x = \int_0^2 \int_0^x y \cdot x^2\, dy\, dx = \int_0^2 x^2 \cdot \left[\frac{y^2}{2}\right]_0^x dx = \int_0^2 \frac{x^4}{2}\, dx = \left[\frac{x^5}{10}\right]_0^2 = \frac{32}{10} = 3.2
+          \]
+        </div>
+        <p class="small muted">
+          Truco: cuando \(\rho\) no depende de \(y\), la integral interior es inmediata,
+          pero se debe sustituir correctamente el límite superior \(y=x\).
+        </p>
+        <span class="result-pill">M_x = 32/10 = 3.2</span>
+      </div></div>
+    </div>
+
+    <div class="step" data-step="4">
+      <div class="step-head">
+        <div class="step-idx">4</div>
+        <div class="step-title">Obtener las coordenadas del centro de masa</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <div class="math-block">
+          \[
+            \bar{x} = \frac{M_y}{m} = \frac{6.4}{4} = 1.6, \qquad \bar{y} = \frac{M_x}{m} = \frac{3.2}{4} = 0.8
+          \]
+        </div>
+        <p>
+          El punto \((1.6,\,0.8)\) está claramente desplazado hacia la derecha del centroide
+          geométrico del triángulo (que sería \((4/3,\,2/3)\approx(1.33,\,0.67)\) si la densidad
+          fuera homogénea). Esto confirma físicamente que la masa acumulada hacia \(x\) grande
+          "tira" del centro de masa en esa dirección.
+        </p>
+        <span class="result-pill">Centro de masa: (1.6, 0.8)</span>
+      </div></div>
+    </div>
+
+    <hr class="sep">
+
+    <!-- Examples from Thomas/Tromba style -->
+    <h3>3. Ejemplos canónicos (estilo Thomas · Tromba)</h3>
+    <p class="small">
+      Para enriquecer la intuición, comparamos nuestro problema modelo con dos ejemplos clásicos
+      de los libros de referencia:
+    </p>
+    <div class="grid-2">
+      <div class="info-card">
+        <div class="ic-label">Thomas · Ejemplo 15.4</div>
+        <p class="small"><b>Lámina semicircular</b> \(x^2+y^2 \le a^2,\, y\ge 0\),
+        con \(\rho(x,y) = k\sqrt{x^2+y^2}\) (densidad radial).</p>
+        <div class="math-block" style="padding:8px 10px; margin:4px 0;">
+          Por simetría: \(\bar{x}=0\). Para \(\bar{y}\) conviene pasar a polares:
+          \[
+            \bar{y} = \frac{\int_0^\pi \int_0^a (r\sin\theta)(kr)\, r\, dr\, d\theta}{\int_0^\pi \int_0^a kr\, r\, dr\, d\theta} = \frac{3a}{2\pi}
+          \]
+        </div>
+        <div class="ic-note">Lección: la simetría y la elección de coordenadas ahorran trabajo.</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Tromba · Ejemplo 5.4</div>
+        <p class="small"><b>Disco con densidad no uniforme</b> \(\rho(x,y) = 1 + x^2 + y^2\)
+        sobre \(x^2+y^2 \le 1\).</p>
+        <div class="math-block" style="padding:8px 10px; margin:4px 0;">
+          En polares \(\rho = 1 + r^2\):
+          \[
+            m = \int_0^{2\pi}\!\!\int_0^1 (1+r^2) r\, dr\, d\theta = \frac{3\pi}{2}
+          \]
+          por simetría \(\bar{x}=\bar{y}=0\), pero \(I_z = \int (x^2+y^2)\rho\, dA = \frac{5\pi}{6}\).
+        </div>
+        <div class="ic-note">Lección: la inercia pondera más los bordes si \(\rho\) crece con \(r\).</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ GALERÍA DE SIMULACIONES ============ -->
+  <section id="galeria" class="gallery">
+    <div class="card-header">
+      <span class="chip gold">03 · GALERÍA INTERACTIVA</span>
+      <h2 style="color:var(--up-blue); margin:0;">Galería de simulaciones</h2>
+    </div>
+    <p class="small" style="margin-bottom:14px;">
+      Un único espacio donde puedes explorar todas las visualizaciones de la clase.
+      Cambia entre pestañas, ajusta los parámetros y usa el botón <b>↻ Reiniciar</b>
+      para volver al estado original de cada simulación.
+    </p>
+
+    <div class="gallery-tabs">
+      <button class="gallery-tab active" data-panel="p1">📐 Triángulo con densidad</button>
+      <button class="gallery-tab" data-panel="p2">⚖️ Balanceo 3D sobre alfiler</button>
+      <button class="gallery-tab" data-panel="p3">⭕ Semicírculo polar</button>
+      <button class="gallery-tab" data-panel="p4">📊 Comparación CM vs centroide</button>
+    </div>
+
+    <!-- Panel 1: Triángulo con densidad -->
+    <div class="gallery-panel active" id="p1">
+      <div class="gallery-header">
+        <h3>Triángulo con densidad variable ρ(x,y) = x²</h3>
+        <button class="gallery-reset" data-reset="p1">↻ Reiniciar</button>
+      </div>
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <div class="plot-box" style="height:420px;">
+            <span class="plot-title">Región R · campo de densidad ρ(x,y)</span>
+            <div id="regionPlot" style="width:100%; height:420px;"></div>
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#0A1C3A; color:#0A1C3A"></span>Baja densidad</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#C9A84C; color:#C9A84C"></span>Alta densidad</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#007B5D; color:#007B5D"></span>Centro de masa</span>
+          </div>
+        </div>
+        <div>
+          <div class="controls">
+            <div class="control-row">
+              <label>Función de densidad</label>
+              <select id="rhoSel" class="ratio-input" style="width:auto; padding:6px 10px;">
+                <option value="x^2" selected>ρ(x,y) = x² (problema modelo)</option>
+                <option value="x">ρ(x,y) = x</option>
+                <option value="x^3">ρ(x,y) = x³</option>
+                <option value="1">ρ(x,y) = 1 (homogénea)</option>
+                <option value="y">ρ(x,y) = y</option>
+                <option value="x*y">ρ(x,y) = x·y</option>
+              </select>
+            </div>
+            <div class="control-row">
+              <label>Límite derecho (b)</label>
+              <input type="range" id="bRange" min="1" max="4" step="0.1" value="2">
+              <span class="val-tag" id="bVal">2.0</span>
+            </div>
+            <div class="control-row">
+              <label>Mostrar diferencial dm</label>
+              <input type="checkbox" id="showDm" checked>
+            </div>
+            <div class="control-row">
+              <label>Mostrar centro de masa</label>
+              <input type="checkbox" id="showCM" checked>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top:14px">
+            <div class="info-card">
+              <div class="ic-label">Masa m</div>
+              <div class="ic-value" id="rMasa">—</div>
+              <div class="ic-note" id="rMasaNote">∫∫ ρ dA</div>
+            </div>
+            <div class="info-card">
+              <div class="ic-label">x̄ = M_y / m</div>
+              <div class="ic-value" id="rXbar">—</div>
+              <div class="ic-note">coordenada x</div>
+            </div>
+            <div class="info-card">
+              <div class="ic-label">ȳ = M_x / m</div>
+              <div class="ic-value" id="rYbar">—</div>
+              <div class="ic-note">coordenada y</div>
+            </div>
+          </div>
+          <div class="math-block" style="margin-top:12px">
+            <span class="muted small">Interpretación:</span>
+            <div id="interpText" style="margin-top:6px; font-size:13.5px;">
+              Con \(\rho(x,y)=x^2\), la masa se concentra hacia la derecha.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2: Balanceo 3D -->
+    <div class="gallery-panel" id="p2">
+      <div class="gallery-header">
+        <h3>Balanceo 3D de la placa sobre el alfiler</h3>
+        <button class="gallery-reset" data-reset="p2">↻ Reiniciar</button>
+      </div>
+      <p class="small">
+        Imagina que tomas la placa triangular plana y la apoyas sobre la punta de un alfiler
+        situado en el punto que tú elijas. Si coincide con el centro de masa real, la placa
+        se equilibra; si no, cae hacia el lado más pesado. <b>Mejora:</b> ahora con física de
+        cuerpo rígido completa (momento de inercia, torque, amortiguamiento).
+      </p>
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <div class="plot-box" style="height:340px;">
+            <span class="plot-title">Predicción del alumno (vista superior)</span>
+            <div id="guessPlot" style="width:100%; height:340px;"></div>
+          </div>
+          <div class="controls" style="margin-top:10px">
+            <div class="control-row">
+              <label>Coordenada x del alfiler</label>
+              <input type="range" id="pxRange" min="0" max="2" step="0.05" value="1.0">
+              <span class="val-tag" id="pxVal">1.00</span>
+            </div>
+            <div class="control-row">
+              <label>Coordenada y del alfiler</label>
+              <input type="range" id="pyRange" min="0" max="2" step="0.05" value="0.5">
+              <span class="val-tag" id="pyVal">0.50</span>
+            </div>
+            <div class="control-row">
+              <label>Amortiguamiento</label>
+              <input type="range" id="dampRange" min="0" max="2" step="0.05" value="0.6">
+              <span class="val-tag" id="dampVal">0.60</span>
+            </div>
+            <div class="control-row">
+              <button class="btn green" id="runSim">🎬 Simular balanceo</button>
+              <button class="btn ghost" id="resetSim">⏸ Detener</button>
+              <button class="btn gold teacher-only" id="autoCM">🎯 Auto-ubicar CM real</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="physics-stage" style="position:relative">
+            <div id="physics3D" style="width:100%; height:460px;"></div>
+            <div class="physics-status" id="physicsStatus">
+              <div class="status-row"><span>Predicción:</span><strong id="sPred">(1.00, 0.50)</strong></div>
+              <div class="status-row"><span>CM real:</span><strong id="sReal">(1.60, 0.80)</strong></div>
+              <div class="status-row"><span>Error |Δ|:</span><strong id="sErr">0.94</strong></div>
+              <div class="status-row"><span>Ángulo:</span><strong id="sAng">0.0°</strong></div>
+              <div class="verdict espera" id="sVerdict">⏸ En espera de simulación...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 3: Semicírculo polar -->
+    <div class="gallery-panel" id="p3">
+      <div class="gallery-header">
+        <h3>Lámina semicircular con densidad radial ρ = k·r</h3>
+        <button class="gallery-reset" data-reset="p3">↻ Reiniciar</button>
+      </div>
+      <p class="small">
+        <b>Ejercicio 2:</b> Lámina semicircular \(x^2+y^2 \le a^2,\ y \ge 0\) con densidad
+        radial \(\rho = k\sqrt{x^2+y^2} = kr\). Por simetría \(\bar{x}=0\); calculamos \(\bar{y}\)
+        pasando a polares.
+      </p>
+      <div class="grid-2" style="align-items:start">
+        <div>
+          <div class="plot-box" style="height:380px;">
+            <span class="plot-title">Semicírculo · coordenadas polares</span>
+            <div id="polarPlot" style="width:100%; height:380px;"></div>
+          </div>
+          <div class="legend-row">
+            <span class="legend-item"><span class="legend-dot" style="background:#0A1C3A; color:#0A1C3A"></span>ρ baja (centro)</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#C9A84C; color:#C9A84C"></span>ρ alta (borde)</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#007B5D; color:#007B5D"></span>Centro de masa</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#E08A00; color:#E08A00"></span>Centroide geométrico</span>
+          </div>
+        </div>
+        <div>
+          <div class="controls">
+            <div class="control-row">
+              <label>Radio a</label>
+              <input type="range" id="aRange" min="0.5" max="3" step="0.1" value="1">
+              <span class="val-tag" id="aVal">1.0</span>
+            </div>
+            <div class="control-row">
+              <label>Tipo de densidad</label>
+              <select id="rhoPolarSel" class="ratio-input" style="width:auto; padding:6px 10px;">
+                <option value="r" selected>ρ = k·r (radial creciente)</option>
+                <option value="const">ρ = c (homogénea)</option>
+                <option value="r2">ρ = k·r² (cuadrática)</option>
+                <option value="1-r">ρ = k·(a-r) (decreciente)</option>
+              </select>
+            </div>
+            <div class="control-row">
+              <label>Mostrar elemento polar</label>
+              <input type="checkbox" id="showPolarElem" checked>
+            </div>
+          </div>
+          <div class="grid-3" style="margin-top:14px">
+            <div class="info-card">
+              <div class="ic-label">Masa m</div>
+              <div class="ic-value" id="pMasa">—</div>
+              <div class="ic-note" id="pMasaNote">∫∫ ρ dA</div>
+            </div>
+            <div class="info-card">
+              <div class="ic-label">ȳ = M_x/m</div>
+              <div class="ic-value" id="pYbar">—</div>
+              <div class="ic-note">sobre eje y</div>
+            </div>
+            <div class="info-card">
+              <div class="ic-label">Centroide geom.</div>
+              <div class="ic-value" id="pCentroid">—</div>
+              <div class="ic-note">4a/(3π) si ρ=c</div>
+            </div>
+          </div>
+          <div class="math-block" style="margin-top:12px">
+            <b>Deducción (caso ρ = kr):</b>
+            \[
+              m = \int_0^\pi \int_0^a kr \cdot r\, dr\, d\theta = \frac{k\pi a^3}{3}
+            \]
+            \[
+              M_x = \int_0^\pi \int_0^a (r\sin\theta)(kr) \cdot r\, dr\, d\theta = \frac{k a^4}{2}
+            \]
+            \[
+              \bar{y} = \frac{M_x}{m} = \frac{3a}{2\pi} \approx 0.477\,a
+            \]
+          </div>
+          <p class="small muted" id="polarInterp">
+            Como \(\rho\) crece con \(r\), hay más masa hacia el borde y \(\bar{y}\) sube
+            respecto al centroide geométrico (\(4a/(3\pi) \approx 0.424a\)).
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 4: Comparación -->
+    <div class="gallery-panel" id="p4">
+      <div class="gallery-header">
+        <h3>Comparación: Centro de masa vs Centroide geométrico</h3>
+        <button class="gallery-reset" data-reset="p4">↻ Reiniciar</button>
+      </div>
+      <p class="small">
+        Cuando la densidad es <b>homogénea</b> (\(\rho = c\)), el centro de masa coincide con el
+        centroide geométrico. Cuando \(\rho\) varía, el CM se desplaza hacia la región de mayor
+        densidad. La siguiente tabla compara los tres casos estudiados:
+      </p>
+      <div class="compare-grid">
+        <div class="compare-card">
+          <h4>Triángulo · ρ = x²</h4>
+          <div class="num">x̄ = 1.60, ȳ = 0.80</div>
+          <p class="small muted">Centroide geométrico: (1.33, 0.67).<br>
+          Desplazamiento: +0.27 en x (hacia la densidad creciente).</p>
+        </div>
+        <div class="compare-card">
+          <h4>Triángulo · ρ = 1 (homogénea)</h4>
+          <div class="num">x̄ = 1.33, ȳ = 0.67</div>
+          <p class="small muted">Coincide con el centroide geométrico del triángulo rectángulo.</p>
+        </div>
+        <div class="compare-card">
+          <h4>Semicírculo · ρ = kr</h4>
+          <div class="num">ȳ = 3a/(2π) ≈ 0.477a</div>
+          <p class="small muted">Mayor que el centroide (4a/3π ≈ 0.424a) porque hay más masa en el borde.</p>
+        </div>
+        <div class="compare-card">
+          <h4>Semicírculo · ρ = c</h4>
+          <div class="num">ȳ = 4a/(3π) ≈ 0.424a</div>
+          <p class="small muted">Centroide geométrico del semicírculo homogéneo.</p>
+        </div>
+      </div>
+      <div class="math-block" style="margin-top:14px">
+        <b>Conclusión clave:</b> la diferencia entre centro de masa y centroide es
+        \[
+          \bar{x}_{CM} - \bar{x}_{centroide} = \frac{\iint x\,(\rho - \rho_0)\, dA}{\iint \rho\, dA}
+        \]
+        donde \(\rho_0\) es la densidad promedio. Si \(\rho\) es constante, el numerador se anula
+        y CM = centroide.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EJERCICIO 2: SEMICÍRCULO ============ -->
+  <section id="ejercicio2" class="card">
+    <div class="card-header">
+      <span class="chip green">04 · EJERCICIO 2</span>
+      <h2>Lámina semicircular con densidad radial (Thomas 15.4)</h2>
+    </div>
+    <p>
+      <b>Enunciado:</b> Una lámina semicircular \(x^2+y^2 \le a^2,\ y \ge 0\) tiene densidad
+      proporcional a la distancia al origen: \(\rho(x,y) = k\sqrt{x^2+y^2} = kr\).
+      Halla el centro de masa.
+    </p>
+    <div class="math-block">
+      <b>Pista:</b> por simetría respecto al eje \(y\), \(\bar{x} = 0\). Sólo hace falta calcular \(\bar{y}\).
+      Conviene usar coordenadas polares: \(x = r\cos\theta,\ y = r\sin\theta,\ dA = r\, dr\, d\theta\).
+    </div>
+
+    <h3>📋 Paso a paso</h3>
+    <div class="step" data-step="s1">
+      <div class="step-head">
+        <div class="step-idx">1</div>
+        <div class="step-title">Plantear la masa total en polares</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <p>La región es \(0 \le r \le a,\ 0 \le \theta \le \pi\). Con \(dA = r\,dr\,d\theta\):</p>
+        <div class="math-block">
+          \[
+            m = \int_0^\pi \int_0^a (kr) \cdot r\, dr\, d\theta = k \int_0^\pi d\theta \int_0^a r^2\, dr = k \cdot \pi \cdot \frac{a^3}{3} = \frac{k\pi a^3}{3}
+          \]
+        </div>
+        <span class="result-pill">m = kπa³/3</span>
+      </div></div>
+    </div>
+
+    <div class="step" data-step="s2">
+      <div class="step-head">
+        <div class="step-idx">2</div>
+        <div class="step-title">Calcular \(M_x\) (momento para \(\bar{y}\))</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <p>\(M_x\) pondera por \(y = r\sin\theta\):</p>
+        <div class="math-block">
+          \[
+            M_x = \int_0^\pi \int_0^a (r\sin\theta)(kr) \cdot r\, dr\, d\theta = k \int_0^\pi \sin\theta\, d\theta \int_0^a r^3\, dr = k \cdot 2 \cdot \frac{a^4}{4} = \frac{ka^4}{2}
+          \]
+        </div>
+        <p class="small muted">
+          Truco: al separar las integrales (producto de funciones independientes), el cálculo se simplifica enormemente.
+        </p>
+        <span class="result-pill">M_x = ka⁴/2</span>
+      </div></div>
+    </div>
+
+    <div class="step" data-step="s3">
+      <div class="step-head">
+        <div class="step-idx">3</div>
+        <div class="step-title">Obtener \(\bar{y}\) y comparar con el centroide</div>
+        <div class="step-toggle">▶</div>
+      </div>
+      <div class="step-body"><div class="step-body-inner">
+        <div class="math-block">
+          \[
+            \bar{y} = \frac{M_x}{m} = \frac{ka^4/2}{k\pi a^3/3} = \frac{3a}{2\pi} \approx 0.477\,a
+          \]
+        </div>
+        <p>
+          Para \(a=1\): \(\bar{y} \approx 0.477\). Compárese con el centroide geométrico del semicírculo
+          homogéneo: \(\bar{y}_{cent} = \dfrac{4a}{3\pi} \approx 0.424\,a\).
+        </p>
+        <p>
+          <b>Interpretación:</b> como \(\rho = kr\) crece con la distancia al origen, hay más masa
+          hacia el borde curvo. Esto "tira" del centro de masa hacia arriba, alejándolo del diámetro.
+        </p>
+        <span class="result-pill">Centro de masa: (0, 3a/(2π))</span>
+      </div></div>
+    </div>
+
+    <hr class="sep">
+
+    <h3>🧩 Wizard interactivo: Ejercicio 2</h3>
+    <p class="small">Responde cada paso del ejercicio. Al final, tu secuencia se exporta en el PDF.</p>
+    <div class="wizard">
+      <div class="wiz-progress" id="wiz2Progress"></div>
+      <div class="wiz-step-num" id="wiz2Num">Paso 1 de 4</div>
+      <div class="wiz-q" id="wiz2Q">—</div>
+      <div class="wiz-options" id="wiz2Options"></div>
+      <div class="wiz-feedback" id="wiz2Fb"></div>
+      <div class="wiz-nav">
+        <button class="btn ghost" id="wiz2Prev">← Anterior</button>
+        <span class="muted small" id="wiz2Score">Aciertos: 0/0</span>
+        <button class="btn green" id="wiz2Next" disabled>Siguiente →</button>
+      </div>
+    </div>
+    <div class="wiz-trail" id="wiz2Trail">
+      <div class="bold small" style="color:var(--up-green); margin-bottom:8px">📋 Tu secuencia:</div>
+      <div id="wiz2TrailList"></div>
+    </div>
+    <div class="wiz-final" id="wiz2Final">
+      <h4>✅ ¡Ejercicio 2 completado!</h4>
+      <p class="small" id="wiz2FinalMsg"></p>
+    </div>
+  </section>
+
+  <!-- ============ PRÁCTICA: Ejercicio 1 Wizard ============ -->
+  <section id="practica" class="card">
+    <div class="card-header">
+      <span class="chip">05 · PRÁCTICA</span>
+      <h2>Ejercicio 1 guiado: Momento de Inercia I_y</h2>
+    </div>
+    <p>
+      <b>Estrategia:</b> Aprendizaje basado en problemas. En cada paso elige la opción correcta;
+      sólo entonces podrás avanzar. Al final, tu secuencia se exporta en el PDF.
+    </p>
+    <div class="math-block">
+      <b>Enunciado:</b> Hallar el momento de inercia \(I_y\) de la lámina triangular acotada por
+      \(y=x\), \(x=2\) y \(y=0\), con densidad \(\rho(x,y) = x^2\).
+    </div>
+    <div class="wizard">
+      <div class="wiz-progress" id="wizProgress"></div>
+      <div class="wiz-step-num" id="wizNum">Paso 1 de 5</div>
+      <div class="wiz-q" id="wizQ">—</div>
+      <div class="wiz-options" id="wizOptions"></div>
+      <div class="wiz-feedback" id="wizFb"></div>
+      <div class="wiz-nav">
+        <button class="btn ghost" id="wizPrev">← Anterior</button>
+        <span class="muted small" id="wizScore">Aciertos: 0/0</span>
+        <button class="btn green" id="wizNext" disabled>Siguiente →</button>
+      </div>
+    </div>
+    <div class="wiz-trail" id="wizTrail">
+      <div class="bold small" style="color:var(--up-green); margin-bottom:8px">📋 Tu secuencia:</div>
+      <div id="wizTrailList"></div>
+    </div>
+    <div class="wiz-final" id="wizFinal">
+      <h4>✅ ¡Ejercicio completado!</h4>
+      <p class="small" id="wizFinalMsg"></p>
+      <div class="math-block">
+        \[
+          I_y = \int_0^2 \int_0^x x^2 \cdot x^2\, dy\, dx = \int_0^2 x^5\, dx = \left[\frac{x^6}{6}\right]_0^2 = \frac{64}{6} \approx 10.67
+        \]
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <h3>🔧 Constructor 1: Momento de inercia I_y (triángulo)</h3>
+    <p class="small">
+      Arrastra (o haz clic en) los tokens correctos para llenar cada casilla. Recuerda:
+      la distancia al cuadrado desde un punto \((x,y)\) al eje \(y\) es simplemente \(x^2\).
+      El primer par de corchetes son los límites de \(x\), el segundo de \(y\).
+    </p>
+
+    <div class="builder" data-builder="b1">
+      <div class="builder-row">
+        <span class="br-label">I<sub>y</sub> =</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="a"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="b"></span>
+        <span class="br-brac">]</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="c"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="d"></span>
+        <span class="br-brac">]</span>
+        <span class="slot" data-slot="e" style="min-width:80px"></span>
+        <span class="br-dx">dA</span>
+      </div>
+      <div class="br-sub muted small">
+        orden: \(dy\,dx\). El integrando es \(r^2 \cdot \rho = x^2 \cdot x^2 = x^4\).
+      </div>
+      <div class="token-bank">
+        <span class="token" data-val="0">0</span>
+        <span class="token" data-val="2">2</span>
+        <span class="token" data-val="x">x</span>
+        <span class="token" data-val="x²">x²</span>
+        <span class="token" data-val="x³">x³</span>
+        <span class="token" data-val="x⁴">x⁴</span>
+        <span class="token" data-val="y">y</span>
+        <span class="token" data-val="2x">2x</span>
+      </div>
+      <div class="flex" style="margin-top:12px">
+        <button class="btn green" data-action="check">✓ Verificar planteamiento</button>
+        <button class="btn ghost" data-action="reset">↻ Limpiar</button>
+        <button class="btn gold teacher-only" data-action="solve">👨‍🏫 Ver solución</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <hr class="sep">
+
+    <h3>🔧 Constructor 2: Masa del semicírculo en polares</h3>
+    <p class="small">
+      Lámina semicircular \(x^2+y^2 \le a^2,\ y \ge 0\) con densidad radial \(\rho = kr\).
+      En polares: \(dA = r\,dr\,d\theta\). Construye la integral que da la masa total \(m\).
+      Pista: \(\theta\) recorre el semicírculo superior; \(r\) va de 0 al radio.
+    </p>
+
+    <div class="builder" data-builder="b2">
+      <div class="builder-row">
+        <span class="br-label">m =</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="a"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="b"></span>
+        <span class="br-brac">]</span>
+        <span class="br-tag">θ</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="c"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="d"></span>
+        <span class="br-brac">]</span>
+        <span class="br-tag">r</span>
+        <span class="slot" data-slot="e" style="min-width:80px"></span>
+        <span class="br-times">·</span>
+        <span class="br-dx">r dr dθ</span>
+      </div>
+      <div class="br-sub muted small">
+        El diferencial polar es \(r\,dr\,d\theta = dA\). El integrando incluye \(\rho = kr\) que ya tiene un factor \(r\).
+      </div>
+      <div class="token-bank">
+        <span class="token" data-val="0">0</span>
+        <span class="token" data-val="a">a</span>
+        <span class="token" data-val="π">π</span>
+        <span class="token" data-val="2π">2π</span>
+        <span class="token" data-val="-a">-a</span>
+        <span class="token" data-val="kr">kr</span>
+        <span class="token" data-val="kr²">kr²</span>
+        <span class="token" data-val="k">k</span>
+        <span class="token" data-val="r">r</span>
+      </div>
+      <div class="flex" style="margin-top:12px">
+        <button class="btn green" data-action="check">✓ Verificar planteamiento</button>
+        <button class="btn ghost" data-action="reset">↻ Limpiar</button>
+        <button class="btn gold teacher-only" data-action="solve">👨‍🏫 Ver solución</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <hr class="sep">
+
+    <h3>🔧 Constructor 3: Momento de inercia I_z del disco con ρ = 1 + r²</h3>
+    <p class="small">
+      Disco completo \(x^2+y^2 \le 1\) con \(\rho(x,y) = 1 + x^2 + y^2 = 1 + r^2\).
+      Plantea el momento de inercia respecto al eje \(z\), donde \(r^2 = x^2 + y^2\).
+      Pista: el integrando es \(r^2 \cdot \rho = r^2(1+r^2) = r^2 + r^4\).
+    </p>
+
+    <div class="builder" data-builder="b3">
+      <div class="builder-row">
+        <span class="br-label">I<sub>z</sub> =</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="a"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="b"></span>
+        <span class="br-brac">]</span>
+        <span class="br-tag">θ</span>
+        <span class="br-int">∫</span>
+        <span class="br-brac">[</span>
+        <span class="slot" data-slot="c"></span>
+        <span class="br-comma">,</span>
+        <span class="slot" data-slot="d"></span>
+        <span class="br-brac">]</span>
+        <span class="br-tag">r</span>
+        <span class="slot" data-slot="e" style="min-width:90px"></span>
+        <span class="br-times">·</span>
+        <span class="br-dx">r dr dθ</span>
+      </div>
+      <div class="br-sub muted small">
+        Con \(\rho = 1+r^2\), el integrando resulta \(r^2 \cdot (1+r^2) = r^2 + r^4\).
+      </div>
+      <div class="token-bank">
+        <span class="token" data-val="0">0</span>
+        <span class="token" data-val="1">1</span>
+        <span class="token" data-val="-1">-1</span>
+        <span class="token" data-val="π">π</span>
+        <span class="token" data-val="2π">2π</span>
+        <span class="token" data-val="r²">r²</span>
+        <span class="token" data-val="r⁴">r⁴</span>
+        <span class="token" data-val="r²+r⁴">r²+r⁴</span>
+        <span class="token" data-val="1+r²">1+r²</span>
+      </div>
+      <div class="flex" style="margin-top:12px">
+        <button class="btn green" data-action="check">✓ Verificar planteamiento</button>
+        <button class="btn ghost" data-action="reset">↻ Limpiar</button>
+        <button class="btn gold teacher-only" data-action="solve">👨‍🏫 Ver solución</button>
+      </div>
+      <div class="feedback"></div>
+    </div>
+  </section>
+
+  <!-- ============ LIENZO MANUSCRITO ============ -->
+  <section id="escritura" class="card">
+    <div class="card-header">
+      <span class="chip">06 · LIENZO</span>
+      <h2>Escribe tu solución a mano</h2>
+    </div>
+    <p>
+      Usa tu <b>lapicera de tableta</b>, el <b>dedo</b> en pantalla táctil, o el ratón.
+      Elige el color del lapiz virtual y el grosor. Tu dibujo se incluirá en el PDF.
+    </p>
+    <div class="canvas-toolbar">
+      <span class="small" style="color:var(--up-blue); margin-right:6px; font-weight:700">Lapiz:</span>
+      <button class="pen-btn pen-blue active" data-color="#1e3a8a" title="Azul"></button>
+      <button class="pen-btn pen-black" data-color="#111827" title="Negro"></button>
+      <button class="pen-btn pen-red" data-color="#dc2626" title="Rojo"></button>
+      <div class="size-control" style="margin-left:10px">
+        <span>Grosor:</span>
+        <input type="range" id="penSize" min="1" max="10" step="0.5" value="2.5">
+        <span class="val-tag" id="penSizeVal" style="min-width:36px">2.5</span>
+      </div>
+      <button class="btn ghost" id="penUndo" style="margin-left:auto">↶ Deshacer</button>
+      <button class="btn ghost" id="penClear">🗑 Limpiar</button>
+      <button class="btn gold" id="penDownload">⬇ Descargar PNG</button>
+    </div>
+    <div class="canvas-wrap canvas-grid" style="margin-top:10px">
+      <canvas id="handCanvas"></canvas>
+    </div>
+    <p class="small muted" style="margin-top:8px">
+      💡 Sugerencia: escribe aquí la deducción de \(M_y\) y \(M_x\) del ejercicio 1, o el planteamiento
+      del semicírculo en polares del ejercicio 2.
+    </p>
+  </section>
+
+  <!-- ============ CIERRE ============ -->
+  <section id="cierre" class="card">
+    <div class="card-header">
+      <span class="chip">07 · CIERRE</span>
+      <h2>Síntesis y boleto de salida</h2>
+    </div>
+    <div class="grid-3">
+      <div class="info-card">
+        <div class="ic-label">Masa</div>
+        <div class="ic-value" style="font-size:14px; line-height:1.4">acumula densidad</div>
+        <div class="ic-note">\(m = \iint \rho\, dA\)</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Centro de masa</div>
+        <div class="ic-value" style="font-size:14px; line-height:1.4">balancea primeros momentos</div>
+        <div class="ic-note">\(\bar{x} = M_y/m,\; \bar{y}=M_x/m\)</div>
+      </div>
+      <div class="info-card">
+        <div class="ic-label">Inercia</div>
+        <div class="ic-value" style="font-size:14px; line-height:1.4">penaliza distancia al cuadrado</div>
+        <div class="ic-note">\(I = \iint r^2 \rho\, dA\)</div>
+      </div>
+    </div>
+
+    <div class="ticket" style="margin-top:18px">
+      <h3 style="margin-top:0">🎫 Boleto de salida (Exit Ticket)</h3>
+      <p class="small">
+        Responde en una frase. Tu respuesta se guardará localmente y se incluirá en el PDF.
+      </p>
+      <div class="math-block">
+        <b>Pregunta:</b> Si la densidad de una lámina es homogénea (\(\rho = c\)), ¿el centro de masa
+        coincide obligatoriamente con el centro geométrico (centroide) de la región? <b>Justifica en una frase.</b>
+      </div>
+      <textarea id="exitAnswer" placeholder="Escribe aquí tu respuesta conceptual..."></textarea>
+      <div class="flex" style="margin-top:10px">
+        <button class="btn green" id="submitTicket">💾 Guardar respuesta</button>
+        <button class="btn ghost teacher-only" id="showKey">🔑 Ver respuesta modelo</button>
+      </div>
+      <div class="answer-key" id="answerKey">
+        <b>Respuesta modelo:</b> Sí. Si \(\rho = c\) (constante), entonces \(c\) se cancela en
+        \(\bar{x} = \frac{\iint x\, c\, dA}{\iint c\, dA} = \frac{\iint x\, dA}{\iint dA}\),
+        que es exactamente la definición del centroide geométrico.
+      </div>
+      <div class="feedback ok show" id="ticketSaved" style="display:none">
+        ✅ Boleto guardado localmente. ¡Gracias!
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <h3>📄 Exportar PDF del trabajo</h3>
+    <p class="small">
+      Genera un PDF con: tus datos, el boleto de salida, las soluciones de ambos ejercicios
+      paso a paso (wizard 1 y 2), y el dibujo manuscrito del lienzo.
+    </p>
+    <div class="flex" style="margin-top:6px">
+      <input type="text" id="studentName" placeholder="Nombre del estudiante"
+        style="background:white; border:1px solid var(--line-strong); color:var(--up-text); padding:9px 12px; border-radius:8px; font-size:14px; flex:1; min-width:200px">
+      <button class="btn gold" id="exportPdf">📄 Generar PDF</button>
+    </div>
+
+    <div id="pdfCapture" style="position:absolute; left:-9999px; top:0;"></div>
+  </section>
+
+  <footer class="foot">
+    Clase interactiva · Aplicaciones de la Integral Múltiple · Cálculo Multivariable ·
+    Universidad Panamericana · LaTeX (KaTeX) · Plotly.js · html2pdf.js ·
+    Basado en Thomas' Calculus y Tromba-Marsden
+  </footer>
+</main>
+
+<script>
+/* ===========================================================
+   KaTeX config
+   =========================================================== */
+const katexOpts = {
+  delimiters: [
+    {left: "$$", right: "$$", display: true},
+    {left: "\\[", right: "\\]", display: true},
+    {left: "\\(", right: "\\)", display: false}
+  ],
+  throwOnError: false, strict: false
+};
+function onMathReady() {
+  if (window.renderMathInElement) renderMathInElement(document.body, katexOpts);
+}
+
+const $ = (sel, ctx=document) => ctx.querySelector(sel);
+const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+function fmt(n, d=3) {
+  if (typeof n !== 'number' || !isFinite(n)) return '—';
+  return Number(n.toFixed(d)).toString();
+}
+
+/* ===========================================================
+   Navegación y progreso
+   =========================================================== */
+function navigateTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$$('#navTabs .nav-tab').forEach(btn => btn.addEventListener('click', () => navigateTo(btn.dataset.go)));
+$$('#timeline .tl-cell').forEach(cell => cell.addEventListener('click', () => navigateTo(cell.dataset.go)));
+
+const sectionsAll = ['hero','apertura','desarrollo','galeria','ejercicio2','practica','escritura','cierre'];
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 120;
+  let current = sectionsAll[0];
+  for (const id of sectionsAll) {
+    const el = document.getElementById(id);
+    if (el && el.offsetTop <= y) current = id;
+  }
+  $$('#navTabs .nav-tab').forEach(t => t.classList.toggle('active', t.dataset.go === current));
+  $$('#timeline .tl-cell').forEach(t => t.classList.toggle('active', t.dataset.go === current));
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = Math.min(100, (window.scrollY / docH) * 100);
+  $('#progressFill').style.width = pct + '%';
+});
+
+/* ===========================================================
+   Galería: pestañas
+   =========================================================== */
+$$('.gallery-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    $$('.gallery-tab').forEach(t => t.classList.remove('active'));
+    $$('.gallery-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const panel = document.getElementById(tab.dataset.panel);
+    if (panel) panel.classList.add('active');
+    // forzar redibujado del plot al cambiar de pestaña
+    setTimeout(() => {
+      if (tab.dataset.panel === 'p1') refreshRegion();
+      else if (tab.dataset.panel === 'p2') { drawGuessPlot(simState.predX, simState.predY); drawPhysics3D(0, false); }
+      else if (tab.dataset.panel === 'p3') refreshPolar();
+    }, 50);
+  });
+});
+
+/* Botones de reinicio de la galería */
+$$('.gallery-reset').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.dataset.reset;
+    if (panel === 'p1') resetPanel1();
+    else if (panel === 'p2') resetPanel2();
+    else if (panel === 'p3') resetPanel3();
+    else if (panel === 'p4') { /* estático */ }
+  });
+});
+
+function resetPanel1() {
+  $('#rhoSel').value = 'x^2';
+  $('#bRange').value = 2;
+  $('#showDm').checked = true;
+  $('#showCM').checked = true;
+  refreshRegion();
+}
+function resetPanel2() {
+  if (simAnimId) cancelAnimationFrame(simAnimId);
+  simState.predX = 1.0; simState.predY = 0.5;
+  simState.angle = 0; simState.angleVel = 0;
+  simState.running = false;
+  $('#pxRange').value = 1.0; $('#pyRange').value = 0.5;
+  $('#dampRange').value = 0.6;
+  $('#pxVal').textContent = '1.00'; $('#pyVal').textContent = '0.50';
+  $('#dampVal').textContent = '0.60';
+  drawGuessPlot(1.0, 0.5);
+  drawPhysics3D(0, false);
+  updatePhysicsStatus(null);
+}
+function resetPanel3() {
+  $('#aRange').value = 1;
+  $('#rhoPolarSel').value = 'r';
+  $('#showPolarElem').checked = true;
+  $('#aVal').textContent = '1.0';
+  refreshPolar();
+}
+
+/* ===========================================================
+   Modo profesor
+   =========================================================== */
+const teacherBtn = $('#teacherToggle');
+teacherBtn.addEventListener('click', () => {
+  document.body.classList.toggle('teacher');
+  teacherBtn.classList.toggle('on');
+  if (document.body.classList.contains('teacher')) {
+    $$('.step').forEach(s => s.classList.add('open','solved'));
+  }
+});
+
+/* ===========================================================
+   Steps (desarrollo)
+   =========================================================== */
+$$('.step').forEach(step => {
+  $('.step-head', step).addEventListener('click', () => {
+    step.classList.toggle('open');
+    step.classList.add('solved');
+  });
+});
+
+/* ===========================================================
+   Cálculo numérico
+   =========================================================== */
+function rhoFunc(sel, x, y) {
+  switch (sel) {
+    case 'x^2': return x*x;
+    case 'x':   return x;
+    case 'x^3': return x*x*x;
+    case '1':   return 1;
+    case 'y':   return y;
+    case 'x*y': return x*y;
+    default:    return 1;
+  }
+}
+function rhoLabel(sel) {
+  switch (sel) {
+    case 'x^2': return 'x^2';
+    case 'x':   return 'x';
+    case 'x^3': return 'x^3';
+    case '1':   return '1';
+    case 'y':   return 'y';
+    case 'x*y': return 'x\\cdot y';
+    default:    return '1';
+  }
+}
+function computeProblem(rhoSel, b) {
+  const N = 240;
+  const h = b / N;
+  let m = 0, My = 0, Mx = 0;
+  for (let i = 0; i < N; i++) {
+    const x = (i + 0.5) * h;
+    const ymax = x;
+    const hy = ymax / N;
+    for (let j = 0; j < N; j++) {
+      const y = (j + 0.5) * hy;
+      const rho = rhoFunc(rhoSel, x, y);
+      const dA = h * hy;
+      m  += rho * dA;
+      My += x * rho * dA;
+      Mx += y * rho * dA;
+    }
+  }
+  const xb = m > 0 ? My / m : 0;
+  const yb = m > 0 ? Mx / m : 0;
+  return { m, My, Mx, xb, yb };
+}
+
+/* ===========================================================
+   Plot región 2D con densidad
+   =========================================================== */
+function buildHeatmapData(rhoSel, b) {
+  const N = 60;
+  const z = [];
+  const xs = [];
+  for (let i = 0; i < N; i++) {
+    const x = (i / (N-1)) * b;
+    xs.push(x);
+    const row = [];
+    for (let j = 0; j < N; j++) {
+      const y = (j / (N-1)) * b;
+      if (y <= x + 0.001) row.push(rhoFunc(rhoSel, x, y));
+      else row.push(NaN);
+    }
+    z.push(row);
+  }
+  return { z, xs };
+}
+
+function drawRegion(rhoSel, b, showCM, showDm) {
+  const { z, xs } = buildHeatmapData(rhoSel, b);
+  const { m, My, Mx, xb, yb } = computeProblem(rhoSel, b);
+  const data = [
+    {
+      type: 'heatmap', z: z, x: xs, y: xs,
+      colorscale: [
+        [0,    'rgba(10, 28, 58, 0.65)'],
+        [0.25, 'rgba(30, 60, 130, 0.75)'],
+        [0.5,  'rgba(80, 140, 180, 0.8)'],
+        [0.75, 'rgba(201, 168, 76, 0.9)'],
+        [1,    'rgba(180, 120, 40, 0.95)']
+      ],
+      showscale: false,
+      hovertemplate: 'x=%{x:.2f}, y=%{y:.2f}<br>ρ=%{z:.3f}<extra></extra>'
+    },
+    {
+      type: 'scatter', mode: 'lines',
+      x: [0, b, b, 0], y: [0, b, 0, 0],
+      line: { color: '#0A1C3A', width: 2.5 },
+      fill: 'toself', fillcolor: 'rgba(10,28,58,0.04)',
+      hoverinfo: 'skip'
+    },
+    {
+      type: 'scatter', mode: 'lines',
+      x: [0, b], y: [0, b],
+      line: { color: '#C9A84C', width: 2, dash: 'dash' },
+      hoverinfo: 'skip'
+    }
+  ];
+  if (showCM) {
+    data.push({
+      type: 'scatter', mode: 'markers+text',
+      x: [xb], y: [yb],
+      marker: { size: 16, color: '#007B5D', line: { color: 'white', width: 2 }, symbol: 'star' },
+      text: [`CM = (${fmt(xb,2)}, ${fmt(yb,2)})`],
+      textposition: 'top right',
+      textfont: { color: '#007B5D', size: 12, family: 'JetBrains Mono, monospace' }
+    });
+  }
+  if (showDm) {
+    const dx = b / 6;
+    const xs2 = [], ys2 = [];
+    for (let i = 1; i < 6; i++) {
+      const x = i * dx;
+      xs2.push(x); ys2.push(x / 2);
+    }
+    data.push({
+      type: 'scatter', mode: 'markers',
+      x: xs2, y: ys2,
+      marker: { size: 7, color: '#0A1C3A', symbol: 'circle-open', line: { width: 1.5, color: '#0A1C3A' } },
+      hovertemplate: 'dm = ρ·dA<extra></extra>'
+    });
+  }
+  if (rhoSel !== '1') {
+    data.push({
+      type: 'scatter', mode: 'lines+text',
+      x: [b - 0.5, b - 0.05], y: [0.5, 0.05],
+      line: { color: '#C9A84C', width: 4 },
+      hoverinfo: 'skip',
+      text: ['', '← más denso'],
+      textposition: 'middle right',
+      textfont: { color: '#C9A84C', size: 13, family: 'Inter', weight: 'bold' }
+    });
+  }
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(255,255,255,0.5)',
+    font: { color: '#1E2A44', family: 'Segoe UI, sans-serif', size: 12 },
+    margin: { l: 45, r: 15, t: 35, b: 40 },
+    xaxis: { title: 'x', range: [-0.1, b + 0.4], gridcolor: 'rgba(10,28,58,0.08)', zerolinecolor: 'rgba(10,28,58,0.2)' },
+    yaxis: { title: 'y', range: [-0.1, b + 0.2], gridcolor: 'rgba(10,28,58,0.08)', zerolinecolor: 'rgba(10,28,58,0.2)', scaleanchor: 'x', scaleratio: 1 },
+    showlegend: false
+  };
+  Plotly.react('regionPlot', data, layout, { responsive: true, displayModeBar: false });
+  $('#rMasa').textContent = fmt(m, 3);
+  $('#rXbar').textContent = fmt(xb, 3);
+  $('#rYbar').textContent = fmt(yb, 3);
+  $('#rMasaNote').textContent = `∫∫ ${rhoLabel(rhoSel)} dA`;
+  let interp = '';
+  if (rhoSel === '1') {
+    interp = `Con densidad <b>homogénea</b> \\(\\rho = 1\\), el CM coincide con el centroide geométrico: \\((${fmt(xb,2)}, ${fmt(yb,2)})\\).`;
+  } else if (rhoSel.includes('x')) {
+    interp = `La densidad crece con \\(x\\), la masa se acumula hacia la derecha y \\(\\bar{x} = ${fmt(xb,2)}\\) supera al centroide \\((${fmt(b*2/3,2)}, ${fmt(b/3,2)})\\).`;
+  } else if (rhoSel === 'y') {
+    interp = `La densidad crece con \\(y\\), la masa sube y \\(\\bar{y} = ${fmt(yb,2)}\\) sube.`;
+  } else {
+    interp = `Centro de masa en \\((${fmt(xb,2)}, ${fmt(yb,2)})\\).`;
+  }
+  $('#interpText').innerHTML = interp;
+  if (window.renderMathInElement) renderMathInElement($('#interpText'), katexOpts);
+}
+
+const rhoSel = $('#rhoSel');
+const bRange = $('#bRange');
+const bVal = $('#bVal');
+const showDm = $('#showDm');
+const showCM = $('#showCM');
+function refreshRegion() {
+  const b = parseFloat(bRange.value);
+  bVal.textContent = b.toFixed(1);
+  drawRegion(rhoSel.value, b, showCM.checked, showDm.checked);
+}
+[rhoSel, bRange, showDm, showCM].forEach(el => {
+  el.addEventListener('input', refreshRegion);
+  el.addEventListener('change', refreshRegion);
+});
+
+/* ===========================================================
+   Juego adivina CM (apertura - SVG)
+   =========================================================== */
+function setupGuessGame() {
+  const stage = $('#guessStage');
+  const tri = `<svg width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none" style="position:absolute; inset:0;">
+    <defs>
+      <linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="rgba(10,28,58,0.5)"/>
+        <stop offset="0.5" stop-color="rgba(80,140,180,0.7)"/>
+        <stop offset="1" stop-color="rgba(180,120,40,0.95)"/>
+      </linearGradient>
+      <clipPath id="c1"><polygon points="20,80 80,80 80,20"/></clipPath>
+    </defs>
+    <polygon points="20,80 80,80 80,20" fill="url(#g1)" clip-path="url(#c1)"/>
+    <polygon points="20,80 80,80 80,20" fill="none" stroke="#0A1C3A" stroke-width="0.6"/>
+    <line x1="20" y1="80" x2="80" y2="20" stroke="#C9A84C" stroke-width="0.4" stroke-dasharray="2 2"/>
+    <text x="74" y="78" font-size="3" fill="#C9A84C" font-weight="bold">ρ máx</text>
+  </svg>`;
+  stage.insertAdjacentHTML('beforeend', tri);
+  const realX = 20 + (1.6/2)*60;
+  const realY = 80 - (0.8/2)*60;
+  let userPin = null;
+  let realPin = null;
+  stage.addEventListener('click', (e) => {
+    if (realPin) return;
+    const rect = stage.getBoundingClientRect();
+    const px = ((e.clientX - rect.left) / rect.width) * 100;
+    const py = ((e.clientY - rect.top) / rect.height) * 100;
+    if (userPin) userPin.remove();
+    userPin = document.createElement('div');
+    userPin.className = 'pin';
+    userPin.style.left = px + '%';
+    userPin.style.top = py + '%';
+    stage.appendChild(userPin);
+    const ux = (px - 20) / 60 * 2;
+    const uy = (80 - py) / 60 * 2;
+    if (ux >= 0 && ux <= 2 && uy >= 0 && uy <= 2) {
+      $('#pxRange').value = ux.toFixed(2);
+      $('#pyRange').value = uy.toFixed(2);
+      $('#pxVal').textContent = ux.toFixed(2);
+      $('#pyVal').textContent = uy.toFixed(2);
+      simState.predX = ux; simState.predY = uy;
+      drawGuessPlot(ux, uy);
+    }
+    const dx = px - realX, dy = py - realY;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    let msg = '';
+    if (dist < 4) msg = '🎯 ¡Excelente! Acertaste muy cerca del centro real.';
+    else if (dist < 10) msg = '👍 Cerca. La densidad crece hacia la derecha.';
+    else msg = '💭 Lejos. La masa se acumula donde ρ es mayor (x grande).';
+    $('#guessFeedback').textContent = msg;
+  });
+  $('#guessReveal').addEventListener('click', () => {
+    if (realPin) return;
+    realPin = document.createElement('div');
+    realPin.className = 'pin real';
+    realPin.style.left = realX + '%';
+    realPin.style.top = realY + '%';
+    stage.appendChild(realPin);
+    $('#guessFeedback').innerHTML = '<b style="color:#007B5D">Centro real en (1.6, 0.8).</b> No coincide con el centroide geométrico (1.33, 0.67).';
+  });
+  $('#guessReset').addEventListener('click', () => {
+    if (userPin) userPin.remove();
+    if (realPin) realPin.remove();
+    userPin = null; realPin = null;
+    $('#guessFeedback').textContent = '';
+  });
+  $('#guessContinue').addEventListener('click', () => {
+    navigateTo('galeria');
+    // activar panel 2
+    $$('.gallery-tab').forEach(t => t.classList.remove('active'));
+    $$('.gallery-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('[data-panel="p2"]').classList.add('active');
+    document.getElementById('p2').classList.add('active');
+    setTimeout(() => { drawGuessPlot(simState.predX, simState.predY); drawPhysics3D(0, false); }, 100);
+  });
+}
+
+/* ===========================================================
+   Plot predicción (vista superior) - para sección física
+   =========================================================== */
+function drawGuessPlot(ux, uy) {
+  const b = 2;
+  const { xb, yb } = computeProblem('x^2', b);
+  const hm = buildHeatmapData('x^2', b);
+  const data = [
+    {
+      type: 'heatmap', z: hm.z, x: hm.xs, y: hm.xs,
+      colorscale: [
+        [0, 'rgba(10,28,58,0.6)'],
+        [0.5, 'rgba(80,140,180,0.8)'],
+        [1, 'rgba(180,120,40,0.95)']
+      ],
+      showscale: false
+    },
+    {
+      type: 'scatter', mode: 'lines',
+      x: [0, b, b, 0], y: [0, b, 0, 0],
+      line: { color: '#0A1C3A', width: 2 },
+      fill: 'toself', fillcolor: 'rgba(10,28,58,0.05)',
+      hoverinfo: 'skip'
+    },
+    {
+      type: 'scatter', mode: 'markers',
+      x: [ux], y: [uy],
+      marker: { size: 18, color: '#C9A84C', line: { color: 'white', width: 2 }, symbol: 'x' },
+      text: [`Tu predicción (${ux.toFixed(2)}, ${uy.toFixed(2)})`],
+      textposition: 'top center',
+      textfont: { color: '#C9A84C', size: 11 }
+    },
+    {
+      type: 'scatter', mode: 'markers',
+      x: [xb], y: [yb],
+      marker: { size: 14, color: '#007B5D', line: { color: 'white', width: 2 }, symbol: 'star' },
+      text: [`CM real (${xb.toFixed(2)}, ${yb.toFixed(2)})`],
+      textposition: 'bottom center',
+      textfont: { color: '#007B5D', size: 11 }
+    }
+  ];
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(255,255,255,0.5)',
+    font: { color: '#1E2A44', size: 11 },
+    margin: { l: 40, r: 10, t: 10, b: 35 },
+    xaxis: { title: 'x', range: [-0.1, b+0.2], gridcolor: 'rgba(10,28,58,0.08)' },
+    yaxis: { title: 'y', range: [-0.1, b+0.2], gridcolor: 'rgba(10,28,58,0.08)', scaleanchor: 'x', scaleratio: 1 },
+    showlegend: false
+  };
+  Plotly.react('guessPlot', data, layout, { responsive: true, displayModeBar: false });
+}
+
+/* ===========================================================
+   SIMULACIÓN 3D MEJORADA: cuerpo rígido con física completa
+   ===========================================================
+   Modelo físico:
+   - Placa triangular en el plano, apoyada en un punto P (alfiler).
+   - CM en C = (cmx, cmy) con masa m.
+   - Distancia d = |C - P|.
+   - Momento de inercia sobre el pivote: I_P = I_CM + m·d²  (Steiner)
+   - Ecuación: I_P · α = -m·g·d·sin(θ)  -  c·ω  (torque + amortiguamiento)
+   - ω' = α, θ' = ω
+   - Frecuencia natural: ω_n = sqrt(m·g·d / I_P)
+   - Si d ≈ 0 → equilibrio estable (oscilaciones pequeñas amortiguadas)
+   =========================================================== */
+const CM_REAL = { x: 1.6, y: 0.8 };
+let simState = {
+  predX: 1.0, predY: 0.5,
+  angle: 0, angleVel: 0,
+  running: false, balanced: false, fallen: false,
+  damping: 0.6
+};
+
+// I_CM de la placa con ρ = x² respecto al CM (numérico)
+function computePlateICM() {
+  const N = 100;
+  const b = 2;
+  const h = b / N;
+  const { m, xb, yb } = computeProblem('x^2', b);
+  let I = 0;
+  for (let i = 0; i < N; i++) {
+    const x = (i + 0.5) * h;
+    const ymax = x;
+    const hy = ymax / N;
+    for (let j = 0; j < N; j++) {
+      const y = (j + 0.5) * hy;
+      const rho = rhoFunc('x^2', x, y);
+      const dA = h * hy;
+      const r2 = (x - xb) * (x - xb) + (y - yb) * (y - yb);
+      I += r2 * rho * dA;
+    }
+  }
+  return { I_cm: I / m, m, xb, yb };
+}
+
+let plateICM = computePlateICM();
+const G = 9.81;
+const PLATE_MASS = plateICM.m;
+
+function drawPhysics3D(angle = 0, fallen = false) {
+  const b = 2;
+  const px = simState.predX, py = simState.predY;
+  const cmx = CM_REAL.x, cmy = CM_REAL.y;
+  const dx = cmx - px, dy = cmy - py;
+  const fallDir = Math.atan2(dy, dx);
+  const axisAngle = fallDir + Math.PI/2;
+  const ax = Math.cos(axisAngle), ay = Math.sin(axisAngle);
+
+  function rotate(v) {
+    const tx = v[0] - px, ty = v[1] - py, tz = 0;
+    const kx = ax, ky = ay, kz = 0;
+    const kdotv = kx*tx + ky*ty + kz*tz;
+    const crossx = ky*tz - kz*ty;
+    const crossy = kz*tx - kx*tz;
+    const crossz = kx*ty - ky*tx;
+    const cosA = Math.cos(angle), sinA = Math.sin(angle);
+    const rx = tx*cosA + crossx*sinA + kx*kdotv*(1-cosA);
+    const ry = ty*cosA + crossy*sinA + ky*kdotv*(1-cosA);
+    const rz = tz*cosA + crossz*sinA + kz*kdotv*(1-cosA);
+    return [rx + px, ry + py, rz];
+  }
+
+  const N = 12;
+  const vertices = [];
+  const faces = [];
+  const triV = [[0,0],[b,0],[b,b]];
+  for (let i = 0; i <= N; i++) {
+    for (let j = 0; j <= N-i; j++) {
+      const s = i/N, t = j/N;
+      const x = (1-s-t)*triV[0][0] + s*triV[1][0] + t*triV[2][0];
+      const y = (1-s-t)*triV[0][1] + s*triV[1][1] + t*triV[2][1];
+      const v = rotate([x, y, 0]);
+      vertices.push(v);
+    }
+  }
+  const intensity = [];
+  for (let i = 0; i <= N; i++) {
+    for (let j = 0; j <= N-i; j++) {
+      const s = i/N, t = j/N;
+      const x = (1-s-t)*triV[0][0] + s*triV[1][0] + t*triV[2][0];
+      const y = (1-s-t)*triV[0][1] + s*triV[1][1] + t*triV[2][1];
+      intensity.push(x*x / 4);
+    }
+  }
+  for (let i = 0; i < N; i++) {
+    for (let j = 0; j < N-i; j++) {
+      const idx = (ii, jj) => {
+        let s = 0;
+        for (let k = 0; k < ii; k++) s += (N + 1 - k);
+        return s + jj;
+      };
+      const v0 = idx(i, j);
+      const v1 = idx(i+1, j);
+      const v2 = idx(i, j+1);
+      if (v1 < vertices.length && v2 < vertices.length) faces.push([v0, v1, v2]);
+      if (i + j < N - 1) {
+        const v3 = idx(i+1, j);
+        const v4 = idx(i+1, j+1);
+        const v5 = idx(i, j+1);
+        if (v4 < vertices.length) faces.push([v3, v4, v5]);
+      }
+    }
+  }
+  const iarr = [], jarr = [], karr = [];
+  faces.forEach(f => { iarr.push(f[0]); jarr.push(f[1]); karr.push(f[2]); });
+
+  // Alfiler (cono)
+  const alfiler = {
+    type: 'scatter3d', mode: 'markers',
+    x: [px], y: [py], z: [0.05],
+    marker: { size: 10, color: '#C9A84C', symbol: 'diamond', line: { color: 'white', width: 1 } },
+    name: 'Alfiler'
+  };
+  const alfilerLine = {
+    type: 'scatter3d', mode: 'lines',
+    x: [px, px], y: [py, py], z: [0, 0.4],
+    line: { color: '#C9A84C', width: 6 },
+    hoverinfo: 'skip'
+  };
+  const cmRotated = rotate([cmx, cmy, 0.01]);
+  const cmMark = {
+    type: 'scatter3d', mode: 'markers+text',
+    x: [cmRotated[0]], y: [cmRotated[1]], z: [cmRotated[2]+0.05],
+    marker: { size: 10, color: '#007B5D', symbol: 'x', line: { color: 'white', width: 2 } },
+    text: ['CM'],
+    textposition: 'top center',
+    textfont: { color: '#007B5D', size: 11, weight: 'bold' }
+  };
+  const rotatedV = triV.map(v => rotate([v[0], v[1], 0]));
+  const outline = {
+    type: 'scatter3d', mode: 'lines+markers',
+    x: [rotatedV[0][0], rotatedV[1][0], rotatedV[2][0], rotatedV[0][0]],
+    y: [rotatedV[0][1], rotatedV[1][1], rotatedV[2][1], rotatedV[0][1]],
+    z: [rotatedV[0][2], rotatedV[1][2], rotatedV[2][2], rotatedV[0][2]],
+    line: { color: '#0A1C3A', width: 4 },
+    marker: { size: 5, color: '#0A1C3A' },
+    hoverinfo: 'skip'
+  };
+  // Sombra de la placa en el suelo
+  const shadow = {
+    type: 'scatter3d', mode: 'lines',
+    x: [rotatedV[0][0], rotatedV[1][0], rotatedV[2][0], rotatedV[0][0]],
+    y: [rotatedV[0][1], rotatedV[1][1], rotatedV[2][1], rotatedV[0][1]],
+    z: [0, 0, 0, 0],
+    line: { color: 'rgba(10,28,58,0.25)', width: 2, dash: 'dot' },
+    hoverinfo: 'skip'
+  };
+  const data = [{
+    type: 'mesh3d',
+    x: vertices.map(v => v[0]),
+    y: vertices.map(v => v[1]),
+    z: vertices.map(v => v[2]),
+    i: iarr, j: jarr, k: karr,
+    intensity: intensity,
+    colorscale: [
+      [0, 'rgb(10, 28, 58)'],
+      [0.4, 'rgb(80, 140, 180)'],
+      [0.8, 'rgb(201, 168, 76)'],
+      [1, 'rgb(180, 120, 40)']
+    ],
+    opacity: 0.92,
+    name: 'Placa'
+  }, alfilerLine, alfiler, cmMark, outline, shadow];
+
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(0,0,0,0)',
+    font: { color: '#1E2A44', size: 11 },
+    margin: { l: 0, r: 0, t: 0, b: 0 },
+    scene: {
+      xaxis: { title: 'x', range: [-0.5, 2.5], gridcolor: 'rgba(10,28,58,0.1)', zerolinecolor: 'rgba(10,28,58,0.3)', showbackground: false },
+      yaxis: { title: 'y', range: [-0.5, 2.5], gridcolor: 'rgba(10,28,58,0.1)', zerolinecolor: 'rgba(10,28,58,0.3)', showbackground: false },
+      zaxis: { title: 'z', range: [-0.3, 2.0], gridcolor: 'rgba(10,28,58,0.1)', zerolinecolor: 'rgba(10,28,58,0.3)', showbackground: false },
+      camera: { eye: { x: 1.8, y: -1.8, z: 1.2 } },
+      aspectmode: 'cube'
+    },
+    showlegend: false
+  };
+  Plotly.react('physics3D', data, layout, { responsive: true, displayModeBar: false });
+}
+
+function updatePhysicsStatus(verdict) {
+  const px = simState.predX, py = simState.predY;
+  const err = Math.sqrt((px - CM_REAL.x)**2 + (py - CM_REAL.y)**2);
+  $('#sPred').textContent = `(${px.toFixed(2)}, ${py.toFixed(2)})`;
+  $('#sReal').textContent = `(${CM_REAL.x}, ${CM_REAL.y})`;
+  $('#sErr').textContent = err.toFixed(3);
+  $('#sAng').textContent = (simState.angle * 180 / Math.PI).toFixed(1) + '°';
+  const v = $('#sVerdict');
+  v.classList.remove('balancea','cae','espera');
+  if (verdict === 'balancea') {
+    v.textContent = '✅ ¡La placa se equilibra! El alfiler está bajo el CM.';
+    v.classList.add('balancea');
+  } else if (verdict === 'cae') {
+    const dx = CM_REAL.x - px, dy = CM_REAL.y - py;
+    const dir = Math.atan2(dy, dx) * 180 / Math.PI;
+    v.textContent = `⚠ La placa cae (CM desplazado a ${dir.toFixed(0)}° del pivote).`;
+    v.classList.add('cae');
+  } else {
+    v.textContent = '⏸ En espera de simulación...';
+    v.classList.add('espera');
+  }
+}
+
+let simAnimId = null;
+
+function runSimulation() {
+  const px = parseFloat($('#pxRange').value);
+  const py = parseFloat($('#pyRange').value);
+  const damping = parseFloat($('#dampRange').value);
+  simState.predX = px;
+  simState.predY = py;
+  simState.damping = damping;
+  simState.angle = 0;
+  simState.angleVel = 0;
+  simState.balanced = false; simState.fallen = false;
+
+  if (simAnimId) cancelAnimationFrame(simAnimId);
+
+  const dx = CM_REAL.x - px, dy = CM_REAL.y - py;
+  const d = Math.sqrt(dx*dx + dy*dy);
+
+  // I_pivot = I_cm + m·d²  (Steiner)
+  const I_cm = plateICM.I_cm;
+  const I_pivot = I_cm + PLATE_MASS * d * d;
+
+  // Si d es muy pequeño → equilibra (oscilación mínima)
+  const isBalanced = d < 0.05;
+
+  // pequeño ángulo inicial para iniciar la animación (perturbación)
+  if (!isBalanced) {
+    simState.angle = 0.02 * Math.sign(Math.atan2(dy, dx));
+  }
+
+  const dt = 1/60;
+  let t = 0;
+  const animate = () => {
+    t += dt;
+    // Ecuación del péndulo físico: I·α = -m·g·d·sin(θ) - c·ω
+    const torque = -PLATE_MASS * G * d * Math.sin(simState.angle);
+    const damp = -simState.damping * simState.angleVel * 0.5;
+    const alpha = (torque + damp) / I_pivot;
+    simState.angleVel += alpha * dt;
+    simState.angle += simState.angleVel * dt;
+
+    // Limitar caída
+    if (Math.abs(simState.angle) > Math.PI/2.05) {
+      simState.angle = Math.sign(simState.angle) * Math.PI/2.05;
+      simState.angleVel = 0;
+      simState.fallen = true;
+      drawPhysics3D(simState.angle, true);
+      updatePhysicsStatus('cae');
+      return;
+    }
+    // Actualizar status durante la animación
+    $('#sAng').textContent = (simState.angle * 180 / Math.PI).toFixed(1) + '°';
+
+    drawPhysics3D(simState.angle, false);
+    if (isBalanced && t < 8) {
+      // continuar oscilando levemente
+      simAnimId = requestAnimationFrame(animate);
+    } else if (!isBalanced && !simState.fallen && t < 12) {
+      simAnimId = requestAnimationFrame(animate);
+    } else {
+      if (isBalanced) updatePhysicsStatus('balancea');
+      else updatePhysicsStatus('cae');
+    }
+  };
+  animate();
+  updatePhysicsStatus(isBalanced ? 'balancea' : 'cae');
+}
+
+const pxRange = $('#pxRange'), pyRange = $('#pyRange'), dampRange = $('#dampRange');
+const pxVal = $('#pxVal'), pyVal = $('#pyVal'), dampVal = $('#dampVal');
+function refreshPred() {
+  const px = parseFloat(pxRange.value);
+  const py = parseFloat(pyRange.value);
+  pxVal.textContent = px.toFixed(2);
+  pyVal.textContent = py.toFixed(2);
+  simState.predX = px; simState.predY = py;
+  drawGuessPlot(px, py);
+  drawPhysics3D(0, false);
+  updatePhysicsStatus(null);
+}
+pxRange.addEventListener('input', refreshPred);
+pyRange.addEventListener('input', refreshPred);
+dampRange.addEventListener('input', () => {
+  simState.damping = parseFloat(dampRange.value);
+  dampVal.textContent = simState.damping.toFixed(2);
+});
+$('#runSim').addEventListener('click', runSimulation);
+$('#resetSim').addEventListener('click', () => {
+  if (simAnimId) cancelAnimationFrame(simAnimId);
+  simState.angle = 0; simState.angleVel = 0;
+  drawPhysics3D(0, false);
+  updatePhysicsStatus(null);
+});
+$('#autoCM').addEventListener('click', () => {
+  pxRange.value = CM_REAL.x; pyRange.value = CM_REAL.y;
+  refreshPred();
+});
+
+/* ===========================================================
+   PLOT POLAR: Semicírculo con densidad radial
+   =========================================================== */
+function computePolarProblem(rhoType, a) {
+  const N = 200;
+  let m = 0, Mx = 0;
+  const k = 1;
+  const dr = a / N;
+  const dth = Math.PI / N;
+  for (let i = 0; i < N; i++) {
+    const r = (i + 0.5) * dr;
+    let rho;
+    switch (rhoType) {
+      case 'r':   rho = k * r; break;
+      case 'const': rho = k; break;
+      case 'r2':  rho = k * r * r; break;
+      case '1-r': rho = k * (a - r); break;
+      default: rho = k;
+    }
+    for (let j = 0; j < N; j++) {
+      const theta = (j + 0.5) * dth;
+      const dA = r * dr * dth;
+      m += rho * dA;
+      Mx += (r * Math.sin(theta)) * rho * dA;
+    }
+  }
+  const yb = m > 0 ? Mx / m : 0;
+  return { m, Mx, yb };
+}
+
+function rhoPolarLabel(type) {
+  switch (type) {
+    case 'r': return 'kr';
+    case 'const': return 'c';
+    case 'r2': return 'kr^2';
+    case '1-r': return 'k(a-r)';
+    default: return 'kr';
+  }
+}
+
+function refreshPolar() {
+  const a = parseFloat($('#aRange').value);
+  const rhoType = $('#rhoPolarSel').value;
+  const showElem = $('#showPolarElem').checked;
+  $('#aVal').textContent = a.toFixed(1);
+
+  const { m, Mx, yb } = computePolarProblem(rhoType, a);
+
+  // Heatmap polar: discretizar en grid cartesiano
+  const N = 80;
+  const z = [];
+  const xs = [];
+  const ys = [];
+  for (let i = 0; i < N; i++) {
+    const x = -a + (2*a) * (i / (N-1));
+    xs.push(x);
+    const row = [];
+    for (let j = 0; j < N; j++) {
+      const y = (a) * (j / (N-1));
+      ys[j] = y;
+      const r = Math.sqrt(x*x + y*y);
+      if (y >= 0 && r <= a) {
+        let rho;
+        switch (rhoType) {
+          case 'r': rho = r; break;
+          case 'const': rho = 1; break;
+          case 'r2': rho = r*r; break;
+          case '1-r': rho = Math.max(0, a - r); break;
+          default: rho = r;
+        }
+        row.push(rho);
+      } else {
+        row.push(NaN);
+      }
+    }
+    z.push(row);
+  }
+
+  const data = [
+    {
+      type: 'heatmap', z: z, x: xs, y: ys,
+      colorscale: [
+        [0,    'rgba(10, 28, 58, 0.65)'],
+        [0.3,  'rgba(30, 60, 130, 0.75)'],
+        [0.6,  'rgba(80, 140, 180, 0.8)'],
+        [0.85, 'rgba(201, 168, 76, 0.9)'],
+        [1,    'rgba(180, 120, 40, 0.95)']
+      ],
+      showscale: false,
+      hovertemplate: 'x=%{x:.2f}, y=%{y:.2f}<br>ρ=%{z:.3f}<extra></extra>'
+    },
+    {
+      // frontera semicírculo
+      type: 'scatter', mode: 'lines',
+      x: [-a, a, a, -a, -a],
+      y: [0, 0, 0, 0, 0],
+      line: { color: '#0A1C3A', width: 3 },
+      hoverinfo: 'skip'
+    },
+    {
+      // arco
+      type: 'scatter', mode: 'lines',
+      x: Array.from({length: 50}, (_, i) => a * Math.cos(Math.PI * (i/49))),
+      y: Array.from({length: 50}, (_, i) => a * Math.sin(Math.PI * (i/49))),
+      line: { color: '#0A1C3A', width: 3 },
+      hoverinfo: 'skip'
+    },
+    {
+      // CM
+      type: 'scatter', mode: 'markers+text',
+      x: [0], y: [yb],
+      marker: { size: 16, color: '#007B5D', line: { color: 'white', width: 2 }, symbol: 'star' },
+      text: [`CM = (0, ${yb.toFixed(3)})`],
+      textposition: 'top right',
+      textfont: { color: '#007B5D', size: 12, family: 'JetBrains Mono, monospace' }
+    },
+    {
+      // centroide geométrico del semicírculo: (0, 4a/(3π))
+      type: 'scatter', mode: 'markers+text',
+      x: [0], y: [4*a/(3*Math.PI)],
+      marker: { size: 12, color: '#E08A00', line: { color: 'white', width: 2 }, symbol: 'circle' },
+      text: [`Centroide = (0, ${(4*a/(3*Math.PI)).toFixed(3)})`],
+      textposition: 'bottom right',
+      textfont: { color: '#E08A00', size: 11 }
+    }
+  ];
+
+  if (showElem) {
+    // un elemento polar de ejemplo: r=0.7a, θ=π/4
+    const r0 = 0.6 * a;
+    const th0 = Math.PI / 4;
+    const drEl = 0.15 * a;
+    const dthEl = 0.2;
+    const xPoly = [];
+    const yPoly = [];
+    [r0, r0+drEl].forEach(ri => {
+      [th0, th0+dthEl].forEach(thj => {
+        xPoly.push(ri * Math.cos(thj));
+        yPoly.push(ri * Math.sin(thj));
+      });
+    });
+    // construir el cuadrilátero polar correcto
+    const order = [
+      [r0, th0], [r0, th0+dthEl], [r0+drEl, th0+dthEl], [r0+drEl, th0]
+    ];
+    const xPts = order.map(p => p[0] * Math.cos(p[1]));
+    const yPts = order.map(p => p[0] * Math.sin(p[1]));
+    xPts.push(xPts[0]); yPts.push(yPts[0]);
+    data.push({
+      type: 'scatter', mode: 'lines',
+      x: xPts, y: yPts,
+      line: { color: '#C9A84C', width: 3 },
+      fill: 'toself', fillcolor: 'rgba(201,168,76,0.4)',
+      hovertemplate: 'dA = r dr dθ<extra></extra>'
+    });
+  }
+
+  const layout = {
+    paper_bgcolor: 'rgba(0,0,0,0)',
+    plot_bgcolor: 'rgba(255,255,255,0.5)',
+    font: { color: '#1E2A44', family: 'Segoe UI, sans-serif', size: 12 },
+    margin: { l: 45, r: 15, t: 35, b: 40 },
+    xaxis: { title: 'x', range: [-a-0.2, a+0.2], gridcolor: 'rgba(10,28,58,0.08)', zerolinecolor: 'rgba(10,28,58,0.3)' },
+    yaxis: { title: 'y', range: [-0.2, a+0.2], gridcolor: 'rgba(10,28,58,0.08)', zerolinecolor: 'rgba(10,28,58,0.3)', scaleanchor: 'x', scaleratio: 1 },
+    showlegend: false
+  };
+  Plotly.react('polarPlot', data, layout, { responsive: true, displayModeBar: false });
+
+  $('#pMasa').textContent = fmt(m, 3);
+  $('#pYbar').textContent = fmt(yb, 3);
+  $('#pMasaNote').textContent = `∫∫ ${rhoPolarLabel(rhoType)} dA`;
+  $('#pCentroid').textContent = (4*a/(3*Math.PI)).toFixed(3);
+
+  let interp = '';
+  if (rhoType === 'r') {
+    interp = `Como \\(\\rho = kr\\) crece con \\(r\\), hay más masa hacia el borde curvo y \\(\\bar{y} = ${yb.toFixed(3)}\\) sube respecto al centroide geométrico \\((${(4*a/(3*Math.PI)).toFixed(3)})\\).`;
+  } else if (rhoType === 'const') {
+    interp = `Con densidad <b>homogénea</b>, \\(\\bar{y} = ${yb.toFixed(3)}\\) coincide exactamente con el centroide geométrico del semicírculo.`;
+  } else if (rhoType === 'r2') {
+    interp = `Con \\(\\rho = kr^2\\), la concentración hacia el borde es aún mayor y \\(\\bar{y} = ${yb.toFixed(3)}\\) sube más que con \\(\\rho = kr\\).`;
+  } else {
+    interp = `Con \\(\\rho = k(a-r)\\) decreciente, la masa se concentra hacia el centro y \\(\\bar{y} = ${yb.toFixed(3)}\\) baja respecto al centroide.`;
+  }
+  $('#polarInterp').innerHTML = interp;
+  if (window.renderMathInElement) renderMathInElement($('#polarInterp'), katexOpts);
+}
+
+$('#aRange').addEventListener('input', refreshPolar);
+$('#rhoPolarSel').addEventListener('change', refreshPolar);
+$('#showPolarElem').addEventListener('change', refreshPolar);
+
+/* ===========================================================
+   WIZARD 1: Ejercicio I_y
+   =========================================================== */
+const wizardSteps = [
+  {
+    q: '¿Cuál es la región de integración R del problema?',
+    opts: [
+      { text: '\\(0 \\le x \\le 2,\\ 0 \\le y \\le x\\) — triángulo acotado por \\(y=x\\), \\(x=2\\) y \\(y=0\\).', correct: true },
+      { text: '\\(0 \\le x \\le 2,\\ 0 \\le y \\le 2\\) — cuadrado \\([0,2]\\times[0,2]\\).', correct: false },
+      { text: '\\(-2 \\le x \\le 2,\\ 0 \\le y \\le 2\\) — rectángulo simétrico en \\(x\\).', correct: false }
+    ],
+    fb_ok: '✅ Correcto. La región es triangular: \\(y\\) varía desde 0 hasta \\(x\\).',
+    fb_err: '❌ Recuerda que \\(y=x\\) es la hipotenusa; \\(y\\) no puede llegar hasta 2 independientemente de \\(x\\).'
+  },
+  {
+    q: 'Para el momento de inercia \\(I_y\\), ¿cuál es la distancia al cuadrado desde \\((x,y)\\) al eje \\(y\\)?',
+    opts: [
+      { text: '\\(x^2\\) — distancia horizontal al eje \\(y\\).', correct: true },
+      { text: '\\(y^2\\) — distancia vertical al eje \\(x\\).', correct: false },
+      { text: '\\(x^2 + y^2\\) — distancia al origen.', correct: false }
+    ],
+    fb_ok: '✅ Correcto. Al eje \\(y\\) la distancia es \\(|x|\\), por lo que \\(r^2 = x^2\\).',
+    fb_err: '❌ El eje \\(y\\) es vertical. La distancia a un eje vertical se mide horizontalmente.'
+  },
+  {
+    q: '¿Cuál es la fórmula general del momento de inercia \\(I_y\\) con densidad \\(\\rho(x,y)\\)?',
+    opts: [
+      { text: '\\(I_y = \\iint_R x^2 \\, \\rho(x,y)\\, dA\\) — distancia al cuadrado por densidad.', correct: true },
+      { text: '\\(I_y = \\iint_R x \\, \\rho(x,y)\\, dA\\) — primer momento respecto al eje \\(y\\).', correct: false },
+      { text: '\\(I_y = \\iint_R y^2 \\, \\rho(x,y)\\, dA\\) — esta sería \\(I_x\\), no \\(I_y\\).', correct: false }
+    ],
+    fb_ok: '✅ Correcto. La inercia siempre usa la distancia <b>al cuadrado</b>.',
+    fb_err: '❌ El primer momento \\(\\iint x\\,\\rho\\,dA = M_y\\) da \\(\\bar{x}\\). La inercia usa \\(x^2\\).'
+  },
+  {
+    q: 'Sustituyendo \\(\\rho = x^2\\) y \\(r^2 = x^2\\), ¿cuál queda como integrando?',
+    opts: [
+      { text: '\\(x^2 \\cdot x^2 = x^4\\).', correct: true },
+      { text: '\\(x^2 + x^2 = 2x^2\\).', correct: false },
+      { text: '\\(x^2 \\cdot y = x^2 y\\).', correct: false }
+    ],
+    fb_ok: '✅ Correcto. \\(x^2 \\cdot x^2 = x^4\\).',
+    fb_err: '❌ La inercia es un producto \\r^2 \\cdot \\rho\\), no una suma.'
+  },
+  {
+    q: 'Plantea la integral doble completa con los límites correctos:',
+    opts: [
+      { text: '\\(I_y = \\int_0^2 \\int_0^x x^4\\, dy\\, dx\\).', correct: true },
+      { text: '\\(I_y = \\int_0^2 \\int_0^2 x^4\\, dy\\, dx\\).', correct: false },
+      { text: '\\(I_y = \\int_0^x \\int_0^2 x^4\\, dy\\, dx\\).', correct: false }
+    ],
+    fb_ok: '✅ ¡Perfecto! \\(I_y = \\frac{64}{6} \\approx 10.67\\).',
+    fb_err: '❌ Revisa los límites. La región es \\(0\\le x\\le 2\\) y \\(0\\le y\\le x\\).'
+  }
+];
+
+let wizCurrent = 0;
+let wizAnswers = [];
+let wizScore = 0;
+
+function renderWizard() {
+  const step = wizardSteps[wizCurrent];
+  const total = wizardSteps.length;
+  const dots = $('#wizProgress');
+  dots.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'wiz-dot';
+    if (i < wizCurrent) d.classList.add('done');
+    else if (i === wizCurrent) d.classList.add('current');
+    dots.appendChild(d);
+  }
+  $('#wizNum').textContent = `Paso ${wizCurrent+1} de ${total}`;
+  $('#wizQ').innerHTML = step.q;
+  if (window.renderMathInElement) renderMathInElement($('#wizQ'), katexOpts);
+  const optsEl = $('#wizOptions');
+  optsEl.innerHTML = '';
+  step.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'wiz-option';
+    div.dataset.idx = i;
+    div.innerHTML = `<span style="color:var(--up-gold); font-weight:700; margin-right:8px">${String.fromCharCode(65+i)}.</span> ${opt.text}`;
+    div.addEventListener('click', () => selectWizOption(i));
+    optsEl.appendChild(div);
+  });
+  if (window.renderMathInElement) renderMathInElement(optsEl, katexOpts);
+  $('#wizFb').classList.remove('show','ok','err');
+  $('#wizNext').disabled = true;
+  $('#wizPrev').disabled = (wizCurrent === 0);
+  const prev = wizAnswers[wizCurrent];
+  if (prev) {
+    const optEl = optsEl.children[prev.chosen];
+    if (optEl) optEl.classList.add(prev.correct ? 'correct' : 'wrong');
+  }
+  $('#wizScore').textContent = `Aciertos: ${wizScore}/${wizAnswers.filter(a=>a.evaluated).length}`;
+}
+
+function selectWizOption(i) {
+  const step = wizardSteps[wizCurrent];
+  const optsEl = $('#wizOptions');
+  const fb = $('#wizFb');
+  if (wizAnswers[wizCurrent] && wizAnswers[wizCurrent].evaluated) return;
+  Array.from(optsEl.children).forEach((el, idx) => {
+    el.classList.remove('selected','correct','wrong');
+    if (idx === i) el.classList.add(step.opts[i].correct ? 'correct' : 'wrong');
+  });
+  const isCorrect = step.opts[i].correct;
+  wizAnswers[wizCurrent] = { chosen: i, correct: isCorrect, evaluated: true };
+  if (isCorrect) wizScore++;
+  fb.classList.remove('ok','err','show');
+  fb.classList.add(isCorrect ? 'ok' : 'err', 'show');
+  fb.innerHTML = isCorrect ? step.fb_ok : step.fb_err;
+  if (window.renderMathInElement) renderMathInElement(fb, katexOpts);
+  $('#wizNext').disabled = false;
+  $('#wizScore').textContent = `Aciertos: ${wizScore}/${wizAnswers.filter(a=>a.evaluated).length}`;
+}
+
+$('#wizNext').addEventListener('click', () => {
+  if (wizCurrent < wizardSteps.length - 1) { wizCurrent++; renderWizard(); }
+  else showWizardFinal();
+});
+$('#wizPrev').addEventListener('click', () => {
+  if (wizCurrent > 0) { wizCurrent--; renderWizard(); }
+});
+
+function showWizardFinal() {
+  $('#wizFinal').classList.add('show');
+  const correctCount = wizScore;
+  const total = wizardSteps.length;
+  let msg = '';
+  if (correctCount === total) msg = `🏆 ¡Excelente! Respondiste ${correctCount}/${total} correctamente.`;
+  else if (correctCount >= total * 0.7) msg = `👍 Bien hecho: ${correctCount}/${total} correctas.`;
+  else msg = `📚 ${correctCount}/${total} correctas. Te recomiendo revisar la teoría.`;
+  $('#wizFinalMsg').textContent = msg;
+  if (window.renderMathInElement) renderMathInElement($('#wizFinal'), katexOpts);
+  const trail = $('#wizTrailList');
+  trail.innerHTML = '';
+  wizAnswers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'trail-item';
+    const chosenText = wizardSteps[i].opts[a.chosen].text;
+    item.innerHTML = `<span class="trail-step">Paso ${i+1}:</span><span class="trail-ans">${chosenText} ${a.correct ? '✓' : '✗'}</span>`;
+    trail.appendChild(item);
+  });
+  if (window.renderMathInElement) renderMathInElement(trail, katexOpts);
+  $('#wizTrail').classList.add('show');
+}
+
+/* ===========================================================
+   WIZARD 2: Semicírculo polar
+   =========================================================== */
+const wizard2Steps = [
+  {
+    q: '¿Qué sistema de coordenadas conviene para una región semicircular?',
+    opts: [
+      { text: 'Coordenadas polares \\((r,\\theta)\\): \\(x = r\\cos\\theta,\\ y = r\\sin\\theta,\\ dA = r\\,dr\\,d\\theta\\).', correct: true },
+      { text: 'Coordenadas cartesianas \\((x,y)\\) convencionales.', correct: false },
+      { text: 'Coordenadas cilíndricas con \\(z\\).', correct: false }
+    ],
+    fb_ok: '✅ Correcto. La simetría circular hace que las polares simplifiquen enormemente.',
+    fb_err: '❌ Aunque cartesianas funcionarían, las polares son la elección natural para una región circular.'
+  },
+  {
+    q: '¿Cuáles son los límites de integración en polares para el semicírculo \\(x^2+y^2 \\le a^2,\\ y \\ge 0\\)?',
+    opts: [
+      { text: '\\(0 \\le r \\le a,\\ 0 \\le \\theta \\le \\pi\\).', correct: true },
+      { text: '\\(0 \\le r \\le a,\\ 0 \\le \\theta \\le 2\\pi\\) (esto sería el círculo completo).', correct: false },
+      { text: '\\(-a \\le r \\le a,\\ 0 \\le \\theta \\le \\pi\\).', correct: false }
+    ],
+    fb_ok: '✅ Correcto. \\(\\theta\\) va de 0 a \\(\\pi\\) (semicírculo superior), \\(r\\) de 0 a \\(a\\).',
+    fb_err: '❌ Recuerda: el semicírculo superior cubre media vuelta, \\(\\theta \\in [0,\\pi]\\), no \\([0,2\\pi]\\).'
+  },
+  {
+    q: '¿Cuál es el valor de \\(\\bar{x}\\) por simetría?',
+    opts: [
+      { text: '\\(\\bar{x} = 0\\) — la región y la densidad son simétricas respecto al eje \\(y\\).', correct: true },
+      { text: '\\(\\bar{x} = a/2\\) — promedio de los extremos.', correct: false },
+      { text: '\\(\\bar{x} = a\\) — en el borde derecho.', correct: false }
+    ],
+    fb_ok: '✅ Correcto. Por simetría respecto al eje \\(y\\), \\(\\bar{x} = 0\\).',
+    fb_err: '❌ La región y \\(\\rho = kr\\) son simétricas respecto al eje \\(y\\); las contribuciones izquierda y derecha se cancelan.'
+  },
+  {
+    q: 'Sustituyendo \\(\\rho = kr\\), \\(y = r\\sin\\theta\\), \\(dA = r\\,dr\\,d\\theta\\), ¿cuál es \\(\\bar{y}\\)?',
+    opts: [
+      { text: '\\(\\bar{y} = \\dfrac{3a}{2\\pi} \\approx 0.477\\,a\\).', correct: true },
+      { text: '\\(\\bar{y} = \\dfrac{4a}{3\\pi} \\approx 0.424\\,a\\) (este sería el centroide homogéneo).', correct: false },
+      { text: '\\(\\bar{y} = a/2\\).', correct: false }
+    ],
+    fb_ok: '✅ ¡Perfecto! \\(\\bar{y} = \\dfrac{3a}{2\\pi}\\), mayor que el centroide porque \\(\\rho\\) crece con \\(r\\).',
+    fb_err: '❌ Recuerda \\(m = k\\pi a^3/3\\) y \\(M_x = ka^4/2\\), por lo que \\(\\bar{y} = \\dfrac{3a}{2\\pi}\\).'
+  }
+];
+
+let wiz2Current = 0;
+let wiz2Answers = [];
+let wiz2Score = 0;
+
+function renderWizard2() {
+  const step = wizard2Steps[wiz2Current];
+  const total = wizard2Steps.length;
+  const dots = $('#wiz2Progress');
+  dots.innerHTML = '';
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('div');
+    d.className = 'wiz-dot';
+    if (i < wiz2Current) d.classList.add('done');
+    else if (i === wiz2Current) d.classList.add('current');
+    dots.appendChild(d);
+  }
+  $('#wiz2Num').textContent = `Paso ${wiz2Current+1} de ${total}`;
+  $('#wiz2Q').innerHTML = step.q;
+  if (window.renderMathInElement) renderMathInElement($('#wiz2Q'), katexOpts);
+  const optsEl = $('#wiz2Options');
+  optsEl.innerHTML = '';
+  step.opts.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'wiz-option';
+    div.dataset.idx = i;
+    div.innerHTML = `<span style="color:var(--up-gold); font-weight:700; margin-right:8px">${String.fromCharCode(65+i)}.</span> ${opt.text}`;
+    div.addEventListener('click', () => selectWiz2Option(i));
+    optsEl.appendChild(div);
+  });
+  if (window.renderMathInElement) renderMathInElement(optsEl, katexOpts);
+  $('#wiz2Fb').classList.remove('show','ok','err');
+  $('#wiz2Next').disabled = true;
+  $('#wiz2Prev').disabled = (wiz2Current === 0);
+  const prev = wiz2Answers[wiz2Current];
+  if (prev) {
+    const optEl = optsEl.children[prev.chosen];
+    if (optEl) optEl.classList.add(prev.correct ? 'correct' : 'wrong');
+  }
+  $('#wiz2Score').textContent = `Aciertos: ${wiz2Score}/${wiz2Answers.filter(a=>a.evaluated).length}`;
+}
+
+function selectWiz2Option(i) {
+  const step = wizard2Steps[wiz2Current];
+  const optsEl = $('#wiz2Options');
+  const fb = $('#wiz2Fb');
+  if (wiz2Answers[wiz2Current] && wiz2Answers[wiz2Current].evaluated) return;
+  Array.from(optsEl.children).forEach((el, idx) => {
+    el.classList.remove('selected','correct','wrong');
+    if (idx === i) el.classList.add(step.opts[i].correct ? 'correct' : 'wrong');
+  });
+  const isCorrect = step.opts[i].correct;
+  wiz2Answers[wiz2Current] = { chosen: i, correct: isCorrect, evaluated: true };
+  if (isCorrect) wiz2Score++;
+  fb.classList.remove('ok','err','show');
+  fb.classList.add(isCorrect ? 'ok' : 'err', 'show');
+  fb.innerHTML = isCorrect ? step.fb_ok : step.fb_err;
+  if (window.renderMathInElement) renderMathInElement(fb, katexOpts);
+  $('#wiz2Next').disabled = false;
+  $('#wiz2Score').textContent = `Aciertos: ${wiz2Score}/${wiz2Answers.filter(a=>a.evaluated).length}`;
+}
+
+$('#wiz2Next').addEventListener('click', () => {
+  if (wiz2Current < wizard2Steps.length - 1) { wiz2Current++; renderWizard2(); }
+  else showWizard2Final();
+});
+$('#wiz2Prev').addEventListener('click', () => {
+  if (wiz2Current > 0) { wiz2Current--; renderWizard2(); }
+});
+
+function showWizard2Final() {
+  $('#wiz2Final').classList.add('show');
+  const correctCount = wiz2Score;
+  const total = wizard2Steps.length;
+  let msg = '';
+  if (correctCount === total) msg = `🏆 ¡Excelente! ${correctCount}/${total} correctas. Dominas el caso polar.`;
+  else if (correctCount >= total * 0.7) msg = `👍 Bien hecho: ${correctCount}/${total} correctas.`;
+  else msg = `📚 ${correctCount}/${total} correctas. Repasa el paso a paso del semicírculo.`;
+  $('#wiz2FinalMsg').textContent = msg;
+  const trail = $('#wiz2TrailList');
+  trail.innerHTML = '';
+  wiz2Answers.forEach((a, i) => {
+    const item = document.createElement('div');
+    item.className = 'trail-item';
+    const chosenText = wizard2Steps[i].opts[a.chosen].text;
+    item.innerHTML = `<span class="trail-step">Paso ${i+1}:</span><span class="trail-ans">${chosenText} ${a.correct ? '✓' : '✗'}</span>`;
+    trail.appendChild(item);
+  });
+  if (window.renderMathInElement) renderMathInElement(trail, katexOpts);
+  $('#wiz2Trail').classList.add('show');
+}
+
+/* ===========================================================
+   Builder (genérico: maneja N constructores vía data-builder)
+   =========================================================== */
+const buildersConfig = {
+  b1: {
+    solution: { a:'0', b:'2', c:'0', d:'x', e:'x⁴' },
+    okMsg: '✅ <b>¡Correcto!</b> \\(I_y = \\int_0^2 \\int_0^x x^4\\, dy\\, dx\\).',
+    errMsg: '⚠ Revisa los campos en rojo. Pista: límites (0,2,0,x), integrando \\(x^4\\).'
+  },
+  b2: {
+    solution: { a:'0', b:'π', c:'0', d:'a', e:'kr' },
+    okMsg: '✅ <b>¡Correcto!</b> \\(m = \\int_0^\\pi \\int_0^a kr \\cdot r\\, dr\\, d\\theta = \\frac{k\\pi a^3}{3}\\).',
+    errMsg: '⚠ Revisa los campos en rojo. Pista: \\(\\theta\\in[0,\\pi]\\), \\(r\\in[0,a]\\), integrando \\(kr\\).'
+  },
+  b3: {
+    solution: { a:'0', b:'2π', c:'0', d:'1', e:'r²+r⁴' },
+    okMsg: '✅ <b>¡Correcto!</b> \\(I_z = \\int_0^{2\\pi} \\int_0^1 (r^2+r^4)\\, r\\, dr\\, d\\theta = \\frac{5\\pi}{6}\\).',
+    errMsg: '⚠ Revisa los campos en rojo. Pista: \\(\\theta\\in[0,2\\pi]\\), \\(r\\in[0,1]\\), integrando \\(r^2+r^4\\).'
+  }
+};
+
+function setupBuilder(id) {
+  const root = document.querySelector(`.builder[data-builder="${id}"]`);
+  if (!root) return;
+  const cfg = buildersConfig[id];
+  const solution = cfg.solution;
+  const slots = $$('.slot', root);
+  const bank = $('.token-bank', root);
+
+  $$('.token', bank).forEach(tok => {
+    tok.addEventListener('click', () => {
+      if (tok.classList.contains('used')) return;
+      const emptySlot = slots.find(s => !s.classList.contains('filled'));
+      if (!emptySlot) return;
+      emptySlot.textContent = tok.dataset.val;
+      emptySlot.classList.add('filled');
+      emptySlot.dataset.value = tok.dataset.val;
+      tok.classList.add('used');
+    });
+  });
+
+  slots.forEach(slot => {
+    slot.addEventListener('click', () => {
+      if (!slot.classList.contains('filled')) return;
+      const val = slot.dataset.value;
+      slot.textContent = '';
+      slot.classList.remove('filled','correct','wrong');
+      delete slot.dataset.value;
+      const tok = $(`.token[data-val="${val}"]`, bank);
+      if (tok) tok.classList.remove('used');
+    });
+  });
+
+  const fb = $('.feedback', root);
+
+  $('button[data-action="check"]', root).addEventListener('click', () => {
+    let allCorrect = true;
+    slots.forEach(slot => {
+      const ok = slot.dataset.value === solution[slot.dataset.slot];
+      slot.classList.remove('correct','wrong');
+      slot.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) allCorrect = false;
+    });
+    fb.classList.remove('ok','err','show');
+    if (allCorrect) {
+      fb.classList.add('ok','show');
+      fb.innerHTML = cfg.okMsg;
+    } else {
+      const filled = slots.filter(s => s.classList.contains('filled')).length;
+      fb.classList.add('err','show');
+      if (filled === 0) fb.innerHTML = '⚠ Aún no has colocado ningún token.';
+      else fb.innerHTML = cfg.errMsg;
+    }
+    if (window.renderMathInElement) renderMathInElement(fb, katexOpts);
+  });
+
+  $('button[data-action="reset"]', root).addEventListener('click', () => {
+    slots.forEach(slot => {
+      slot.textContent = '';
+      slot.classList.remove('filled','correct','wrong');
+      delete slot.dataset.value;
+    });
+    $$('.token', bank).forEach(t => t.classList.remove('used'));
+    fb.classList.remove('show','ok','err');
+  });
+
+  $('button[data-action="solve"]', root).addEventListener('click', () => {
+    slots.forEach(slot => {
+      const val = solution[slot.dataset.slot];
+      slot.textContent = val;
+      slot.classList.add('filled','correct');
+      slot.dataset.value = val;
+    });
+    $$('.token', bank).forEach(t => {
+      if (Object.values(solution).includes(t.dataset.val)) t.classList.add('used');
+    });
+  });
+}
+
+function setupAllBuilders() {
+  Object.keys(buildersConfig).forEach(id => setupBuilder(id));
+}
+
+/* ===========================================================
+   Lienzo manuscrito
+   =========================================================== */
+let canvas, ctx;
+let drawing = false;
+let strokes = [];
+let currentStroke = null;
+let currentColor = '#1e3a8a';
+let currentSize = 2.5;
+
+function setupCanvas() {
+  canvas = $('#handCanvas');
+  ctx = canvas.getContext('2d');
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  const start = (e) => {
+    e.preventDefault();
+    drawing = true;
+    const pt = getCanvasPoint(e);
+    currentStroke = { color: currentColor, size: currentSize, points: [pt] };
+    strokes.push(currentStroke);
+    drawStroke(currentStroke);
+  };
+  const move = (e) => {
+    if (!drawing) return;
+    e.preventDefault();
+    const pt = getCanvasPoint(e);
+    currentStroke.points.push(pt);
+    const n = currentStroke.points.length;
+    if (n >= 2) {
+      ctx.strokeStyle = currentStroke.color;
+      ctx.lineWidth = currentStroke.size;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(currentStroke.points[n-2].x, currentStroke.points[n-2].y);
+      ctx.lineTo(currentStroke.points[n-1].x, currentStroke.points[n-1].y);
+      ctx.stroke();
+    }
+  };
+  const end = () => { if (drawing) { drawing = false; currentStroke = null; } };
+  canvas.addEventListener('mousedown', start);
+  canvas.addEventListener('mousemove', move);
+  canvas.addEventListener('mouseup', end);
+  canvas.addEventListener('mouseleave', end);
+  canvas.addEventListener('touchstart', start, { passive: false });
+  canvas.addEventListener('touchmove', move, { passive: false });
+  canvas.addEventListener('touchend', end);
+  $$('.pen-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('.pen-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentColor = btn.dataset.color;
+    });
+  });
+  $('#penSize').addEventListener('input', (e) => {
+    currentSize = parseFloat(e.target.value);
+    $('#penSizeVal').textContent = currentSize.toFixed(1);
+  });
+  $('#penUndo').addEventListener('click', () => { strokes.pop(); redrawCanvas(); });
+  $('#penClear').addEventListener('click', () => { strokes = []; redrawCanvas(); });
+  $('#penDownload').addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'solucion_manuscrita.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+
+function resizeCanvas() {
+  if (!canvas) return;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = 360 * dpr;
+  canvas.style.height = '360px';
+  ctx.scale(dpr, dpr);
+  redrawCanvas();
+}
+
+function getCanvasPoint(e) {
+  const rect = canvas.getBoundingClientRect();
+  let clientX, clientY;
+  if (e.touches && e.touches.length) {
+    clientX = e.touches[0].clientX;
+    clientY = e.touches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+  return { x: clientX - rect.left, y: clientY - rect.top };
+}
+
+function drawStroke(stroke) {
+  if (stroke.points.length < 1) return;
+  ctx.strokeStyle = stroke.color;
+  ctx.lineWidth = stroke.size;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+  for (let i = 1; i < stroke.points.length; i++) {
+    ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+  }
+  ctx.stroke();
+}
+
+function redrawCanvas() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  strokes.forEach(drawStroke);
+}
+
+/* ===========================================================
+   Boleto de salida
+   =========================================================== */
+function setupTicket() {
+  const ta = $('#exitAnswer');
+  const saved = localStorage.getItem('exitTicket_claseIntegrales');
+  if (saved) ta.value = saved;
+  ta.addEventListener('input', () => localStorage.setItem('exitTicket_claseIntegrales', ta.value));
+  $('#submitTicket').addEventListener('click', () => {
+    const v = ta.value.trim();
+    if (v.length < 5) { alert('Escribe al menos una frase para entregar el boleto.'); return; }
+    localStorage.setItem('exitTicket_claseIntegrales', v);
+    localStorage.setItem('exitTicketSubmitted_claseIntegrales', new Date().toISOString());
+    $('#ticketSaved').style.display = 'block';
+    setTimeout(() => { $('#ticketSaved').style.display = 'none'; }, 3500);
+  });
+  $('#showKey').addEventListener('click', () => $('#answerKey').classList.toggle('show'));
+}
+
+/* ===========================================================
+   Exportar PDF
+   =========================================================== */
+async function exportPDF() {
+  const name = $('#studentName').value.trim() || 'Estudiante';
+  const ticketAnswer = $('#exitAnswer').value.trim() || '(sin respuesta)';
+  const capture = $('#pdfCapture');
+  const date = new Date().toLocaleString('es-MX');
+  const canvasImg = (strokes.length > 0) ? canvas.toDataURL('image/png') : null;
+  let regionImg = null;
+  try {
+    const plt = document.getElementById('regionPlot');
+    regionImg = await Plotly.toImage(plt, { format: 'png', width: 600, height: 400, scale: 2 });
+  } catch (e) { console.warn('Plot toImage failed', e); }
+  let polarImg = null;
+  try {
+    const plt2 = document.getElementById('polarPlot');
+    polarImg = await Plotly.toImage(plt2, { format: 'png', width: 600, height: 380, scale: 2 });
+  } catch (e) { console.warn('Polar toImage failed', e); }
+
+  function buildTrail(answers, steps) {
+    if (answers.length === 0 || !answers.every(a => a.evaluated)) {
+      return '<p style="color:#666;font-style:italic">No completado</p>';
+    }
+    let html = '<ol style="font-size:12px;line-height:1.5">';
+    answers.forEach((a, i) => {
+      const chosenText = steps[i].opts[a.chosen].text
+        .replace(/\\\(/g, '').replace(/\\\)/g, '')
+        .replace(/\\\[/g, '').replace(/\\\]/g, '');
+      html += `<li><b>${a.correct ? '✓' : '✗'}</b> ${chosenText}</li>`;
+    });
+    html += '</ol>';
+    return html;
+  }
+
+  const trail1 = buildTrail(wizAnswers, wizardSteps);
+  const trail2 = buildTrail(wiz2Answers, wizard2Steps);
+
+  capture.innerHTML = `
+    <div style="background:white; color:#1E2A44; padding:32px; font-family: 'Segoe UI', Arial, sans-serif; width: 800px;">
+      <div style="border-bottom:4px solid #0A1C3A; padding-bottom:14px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-size:11px; color:#007B5D; font-weight:700; letter-spacing:.1em;">UNIVERSIDAD PANAMERICANA · CÁLCULO MULTIVARIABLE</div>
+          <h1 style="margin:6px 0 4px; color:#0A1C3A; font-size:24px;">Reporte de Aprendizaje</h1>
+          <div style="font-size:13px; color:#4A5575;">Aplicaciones de la Integral Múltiple · Centro de Masa e Inercia</div>
+        </div>
+        <div style="background:#0A1C3A; color:#C9A84C; padding:8px 14px; border-radius:8px; font-weight:800; font-size:14px;">UP</div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; margin-bottom:18px; font-size:13px; background:#F5F5F5; padding:10px 14px; border-radius:6px;">
+        <div><b>Estudiante:</b> ${escapeHtml(name)}</div>
+        <div><b>Fecha:</b> ${date}</div>
+      </div>
+
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:18px 0 10px;">1. Boleto de salida</h2>
+      <div style="background:#F5F5F5; padding:12px; border-radius:6px; font-size:13px; line-height:1.6;">
+        <b>Pregunta:</b> Si la densidad de una lámina es homogénea (ρ = c), ¿el centro de masa coincide
+        obligatoriamente con el centro geométrico (centroide)? Justifica.<br><br>
+        <b>Respuesta del estudiante:</b><br>
+        <i>${escapeHtml(ticketAnswer)}</i>
+      </div>
+
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">2. Ejercicio 1: Momento de Inercia I_y</h2>
+      <div style="font-size:12.5px; background:#F5F5F5; padding:12px; border-radius:6px; line-height:1.6;">
+        <b>Enunciado:</b> Hallar I_y de la lámina triangular acotada por y=x, x=2 e y=0, con ρ(x,y) = x².<br><br>
+        <b>Secuencia de respuestas:</b>
+        ${trail1}
+        <div style="margin-top:10px;"><b>Puntaje:</b> ${wizScore} / ${wizardSteps.length} aciertos</div>
+        <div style="margin-top:6px;"><b>Solución:</b> I_y = ∫₀² ∫₀ˣ x⁴ dy dx = ∫₀² x⁵ dx = [x⁶/6]₀² = 64/6 ≈ 10.67</div>
+      </div>
+
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">3. Ejercicio 2: Semicírculo con densidad radial</h2>
+      <div style="font-size:12.5px; background:#F5F5F5; padding:12px; border-radius:6px; line-height:1.6;">
+        <b>Enunciado:</b> Lámina semicircular x²+y² ≤ a², y ≥ 0, con ρ = kr. Hallar el centro de masa.<br><br>
+        <b>Secuencia de respuestas:</b>
+        ${trail2}
+        <div style="margin-top:10px;"><b>Puntaje:</b> ${wiz2Score} / ${wizard2Steps.length} aciertos</div>
+        <div style="margin-top:6px;"><b>Solución:</b> m = kπa³/3; M_x = ka⁴/2; ȳ = 3a/(2π) ≈ 0.477a (CM = (0, 3a/(2π)))</div>
+      </div>
+
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">4. Constructores de integrales</h2>
+      <div style="font-size:12.5px; background:#F5F5F5; padding:12px; border-radius:6px; line-height:1.7;">
+        <b>Constructor 1 — I_y (triángulo, ρ = x²):</b> I_y = ∫₀² ∫₀ˣ x⁴ dA = 64/6 ≈ 10.67<br>
+        <b>Constructor 2 — Masa del semicírculo (ρ = kr):</b> m = ∫₀^π ∫₀^a kr · r dr dθ = kπa³/3<br>
+        <b>Constructor 3 — I_z del disco (ρ = 1+r²):</b> I_z = ∫₀^{2π} ∫₀¹ (r²+r⁴) r dr dθ = 5π/6 ≈ 2.618
+      </div>
+
+      ${regionImg ? `
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">5. Visualización: Triángulo con densidad</h2>
+      <div style="text-align:center;">
+        <img src="${regionImg}" style="max-width:100%; border:1px solid #ccc; border-radius:6px;" />
+      </div>` : ''}
+
+      ${polarImg ? `
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">6. Visualización: Semicírculo polar</h2>
+      <div style="text-align:center;">
+        <img src="${polarImg}" style="max-width:100%; border:1px solid #ccc; border-radius:6px;" />
+      </div>` : ''}
+
+      ${canvasImg ? `
+      <h2 style="color:#0A1C3A; font-size:16px; border-left:4px solid #0A1C3A; padding-left:10px; margin:24px 0 10px;">7. Solución manuscrita del estudiante</h2>
+      <div style="text-align:center;">
+        <img src="${canvasImg}" style="max-width:100%; border:1px solid #ccc; border-radius:6px; background:white;" />
+      </div>` : ''}
+
+      <div style="margin-top:30px; border-top:2px solid #C9A84C; padding-top:10px; font-size:11px; color:#666; text-align:center;">
+        Generado por la clase interactiva · Universidad Panamericana · Cálculo Multivariable
+      </div>
+    </div>
+  `;
+
+  const btn = $('#exportPdf');
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = '⏳ Generando...';
+  try {
+    const opt = {
+      margin: 0,
+      filename: `clase_integrales_${name.replace(/\s+/g,'_')}.pdf`,
+      image: { type: 'jpeg', quality: 0.96 },
+      html2canvas: { scale: 2, backgroundColor: '#ffffff', useCORS: true, logging: false },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css','legacy'] }
+    };
+    await html2pdf().set(opt).from(capture.firstElementChild).save();
+    btn.disabled = false;
+    btn.textContent = originalText;
+    capture.innerHTML = '';
+  } catch (err) {
+    console.error('PDF error', err);
+    alert('Error al generar el PDF: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+$('#exportPdf')?.addEventListener('click', exportPDF);
+
+/* ===========================================================
+   Init
+   =========================================================== */
+window.addEventListener('load', () => {
+  if (window.renderMathInElement) renderMathInElement(document.body, katexOpts);
+  refreshRegion();
+  refreshPolar();
+  drawGuessPlot(1.0, 0.5);
+  drawPhysics3D(0, false);
+  updatePhysicsStatus(null);
+  setupGuessGame();
+  setupAllBuilders();
+  setupCanvas();
+  setupTicket();
+  renderWizard();
+  renderWizard2();
+});
+setTimeout(() => { if (window.renderMathInElement) renderMathInElement(document.body, katexOpts); }, 800);
+</script>
+</body>
+</html>
